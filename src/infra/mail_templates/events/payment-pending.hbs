@@ -1,0 +1,152 @@
+<div class="content">
+    <h1>Complete Your Payment</h1>
+
+    <p>Hello {{name}},</p>
+
+    <p>
+        You're almost there! Your ticket for <strong>{{eventName}}</strong> has been reserved, but we haven't received your payment yet.
+    </p>
+
+    <!-- Reservation Details -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0 0 8px 0;">
+                    <strong>Reservation Expires:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; color: #92400e; margin: 0;">
+                    {{expiryTime}}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Event Details Card -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background: linear-gradient(135deg, #004aad 0%, #002f6c 100%); border-radius: 8px; padding: 24px;">
+        <tr>
+            <td>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="padding: 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                Event Name
+                            </p>
+                            <p style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                {{eventName}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 16px 0 8px 0;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td width="50%" style="padding-right: 10px;">
+                                        <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                            Date
+                                        </p>
+                                        <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                            {{eventDate}}
+                                        </p>
+                                    </td>
+                                    <td width="50%" style="padding-left: 10px;">
+                                        <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                            Amount
+                                        </p>
+                                        <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                            {{ticketPrice}}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {{#if ticketType}}
+                    <tr>
+                        <td style="padding: 16px 0 8px 0;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td width="50%" style="padding-right: 10px;">
+                                        <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                            Ticket Type
+                                        </p>
+                                        <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                            {{ticketType}}
+                                        </p>
+                                    </td>
+                                    {{#if quantity}}
+                                    <td width="50%" style="padding-left: 10px;">
+                                        <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                            Quantity
+                                        </p>
+                                        <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                            {{quantity}}
+                                        </p>
+                                    </td>
+                                    {{/if}}
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    <tr>
+                        <td style="padding: 16px 0 0 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                Reservation ID
+                            </p>
+                            <p style="font-family: 'Courier New', monospace; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0; letter-spacing: 2px;">
+                                {{reservationId}}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=paymentUrl
+    label="Complete Payment Now"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #f3f4f6; border-radius: 6px; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0 0 8px 0;">
+                    <strong>What happens next?</strong>
+                </p>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0; padding-left: 20px;">
+                    <li style="margin: 4px 0;">Complete your payment before the reservation expires</li>
+                    <li style="margin: 4px 0;">Receive your ticket confirmation with QR code</li>
+                    <li style="margin: 4px 0;">Get reminders before the event</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    {{#if eventUrl}}
+    <p style="font-family: Arial, sans-serif; font-size: 14px; color: #6b7280; margin-top: 20px;">
+        If the button doesn't work, copy and paste this link into your browser:
+    </p>
+    <p style="font-family: Arial, sans-serif; font-size: 13px; color: #004aad; word-break: break-all;">
+        {{paymentUrl}}
+    </p>
+    {{/if}}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="center">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

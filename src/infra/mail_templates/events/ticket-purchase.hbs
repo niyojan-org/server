@@ -1,0 +1,131 @@
+<div class="content">
+    <h1>🎉 Your Ticket is Ready!</h1>
+    
+    <p>Hi {{name}},</p>
+    <p>You're all set for <strong>{{eventName}}</strong>!</p>
+
+    {{#if qrCode}}
+    <!-- QR Code -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 24px 0; background: #fff; border: 2px dashed #004aad; border-radius: 12px; padding: 20px;">
+        <tr>
+            <td align="center">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; font-weight: 600; color: #004aad; margin: 0 0 12px 0;">
+                    📱 Your Entry Pass
+                </p>
+                <img src="{{qrCode}}" alt="QR Code" 
+                    style="width: 180px; height: 180px; display: block; margin: 0 auto; border-radius: 8px;" />
+                <p style="font-family: Arial, sans-serif; font-size: 12px; color: #6b7280; margin: 12px 0 0 0;">
+                    Show at entrance • Valid for single use
+                </p>
+            </td>
+        </tr>
+    </table>
+    {{/if}}
+
+    <!-- Event Card -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background: linear-gradient(135deg, #004aad 0%, #0066cc 100%); border-radius: 12px; padding: 20px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; color: #fff; margin: 0 0 16px 0;">
+                    {{eventName}}
+                </p>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="padding: 6px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; color: rgba(255,255,255,0.9); margin: 0;">
+                                {{eventDate}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 6px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; color: rgba(255,255,255,0.9); margin: 0;">
+                                {{eventLocation}}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Ticket Info -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background: #f8fafc; border-radius: 8px; padding: 16px; border-left: 4px solid #004aad;">
+        <tr>
+            <td>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="padding: 4px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 12px; color: #64748b; margin: 0;">Ticket ID</p>
+                            <p style="font-family: 'Courier New', monospace; font-size: 14px; font-weight: 600; color: #1e293b; margin: 2px 0 0 0;">
+                                {{ticketId}}
+                            </p>
+                        </td>
+                    </tr>
+                    {{#if ticketType}}
+                    <tr>
+                        <td style="padding: 8px 0 4px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 12px; color: #64748b; margin: 0;">Type</p>
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; font-weight: 600; color: #1e293b; margin: 2px 0 0 0;">
+                                {{ticketType}}
+                            </p>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    {{#if orderAmount}}
+                    <tr>
+                        <td style="padding: 8px 0 4px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 12px; color: #64748b; margin: 0;">Amount Paid</p>
+                            <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: 700; color: #059669; margin: 2px 0 0 0;">
+                                {{orderAmount}}
+                            </p>
+                        </td>
+                    </tr>
+                    {{/if}}
+                    {{#if transactionId}}
+                    <tr>
+                        <td style="padding: 8px 0 4px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 12px; color: #64748b; margin: 0;">Transaction ID</p>
+                            <p style="font-family: 'Courier New', monospace; font-size: 13px; color: #64748b; margin: 2px 0 0 0;">
+                                {{transactionId}}
+                            </p>
+                        </td>
+                    </tr>
+                    {{/if}}
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Action Buttons -->
+    {{#if ticketUrl}}
+    {{> button url=ticketUrl label="View Ticket" variant="primary" fullWidth=true marginTop="16px" marginBottom="8px"}}
+    {{/if}}
+    {{#if eventUrl}}
+    {{> button url=eventUrl label="Event Details" variant="secondary" fullWidth=true marginTop="8px" marginBottom="16px"}}
+    {{/if}}
+
+    <!-- Quick Tips -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background: #fef3c7; border-radius: 8px; padding: 14px; border-left: 3px solid #f59e0b;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 13px; font-weight: 600; color: #92400e; margin: 0 0 6px 0;">
+                    💡 Quick Tips
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 13px; color: #78350f; margin: 0; line-height: 1.5;">
+                    • Screenshot this QR code for offline access<br/>
+                    • Arrive 15 mins early for check-in<br/>
+                    • Each ticket allows single entry only
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <p style="font-family: Arial, sans-serif; font-size: 14px; color: #64748b; margin: 24px 0 0 0; text-align: center;">
+        Questions? Reply to this email or visit our <a href="https://orgatick.in/support" style="color: #004aad; text-decoration: none;">Help Center</a>
+    </p>
+</div>

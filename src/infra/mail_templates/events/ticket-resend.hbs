@@ -1,0 +1,190 @@
+<div class="content">
+    <h1>Your Ticket</h1>
+
+    <p>Hello {{name}},</p>
+
+    <p>
+        As requested, here's your ticket for <strong>{{eventName}}</strong>.
+    </p>
+
+    <!-- QR Code Section -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #ffffff; border: 2px solid #004aad; border-radius: 8px; padding: 24px;">
+        <tr>
+            <td align="center">
+                <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #004aad; margin: 0 0 16px 0;">
+                    Your Event Ticket
+                </p>
+                {{#if qrCode}}
+                <img src="{{qrCode}}" alt="Ticket QR Code" class="dark-mode-safe"
+                    style="width: 200px; height: 200px; display: block; margin: 0 auto; -ms-interpolation-mode: bicubic; color: transparent;" />
+                <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6b7280; margin: 16px 0 0 0;">
+                    Show this QR code at the event entrance
+                </p>
+                {{/if}}
+            </td>
+        </tr>
+    </table>
+
+    <!-- Event Details Card -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background: linear-gradient(135deg, #004aad 0%, #002f6c 100%); border-radius: 8px; padding: 24px;">
+        <tr>
+            <td>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="padding: 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                Event Name
+                            </p>
+                            <p style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                {{eventName}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 16px 0 8px 0;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td width="50%" style="padding-right: 10px;">
+                                        <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                            Date
+                                        </p>
+                                        <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                            {{eventDate}}
+                                        </p>
+                                    </td>
+                                    <td width="50%" style="padding-left: 10px;">
+                                        <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                            Time
+                                        </p>
+                                        <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                            {{eventTime}}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 16px 0 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                Location
+                            </p>
+                            <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                {{eventLocation}}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Ticket Details Table -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td width="50%" style="padding: 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6b7280; margin: 0;">
+                                Ticket ID
+                            </p>
+                            <p style="font-family: 'Courier New', monospace; font-size: 14px; font-weight: bold; color: #1f2937; margin: 4px 0 0 0;">
+                                {{ticketId}}
+                            </p>
+                        </td>
+                        {{#if bookingId}}
+                        <td width="50%" style="padding: 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6b7280; margin: 0;">
+                                Booking ID
+                            </p>
+                            <p style="font-family: 'Courier New', monospace; font-size: 14px; font-weight: bold; color: #1f2937; margin: 4px 0 0 0;">
+                                {{bookingId}}
+                            </p>
+                        </td>
+                        {{/if}}
+                    </tr>
+                    {{#if ticketType}}
+                    <tr>
+                        <td width="50%" style="padding: 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6b7280; margin: 0;">
+                                Ticket Type
+                            </p>
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; color: #1f2937; margin: 4px 0 0 0;">
+                                {{ticketType}}
+                            </p>
+                        </td>
+                        {{#if seatNumber}}
+                        <td width="50%" style="padding: 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6b7280; margin: 0;">
+                                Seat Number
+                            </p>
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; color: #1f2937; margin: 4px 0 0 0;">
+                                {{seatNumber}}
+                            </p>
+                        </td>
+                        {{/if}}
+                    </tr>
+                    {{/if}}
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    {{#if ticketUrl}}
+    {{> button
+    url=ticketUrl
+    label="Download Ticket"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="10px"
+    }}
+    {{/if}}
+
+    {{#if eventUrl}}
+    {{> button
+    url=eventUrl
+    label="View Event Details"
+    variant="secondary"
+    fullWidth=true
+    marginTop="10px"
+    marginBottom="20px"
+    }}
+    {{/if}}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #f3f4f6; border-radius: 6px; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0 0 8px 0;">
+                    <strong>Important Reminders:</strong>
+                </p>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0; padding-left: 20px;">
+                    <li style="margin: 4px 0;">Keep this email safe or download your ticket</li>
+                    <li style="margin: 4px 0;">Bring your ticket (digital or printed) to the event</li>
+                    <li style="margin: 4px 0;">One QR code scan per ticket</li>
+                    <li style="margin: 4px 0;">Arrive early for smooth check-in</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <p style="font-family: Arial, sans-serif; font-size: 14px; color: #6b7280; margin-top: 20px;">
+        If you continue to have trouble accessing your ticket, please contact our support team.
+    </p>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    See you at the event!<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

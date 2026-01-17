@@ -1,0 +1,25 @@
+info:
+  name: Add a Domain
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{url}}/domains"
+  body:
+    type: json
+    data: |-
+      {
+        "domain" : "http://localhost:3000",
+        "environment": "development",
+        "purposes" : {
+          "cors" : true
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,0 +1,180 @@
+<div class="content">
+    <h1>Join {{eventName}} Online</h1>
+
+    <p>Hello {{name}},</p>
+
+    <p>
+        Get ready to join <strong>{{eventName}}</strong> virtually! Here's everything you need to attend the event online.
+    </p>
+
+    <!-- Event Details Card -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background: linear-gradient(135deg, #004aad 0%, #002f6c 100%); border-radius: 8px; padding: 24px;">
+        <tr>
+            <td>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="padding: 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                Event Name
+                            </p>
+                            <p style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                {{eventName}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 16px 0 8px 0;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td width="50%" style="padding-right: 10px;">
+                                        <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                            Date
+                                        </p>
+                                        <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                            {{eventDate}}
+                                        </p>
+                                    </td>
+                                    <td width="50%" style="padding-left: 10px;">
+                                        <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                            Time
+                                        </p>
+                                        <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                            {{eventTime}}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Join Link -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #dcfce7; border-left: 4px solid #16a34a; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #166534; margin: 0 0 8px 0;">
+                    <strong>Join the event using this link:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #166534; margin: 0; word-break: break-all;">
+                    <a href="{{joinUrl}}" style="color: #166534; text-decoration: underline;">{{joinUrl}}</a>
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=joinUrl
+    label="Join Virtual Event"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    {{#if meetingId}}
+    <!-- Meeting Details -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #1f2937; margin: 0 0 12px 0;">
+                    <strong>Meeting Details:</strong>
+                </p>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td width="50%" style="padding: 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6b7280; margin: 0;">
+                                Meeting ID
+                            </p>
+                            <p style="font-family: 'Courier New', monospace; font-size: 16px; font-weight: bold; color: #1f2937; margin: 4px 0 0 0; letter-spacing: 2px;">
+                                {{meetingId}}
+                            </p>
+                        </td>
+                        {{#if passcode}}
+                        <td width="50%" style="padding: 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6b7280; margin: 0;">
+                                Passcode
+                            </p>
+                            <p style="font-family: 'Courier New', monospace; font-size: 16px; font-weight: bold; color: #1f2937; margin: 4px 0 0 0; letter-spacing: 2px;">
+                                {{passcode}}
+                            </p>
+                        </td>
+                        {{/if}}
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    {{/if}}
+
+    {{#if dialInNumber}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #1f2937; margin: 0 0 8px 0;">
+                    <strong>Or join by phone:</strong>
+                </p>
+                <p style="font-family: 'Courier New', monospace; font-size: 15px; font-weight: bold; color: #004aad; margin: 0;">
+                    {{dialInNumber}}
+                </p>
+            </td>
+        </tr>
+    </table>
+    {{/if}}
+
+    {{#if instructions}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #f3f4f6; border-radius: 6px; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0 0 8px 0;">
+                    <strong>Instructions:</strong>
+                </p>
+                <div style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; line-height: 1.6;">
+                    {{{instructions}}}
+                </div>
+            </td>
+        </tr>
+    </table>
+    {{else}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #f3f4f6; border-radius: 6px; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0 0 8px 0;">
+                    <strong>Quick Tips:</strong>
+                </p>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0; padding-left: 20px;">
+                    <li style="margin: 4px 0;">Test your camera and microphone before joining</li>
+                    <li style="margin: 4px 0;">Join 5-10 minutes early to avoid technical issues</li>
+                    <li style="margin: 4px 0;">Use headphones for better audio quality</li>
+                    <li style="margin: 4px 0;">Find a quiet place with good internet connection</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+    {{/if}}
+
+    {{#if eventUrl}}
+    <p style="font-family: Arial, sans-serif; font-size: 14px; color: #6b7280; margin-top: 20px; text-align: center;">
+        <a href="{{eventUrl}}" style="color: #004aad; text-decoration: none;">View full event details</a>
+    </p>
+    {{/if}}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    See you online!<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

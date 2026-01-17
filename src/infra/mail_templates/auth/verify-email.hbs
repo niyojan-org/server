@@ -1,0 +1,53 @@
+<div class="content">
+    <h1>Verify Your Email Address</h1>
+
+    <p>Hello {{name}},</p>
+
+    <p>
+        Thank you for signing up with Orgatick. To complete your registration and activate your account, please
+        verify your email address by clicking the button below.
+    </p>
+
+    {{> button
+    url=verificationUrl
+    label="Verify Email Address"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0 0 8px 0;">
+                    <strong>Important:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0;">
+                    This verification link will expire in <strong>10 minutes</strong>. If you failed to verify within
+                    this time, please request a new verification email. If you did not create an account
+                    with Orgatick, please disregard this email.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <p style="font-family: Arial, sans-serif; font-size: 14px; color: #6b7280; margin-top: 20px;">
+        If the button doesn't work, copy and paste this link into your browser:
+    </p>
+    <p style="font-family: Arial, sans-serif; font-size: 13px; color: #004aad; word-break: break-all;">
+        {{verificationUrl}}
+    </p>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

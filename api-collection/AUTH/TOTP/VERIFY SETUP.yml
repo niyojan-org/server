@@ -1,0 +1,21 @@
+info:
+  name: VERIFY SETUP
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{auth_url}}/totp/verify-setup"
+  body:
+    type: json
+    data: |-
+      {
+        "token": "887351"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

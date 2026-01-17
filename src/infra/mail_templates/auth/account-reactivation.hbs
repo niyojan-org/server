@@ -1,0 +1,92 @@
+<div class="content">
+    <h1>Welcome Back to Orgatick!</h1>
+
+    <p>Hello {{name}},</p>
+
+    <p>
+        We're excited to see you again! We received a request to reactivate your Orgatick account. We're glad you've
+        decided to return.
+    </p>
+
+    <p>
+        To complete the reactivation process and regain access to your account, please click the button below:
+    </p>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td align="center">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #1f2937; margin: 0 0 8px 0;">
+                    Your reactivation code:
+                </p>
+                <p
+                    style="font-family: 'Courier New', monospace; font-size: 32px; font-weight: bold; color: #004aad; margin: 0; letter-spacing: 8px;">
+                    {{reactivationCode}}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=reactivationUrl
+    label="Reactivate My Account"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #dcfce7; border-left: 4px solid #16a34a; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #166534; margin: 0 0 8px 0;">
+                    <strong>What happens after reactivation:</strong>
+                </p>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #166534; margin: 0; padding-left: 20px;">
+                    <li style="margin: 4px 0;">Your account will be fully restored</li>
+                    <li style="margin: 4px 0;">You'll regain access to your event history</li>
+                    <li style="margin: 4px 0;">You can discover and register for new events</li>
+                    <li style="margin: 4px 0;">All your saved preferences will be available</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0 0 8px 0;">
+                    <strong>Important:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0;">
+                    This reactivation link will expire in <strong>48 hours</strong>. If you did not request account
+                    reactivation, you can safely ignore this email.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <p style="font-family: Arial, sans-serif; font-size: 14px; color: #6b7280; margin-top: 20px;">
+        If the button doesn't work, copy and paste this link into your browser:
+    </p>
+    <p style="font-family: Arial, sans-serif; font-size: 13px; color: #004aad; word-break: break-all;">
+        {{reactivationUrl}}
+    </p>
+
+    <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin-top: 30px;">
+        We're looking forward to having you back in the Orgatick community!
+    </p>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    Welcome back,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

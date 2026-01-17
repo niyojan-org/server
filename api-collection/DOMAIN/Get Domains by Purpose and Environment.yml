@@ -1,0 +1,22 @@
+info:
+  name: Get Domains by Purpose and Environment
+  type: http
+  seq: 5
+
+http:
+  method: GET
+  url: "{{url}}/domains/purpose/:purpose/env/:env"
+  params:
+    - name: purpose
+      value: cors
+      type: path
+    - name: env
+      value: development
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

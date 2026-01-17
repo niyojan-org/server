@@ -1,0 +1,149 @@
+<div class="content">
+    <h1>Event Starting in 1 Hour!</h1>
+
+    <p>Hello {{name}},</p>
+
+    <p>
+        <strong>{{eventName}}</strong> is starting in just 1 hour. It's almost time!
+    </p>
+
+    <!-- Event Details Card -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background: linear-gradient(135deg, #004aad 0%, #002f6c 100%); border-radius: 8px; padding: 24px;">
+        <tr>
+            <td>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="padding: 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                Event Name
+                            </p>
+                            <p style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                {{eventName}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 16px 0 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                Starting At
+                            </p>
+                            <p style="font-family: Arial, sans-serif; font-size: 22px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                {{eventTime}}
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 16px 0 8px 0;">
+                            <p style="font-family: Arial, sans-serif; font-size: 14px; color: #ffffff; margin: 0; opacity: 0.9;">
+                                Location
+                            </p>
+                            <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #ffffff; margin: 4px 0 0 0;">
+                                {{eventLocation}}
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    {{#if liveStreamUrl}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #dcfce7; border-left: 4px solid #16a34a; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #166534; margin: 0 0 8px 0;">
+                    <strong>Virtual Event:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #166534; margin: 0;">
+                    Join the live stream using the button below
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=liveStreamUrl
+    label="Join Live Stream"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+    {{/if}}
+
+    {{#if qrCode}}
+    <!-- QR Code Section -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #ffffff; border: 2px solid #004aad; border-radius: 8px; padding: 24px;">
+        <tr>
+            <td align="center">
+                <p style="font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; color: #004aad; margin: 0 0 16px 0;">
+                    Your Event Ticket
+                </p>
+                <img src="{{qrCode}}" alt="Ticket QR Code" class="dark-mode-safe"
+                    style="width: 180px; height: 180px; display: block; margin: 0 auto; -ms-interpolation-mode: bicubic; color: transparent;" />
+                <p style="font-family: Arial, sans-serif; font-size: 13px; color: #6b7280; margin: 16px 0 0 0;">
+                    Have this ready for check-in
+                </p>
+            </td>
+        </tr>
+    </table>
+    {{/if}}
+
+    {{#if checkInUrl}}
+    {{> button
+    url=checkInUrl
+    label="Check In Now"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="10px"
+    }}
+    {{/if}}
+
+    {{#if ticketUrl}}
+    {{> button
+    url=ticketUrl
+    label="View Ticket"
+    variant="secondary"
+    fullWidth=true
+    marginTop="10px"
+    marginBottom="20px"
+    }}
+    {{/if}}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #f3f4f6; border-radius: 6px; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0 0 8px 0;">
+                    <strong>Last Minute Reminders:</strong>
+                </p>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0; padding-left: 20px;">
+                    <li style="margin: 4px 0;">Leave now to arrive on time</li>
+                    <li style="margin: 4px 0;">Have your ticket ready for scanning</li>
+                    <li style="margin: 4px 0;">Check for any last-minute updates</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    {{#if eventUrl}}
+    <p style="font-family: Arial, sans-serif; font-size: 14px; color: #6b7280; margin-top: 20px; text-align: center;">
+        <a href="{{eventUrl}}" style="color: #004aad; text-decoration: none;">View full event details</a>
+    </p>
+    {{/if}}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    See you soon!<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

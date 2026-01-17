@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    /* Language & Runtime */
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
+    /* Project Structure */
+    "rootDir": "src",
+    "outDir": "dist",
+
+    /* Path Aliases (SEMANTIC, LOCKED) */
+    "paths": {
+      "@config/*": ["./src/config/*"],
+      "@core/*": ["./src/core/*"],
+      "@modules/*": ["./src/modules/*"],
+      "@infra/*": ["./src/infra/*"],
+      "@queues/*": ["./src/queues/*"],
+      "@workers/*": ["./src/workers/*"],
+      "@routes": ["./src/routes.ts"],
+      "@app": ["./src/app.ts"]
+    },
+
+    /* Strictness */
+    "strict": true,
+    "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true,
+    "useUnknownInCatchVariables": true,
+
+    /* DX & Interop */
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+
+    /* Build Safety */
+    "isolatedModules": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+
+    /* Output */
+    "sourceMap": true,
+    "declaration": false
+  },
+
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

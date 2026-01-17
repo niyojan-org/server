@@ -1,0 +1,25 @@
+info:
+  name: Refresh Token
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{auth_url}}/refresh"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res?.body?.token) {
+          bru.setEnvVar('acess_token', res.body.token);
+        } else {
+          console.warn("accessToken not found in response");
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

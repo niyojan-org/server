@@ -1,0 +1,28 @@
+info:
+  name: Update Domain
+  type: http
+  seq: 7
+
+http:
+  method: PUT
+  url: "{{url}}/domains/:id"
+  params:
+    - name: id
+      value: 6963ebb7747a70a81f648421
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "purposes": {
+          "cors": true,
+          "passkey": true
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

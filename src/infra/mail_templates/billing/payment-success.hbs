@@ -1,0 +1,45 @@
+<div class="content">
+    <h1>✅ Payment Successful</h1>
+
+    <p>Hi {{name}},</p>
+
+    <p>
+        Your payment has been successfully processed. Thank you for your purchase!
+    </p>
+
+    <div class="payment-summary" style="background-color: #f0fdf4; border: 1px solid #86efac; padding: 20px; border-radius: 6px; margin: 20px 0;">
+        <h3 style="margin-top: 0; color: #16a34a;">Payment Details</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="padding: 8px 0;"><strong>Amount Paid:</strong></td>
+                <td style="text-align: right;">{{formatCurrency amount currency}}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 0;"><strong>Transaction ID:</strong></td>
+                <td style="text-align: right;">{{transactionId}}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 0;"><strong>Payment Method:</strong></td>
+                <td style="text-align: right;">{{paymentMethod}}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 0;"><strong>Date:</strong></td>
+                <td style="text-align: right;">{{formatDate paymentDate}}</td>
+            </tr>
+        </table>
+    </div>
+
+    {{#if invoiceUrl}}
+    {{> button
+        url=invoiceUrl
+        label="Download Invoice"
+        variant="primary"
+        marginTop="20px"
+        marginBottom="20px"
+    }}
+    {{/if}}
+
+    <p style="font-size: 14px; color: #6b7280;">
+        A receipt has been sent to your email. If you have any questions, please contact our billing team.
+    </p>
+</div>

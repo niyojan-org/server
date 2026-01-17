@@ -1,0 +1,16 @@
+{{!-- Component-like CTA button --}}
+{{#if fullWidth}}
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="{{#if marginTop}}margin-top: {{marginTop}};{{/if}} {{#if marginBottom}}margin-bottom: {{marginBottom}};{{/if}}">
+    <tr>
+        <td align="center">
+            <a href="{{url}}" style="{{buttonVariant variant}} display: inline-block; text-align: center; box-sizing: border-box;">
+                {{label}}
+            </a>
+        </td>
+    </tr>
+</table>
+{{else}}
+<a href="{{url}}" style="{{buttonVariant variant}} display: inline-block; {{#if marginTop}}margin-top: {{marginTop}};{{/if}} {{#if marginBottom}}margin-bottom: {{marginBottom}};{{/if}}">
+    {{label}}
+</a>
+{{/if}}
