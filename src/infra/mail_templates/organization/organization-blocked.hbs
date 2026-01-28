@@ -1,0 +1,120 @@
+<div class="content">
+    <h1>Organization Blocked</h1>
+
+    <p>Hello {{ownerName}},</p>
+
+    <p>
+        We're writing to inform you that <strong>{{organizationName}}</strong> has been temporarily blocked on the
+        Orgatick platform.
+    </p>
+
+    <!-- Block Notice -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #fef2f2; border-left: 4px solid #dc2626; padding: 20px;">
+        <tr>
+            <td align="center">
+                <img width="48" height="48"
+                    src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/block.png" alt="blocked"
+                    class="dark-mode-safe"
+                    style="-ms-interpolation-mode: bicubic; color: transparent; display: block; margin: 0 auto 12px;" />
+                <p style="font-family: Arial, sans-serif; font-size: 16px; color: #991b1b; margin: 0; font-weight: bold;">
+                    Organization Access Restricted
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #991b1b; margin: 8px 0 0 0;">
+                    Effective immediately
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Reason for Block -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; border-left: 4px solid #004aad; padding-left: 16px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 12px 0;">
+                    Reason for Block:
+                </h3>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0;">
+                    {{blockReason}}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- What This Means -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0 0 8px 0;">
+                    <strong>Impact on Your Organization:</strong>
+                </p>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; line-height: 1.8; margin: 0; padding-left: 20px;">
+                    <li>All events are temporarily unpublished and hidden from search</li>
+                    <li>You cannot create or edit events</li>
+                    <li>Ticket sales are paused for all events</li>
+                    <li>Organization profile is not visible to public</li>
+                    <li>Team members cannot perform organization actions</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Next Steps -->
+    {{#if appealProcess}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 12px 0;">
+                    How to Resolve This:
+                </h3>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; line-height: 1.8; margin: 0;">
+                    {{appealProcess}}
+                </p>
+            </td>
+        </tr>
+    </table>
+    {{/if}}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0 0 8px 0;">
+                    <strong>Important:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0;">
+                    This block is subject to review. We encourage you to contact our support team to understand the
+                    specific concerns and work towards resolution. Compliance with our platform policies is essential
+                    for maintaining trust and safety.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=appealUrl
+    label="Contact Support Team"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    We take platform safety and compliance seriously. Our support team is available to discuss this
+                    matter and help you understand the steps needed for resolution.
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 10px 0 0 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

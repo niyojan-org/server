@@ -1,0 +1,83 @@
+<div class="content">
+    <h1>Your Role Has Been Updated</h1>
+
+    <p>Hello {{memberName}},</p>
+
+    <p>
+        Your role in <strong>{{organizationName}}</strong> has been changed by <strong>{{changedBy}}</strong>.
+    </p>
+
+    <!-- Role Change Info -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td align="center">
+                <img width="48" height="48"
+                    src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/role.png" alt="role-change"
+                    class="dark-mode-safe"
+                    style="-ms-interpolation-mode: bicubic; color: transparent; display: block; margin: 0 auto 12px;" />
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 0;">
+                    Previous role: <span style="color: #9ca3af; text-decoration: line-through;">{{oldRole}}</span>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 16px; color: #1f2937; margin: 8px 0 0 0; font-weight: bold;">
+                    New role: <span style="color: #004aad;">{{newRole}}</span>
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- New Permissions -->
+    {{#if newRoleDescription}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; border-left: 4px solid #004aad; padding-left: 16px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 12px 0;">
+                    Your updated permissions:
+                </h3>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; line-height: 1.8; margin: 0;">
+                    {{newRoleDescription}}
+                </p>
+            </td>
+        </tr>
+    </table>
+    {{/if}}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0 0 8px 0;">
+                    <strong>Security Notice:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0;">
+                    This change affects what you can access and do within the organization. If you believe this
+                    change was made in error, please contact your organization administrator.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=organizationUrl
+    label="Go to Organization"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    If you have any questions about your new role, please reach out to your organization administrator.
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 10px 0 0 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

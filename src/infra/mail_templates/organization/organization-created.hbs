@@ -1,0 +1,105 @@
+<div class="content">
+    <h1>Welcome to Orgatick, {{organizationName}}!</h1>
+
+    <p>Hello {{ownerName}},</p>
+
+    <p>
+        <strong>Congratulations!</strong>
+        Your organization <strong>{{organizationName}}</strong> has been successfully created on Orgatick!
+    </p>
+
+    <p>
+        You're now ready to start creating and managing amazing events for your audience. We're excited to have you
+        on board and can't wait to see what you'll build.
+    </p>
+
+    <!-- Features Section -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td align="center">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                    style="max-width: 480px;">
+                    <tr>
+                        <td style="padding: 12px 0; text-align: center;">
+                            <img width="24" height="24"
+                                src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/calendar.png"
+                                alt="events" class="dark-mode-safe"
+                                style="-ms-interpolation-mode: bicubic; color: transparent; display: inline-block; vertical-align: middle; margin-right: 8px;" />
+                            <span
+                                style="font-family: Arial, sans-serif; font-size: 15px; color: #1f2937; font-weight: bold; vertical-align: middle;">Create
+                                and manage unlimited events</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 0; text-align: center;">
+                            <img width="24" height="24"
+                                src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/users.png"
+                                alt="team" class="dark-mode-safe"
+                                style="-ms-interpolation-mode: bicubic; color: transparent; display: inline-block; vertical-align: middle; margin-right: 8px;" />
+                            <span
+                                style="font-family: Arial, sans-serif; font-size: 15px; color: #1f2937; font-weight: bold; vertical-align: middle;">Invite
+                                team members to collaborate</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 0; text-align: center;">
+                            <img width="24" height="24"
+                                src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/chart.png"
+                                alt="analytics" class="dark-mode-safe"
+                                style="-ms-interpolation-mode: bicubic; color: transparent; display: inline-block; vertical-align: middle; margin-right: 8px;" />
+                            <span
+                                style="font-family: Arial, sans-serif; font-size: 15px; color: #1f2937; font-weight: bold; vertical-align: middle;">Track
+                                performance and analytics</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=dashboardUrl
+    label="Go to Dashboard"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <!-- Next Steps Section -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background: linear-gradient(135deg, #004aad 0%, #002f6c 100%); border-radius: 8px; padding: 24px 20px;">
+        <tr>
+            <td align="center">
+                <h3 style="color: #ffffff; font-family: Arial, sans-serif; font-size: 20px; margin: 0 0 12px 0;">
+                    Ready to Get Started?
+                </h3>
+                <p
+                    style="color: #ffffff; font-family: Arial, sans-serif; font-size: 15px; line-height: 1.6; margin: 0 0 16px 0;">
+                    Here's what you can do next:
+                </p>
+                <ul style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.8; text-align: left; margin: 0; padding-left: 20px;">
+                    <li>Complete your organization profile</li>
+                    <li>Set up your payment details (for paid events)</li>
+                    <li>Create your first event</li>
+                    <li>Invite team members to help manage events</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    If you have any questions, feel free to reach out to our support team.
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 10px 0 0 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

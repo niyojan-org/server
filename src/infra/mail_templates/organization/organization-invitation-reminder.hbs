@@ -1,0 +1,88 @@
+<div class="content">
+    <h1>Reminder: Invitation to Join {{organizationName}}</h1>
+
+    <p>Hello {{inviteeName}},</p>
+
+    <p>
+        This is a friendly reminder that <strong>{{inviterName}}</strong> invited you to join
+        <strong>{{organizationName}}</strong> on Orgatick as a <strong>{{role}}</strong>.
+    </p>
+
+    <p>
+        We noticed you haven't accepted the invitation yet. No pressure — we just wanted to make sure you didn't
+        miss it!
+    </p>
+
+    <!-- Invitation Info -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td align="center">
+                <img width="48" height="48"
+                    src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/invitation.png"
+                    alt="invitation" class="dark-mode-safe"
+                    style="-ms-interpolation-mode: bicubic; color: transparent; display: block; margin: 0 auto 12px;" />
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 8px 0;">
+                    {{organizationName}}
+                </h3>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0;">
+                    Role: <strong style="color: #004aad;">{{role}}</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=acceptInvitationUrl
+    label="Accept Invitation"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0 0 8px 0;">
+                    <strong>Time-Sensitive:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0;">
+                    This invitation will expire in <strong>{{daysRemaining}} days</strong>. Accept soon to start
+                    collaborating with the team!
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <p style="font-family: Arial, sans-serif; font-size: 14px; color: #6b7280; margin-top: 20px;">
+        If the button doesn't work, copy and paste this link into your browser:
+    </p>
+    <p style="font-family: Arial, sans-serif; font-size: 13px; color: #004aad; word-break: break-all;">
+        {{acceptInvitationUrl}}
+    </p>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0;">
+                    If you're not interested or don't recognize this organization, you can safely ignore this email.
+                    No further action is needed.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,135 @@
+<div class="content">
+    <h1>Important: Platform Warning</h1>
+
+    <p>Hello {{ownerName}},</p>
+
+    <p>
+        We're reaching out regarding <strong>{{organizationName}}</strong>. Our platform team has identified a
+        concern that requires your attention.
+    </p>
+
+    <!-- Warning Notice -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px;">
+        <tr>
+            <td align="center">
+                <img width="48" height="48"
+                    src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/warning.png" alt="warning"
+                    class="dark-mode-safe"
+                    style="-ms-interpolation-mode: bicubic; color: transparent; display: block; margin: 0 auto 12px;" />
+                <p style="font-family: Arial, sans-serif; font-size: 16px; color: #92400e; margin: 0; font-weight: bold;">
+                    Platform Warning Issued
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 8px 0 0 0;">
+                    {{warningDate}}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Warning Details -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; border-left: 4px solid #004aad; padding-left: 16px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 12px 0;">
+                    Warning Details:
+                </h3>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0;">
+                    {{warningDetails}}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Why This Matters -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 12px 0;">
+                    Why This Matters:
+                </h3>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; line-height: 1.8; margin: 0;">
+                    Platform warnings are issued to maintain the integrity, safety, and trust of our community.
+                    Repeated violations or failure to address concerns may result in further action, including
+                    temporary restrictions or account suspension.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Action Required -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #fef2f2; border-left: 4px solid #dc2626; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #991b1b; margin: 0 0 8px 0;">
+                    <strong>⚠️ Action Required:</strong>
+                </p>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #991b1b; line-height: 1.8; margin: 0; padding-left: 20px;">
+                    <li>Review the warning details carefully</li>
+                    <li>Take immediate corrective action</li>
+                    <li>Ensure compliance with platform policies</li>
+                    <li>Contact support if you need clarification</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    {{#if recommendedActions}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; border-left: 4px solid #10b981; padding-left: 16px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 12px 0;">
+                    Recommended Actions:
+                </h3>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; line-height: 1.8; margin: 0;">
+                    {{recommendedActions}}
+                </p>
+            </td>
+        </tr>
+    </table>
+    {{/if}}
+
+    {{> button
+    url=contactSupportUrl
+    label="Contact Support Team"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0 0 8px 0;">
+                    <strong>💡 Prevention is Key:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0;">
+                    We're committed to working with you to prevent escalation. Addressing this warning promptly will
+                    help maintain your organization's good standing on the platform and ensure continued access to
+                    all features.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    Please take this warning seriously and address the concerns promptly. Our support team is
+                    available to answer any questions and help you resolve this matter.
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 10px 0 0 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

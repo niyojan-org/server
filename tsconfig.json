@@ -19,7 +19,8 @@
       "@queues/*": ["./src/queues/*"],
       "@workers/*": ["./src/workers/*"],
       "@routes": ["./src/routes.ts"],
-      "@app": ["./src/app.ts"]
+      "@app": ["./src/app.ts"],
+      "@helpers/*": ["./src/helpers/*"]
     },
 
     /* Strictness */

@@ -1,0 +1,22 @@
+info:
+  name: GET LIST OF PENDING VERIFICATION
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{org_tm_url}}/pending-verifications?limit=2&page=1"
+  params:
+    - name: limit
+      value: "2"
+      type: query
+    - name: page
+      value: "1"
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

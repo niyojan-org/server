@@ -1,0 +1,99 @@
+<div class="content">
+    <h1>Payment Verification Failed</h1>
+
+    <p>Hello {{ownerName}},</p>
+
+    <p>
+        We've reviewed the payment details you submitted for <strong>{{organizationName}}</strong>, but unfortunately
+        we're unable to verify them at this time.
+    </p>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #fef2f2; border-left: 4px solid #dc2626; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #991b1b; margin: 0 0 8px 0;">
+                    <strong>Verification Failed:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #991b1b; margin: 0;">
+                    {{rejectionReason}}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- What You Need to Do -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; border-left: 4px solid #004aad; padding-left: 16px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 12px 0;">
+                    Action Required:
+                </h3>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; line-height: 1.8; margin: 0; padding-left: 20px;">
+                    <li>Review the rejection reason carefully</li>
+                    <li>Verify that all information is accurate and complete</li>
+                    <li>Ensure your payment account is active and in good standing</li>
+                    <li>Update and resubmit your payment details</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Common Issues -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 12px 0;">
+                    Common Issues:
+                </h3>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; line-height: 1.8; margin: 0; padding-left: 20px;">
+                    <li>Incorrect or incomplete account information</li>
+                    <li>Mismatched name on the account</li>
+                    <li>Unsupported payment method or region</li>
+                    <li>Missing required documentation</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=updatePaymentUrl
+    label="Update Payment Details"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0 0 8px 0;">
+                    <strong>Important:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0;">
+                    You won't be able to create paid events or receive payments until your payment details are
+                    verified. However, you can continue creating free events and using all other features.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    If you need help with the verification process or have questions, our support team is ready to
+                    assist you.
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 10px 0 0 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,10 @@
+info:
+  name: ADMIN
+  type: folder
+  seq: 1
+
+request:
+  auth: inherit
+  variables:
+    - name: admin_event
+      value: "{{url}}/events/admin"

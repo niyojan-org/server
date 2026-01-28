@@ -1,0 +1,19 @@
+info:
+  name: VERIFY ORGANIZATION REQUEST
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{org_tm_url}}/:id/verify"
+  params:
+    - name: id
+      value: 6972ffb802570490dc685142
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

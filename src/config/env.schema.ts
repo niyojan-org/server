@@ -5,6 +5,7 @@ export const envSchema = z.object({
   NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
   PORT: z.coerce.number().default(5050),
   MONGO_URI: z.string(),
+  PSQL_URI: z.string(),
   APP_NAME: z.string().default("Orgatick"),
 
   //SMTP

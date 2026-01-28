@@ -1,0 +1,67 @@
+info:
+  name: CREATE AN ORGANIZATION
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{org_url}}/admin/create"
+  body:
+    type: json
+    data: |
+      {
+        "name": "Tech Innovators Inc",
+        "email": "iamabhi1906@gmail.com",
+        "phone": "+1234567890",
+        "category": "startup",
+        "subCategory": "SaaS",
+        "description": "A cutting-edge technology startup focused on innovative solutions",
+        "logo": "https://res.cloudinary.com/ddk9qhmit/image/upload/v1764871002/logo.png",
+        "address": {
+          "locality": "Tech Park, Phase 1",
+          "city": "San Francisco",
+          "state": "California",
+          "country": "United States",
+          "zipCode": "94102"
+        },
+        "supportContact": {
+          "name": "John Support",
+          "email": "support@techinnovators.com",
+          "phone": "+1234567891"
+        },
+        "socialLinks": {
+          "website": "https://www.techinnovators.com",
+          "linkedin": "https://www.linkedin.com/company/techinnovators",
+          "twitter": "https://twitter.com/techinnovators",
+          "facebook": "https://www.facebook.com/techinnovators",
+          "instagram": "https://www.instagram.com/techinnovators",
+          "youtube": "https://www.youtube.com/c/techinnovators",
+          "blog": "https://blog.techinnovators.com"
+        },
+        "bankDetails": {
+          "accountHolderName": "Tech Innovators Inc",
+          "bankName": "Bank of America",
+          "branchName": "San Francisco Main Branch",
+          "accountNumber": "1234567890",
+          "ifscCode": "BOFA0001234",
+          "upiId": "techinnovators@upi",
+          "verified": false
+        },
+        "documents": [
+          {
+            "type": "Certificate of Incorporation",
+            "url": "https://example.com/documents/incorporation.pdf",
+            "uploadedAt": "2026-01-19T00:00:00.000Z",
+            "verified": false,
+            "rejected": false
+          }
+        ],
+        "active": true
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

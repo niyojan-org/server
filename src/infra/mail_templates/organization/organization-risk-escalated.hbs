@@ -1,0 +1,141 @@
+<div class="content">
+    <h1>Urgent: Risk Level Escalated</h1>
+
+    <p>Hello {{ownerName}},</p>
+
+    <p>
+        This is an urgent notification regarding <strong>{{organizationName}}</strong>. The risk level for your
+        organization has been escalated to <strong>{{riskLevel}}</strong>.
+    </p>
+
+    <!-- Critical Alert -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #fef2f2; border-left: 4px solid #dc2626; padding: 20px;">
+        <tr>
+            <td align="center">
+                <img width="48" height="48"
+                    src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/alert.png" alt="alert"
+                    class="dark-mode-safe"
+                    style="-ms-interpolation-mode: bicubic; color: transparent; display: block; margin: 0 auto 12px;" />
+                <p style="font-family: Arial, sans-serif; font-size: 18px; color: #991b1b; margin: 0; font-weight: bold;">
+                    ⚠️ {{riskLevel}} Risk Alert
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #991b1b; margin: 8px 0 0 0;">
+                    Immediate attention required
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Escalation Reason -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; border-left: 4px solid #004aad; padding-left: 16px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 12px 0;">
+                    Reason for Escalation:
+                </h3>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0;">
+                    {{escalationReason}}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Immediate Consequences -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; margin: 0 0 8px 0;">
+                    <strong>Immediate Impact:</strong>
+                </p>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #92400e; line-height: 1.8; margin: 0; padding-left: 20px;">
+                    {{#if temporaryRestrictions}}
+                    <li>{{temporaryRestrictions}}</li>
+                    {{else}}
+                    <li>Enhanced monitoring of organization activities</li>
+                    <li>Possible limitations on certain features</li>
+                    <li>Priority review of future submissions</li>
+                    {{/if}}
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Critical Actions Required -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); border-radius: 8px; padding: 24px 20px;">
+        <tr>
+            <td>
+                <h3 style="color: #ffffff; font-family: Arial, sans-serif; font-size: 20px; margin: 0 0 12px 0;">
+                    Critical Actions Required
+                </h3>
+                <ul style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.8; margin: 0; padding-left: 20px;">
+                    <li>Contact our support team immediately</li>
+                    <li>Provide detailed explanation and documentation</li>
+                    <li>Address all compliance concerns</li>
+                    <li>Respond within <strong>{{responseDeadline}}</strong></li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <!-- What Happens Next -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 12px 0;">
+                    What Happens Next:
+                </h3>
+                <ul style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; line-height: 1.8; margin: 0; padding-left: 20px;">
+                    <li><strong>Immediate:</strong> Contact support to discuss the escalation</li>
+                    <li><strong>Short-term:</strong> Provide requested information and corrective actions</li>
+                    <li><strong>If unresolved:</strong> Further restrictions may be applied</li>
+                    <li><strong>Severe cases:</strong> Organization may be suspended or permanently banned</li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=urgentContactUrl
+    label="Contact Support Immediately"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0 0 8px 0;">
+                    <strong>Early Intervention:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0;">
+                    This escalation is designed to prevent further issues and protect our community. By addressing
+                    these concerns promptly and cooperatively, you can help resolve the situation and restore your
+                    organization's good standing.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    <strong>This is a time-sensitive matter.</strong> Please contact our support team immediately to
+                    discuss the escalation and necessary steps for resolution.
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 10px 0 0 0;">
+                    Sincerely,<br />
+                    <strong style="color: #1f2937;">- Orgatick Trust & Safety Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

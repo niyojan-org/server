@@ -1,0 +1,71 @@
+<div class="content">
+    <h1>New Member Joined Your Organization</h1>
+
+    <p>Hello {{ownerName}},</p>
+
+    <p>
+        Great news! <strong>{{memberName}}</strong> has accepted your invitation and joined
+        <strong>{{organizationName}}</strong>.
+    </p>
+
+    <!-- Member Info -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td align="center">
+                <img width="48" height="48"
+                    src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/user-check.png"
+                    alt="member-joined" class="dark-mode-safe"
+                    style="-ms-interpolation-mode: bicubic; color: transparent; display: block; margin: 0 auto 12px;" />
+                <p style="font-family: Arial, sans-serif; font-size: 16px; color: #1f2937; margin: 0; font-weight: bold;">
+                    {{memberName}}
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 8px 0 0 0;">
+                    Role: <strong style="color: #004aad;">{{role}}</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 4px 0 0 0;">
+                    {{memberEmail}}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <p>
+        {{memberName}} now has access to collaborate on your organization's events and can perform actions based on
+        their assigned role.
+    </p>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0 0 8px 0;">
+                    <strong>Tip:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0;">
+                    You can view all team members and manage their roles anytime from your organization dashboard.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=memberManagementUrl
+    label="Manage Team Members"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

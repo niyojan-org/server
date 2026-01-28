@@ -1,0 +1,80 @@
+<div class="content">
+    <h1>Invitation Cancelled</h1>
+
+    <p>Hello {{inviteeName}},</p>
+
+    <p>
+        We're writing to let you know that the invitation to join <strong>{{organizationName}}</strong> has been
+        revoked by <strong>{{revokedBy}}</strong>.
+    </p>
+
+    <!-- Revocation Info -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td align="center">
+                <img width="48" height="48"
+                    src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/cancel.png"
+                    alt="cancelled" class="dark-mode-safe"
+                    style="-ms-interpolation-mode: bicubic; color: transparent; display: block; margin: 0 auto 12px;" />
+                <p style="font-family: Arial, sans-serif; font-size: 16px; color: #1f2937; margin: 0; font-weight: bold;">
+                    Invitation No Longer Valid
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #6b7280; margin: 8px 0 0 0;">
+                    Organization: {{organizationName}}
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <p>
+        This means the invitation link is no longer active and you won't be able to join this organization using the
+        previous invitation.
+    </p>
+
+    {{#if revocationReason}}
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; border-left: 4px solid #004aad; padding-left: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #1f2937; margin: 0 0 8px 0;">
+                    <strong>Reason:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #4b5563; margin: 0;">
+                    {{revocationReason}}
+                </p>
+            </td>
+        </tr>
+    </table>
+    {{/if}}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0 0 8px 0;">
+                    <strong>What this means:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0;">
+                    This is just a notification for clarity — no action is required from your side. If you still wish
+                    to join this organization, please contact the organization administrator to request a new
+                    invitation.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    If you have any questions, feel free to contact our support team.
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 10px 0 0 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,130 @@
+<div class="content">
+    <h1>Payment Details Verified!</h1>
+
+    <p>Hello {{ownerName}},</p>
+
+    <p>
+        Great news! Your payment details for <strong>{{organizationName}}</strong> have been successfully verified.
+    </p>
+
+    <!-- Success Confirmation -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 8px; padding: 24px 20px;">
+        <tr>
+            <td align="center">
+                <img width="64" height="64"
+                    src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/check-circle.png"
+                    alt="verified" class="dark-mode-safe"
+                    style="-ms-interpolation-mode: bicubic; color: transparent; display: block; margin: 0 auto 16px;" />
+                <h3 style="color: #ffffff; font-family: Arial, sans-serif; font-size: 22px; margin: 0 0 8px 0;">
+                    Payment Details Verified
+                </h3>
+                <p style="color: #ffffff; font-family: Arial, sans-serif; font-size: 15px; margin: 0;">
+                    You're all set to receive payments for your events
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <p>
+        Your organization is now ready to create and host paid events. All payment processing features have been
+        activated for your account.
+    </p>
+
+    <!-- Enabled Features -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 25px 0; background-color: #f0f7ff; border-radius: 8px; padding: 20px;">
+        <tr>
+            <td>
+                <h3 style="font-family: Arial, sans-serif; font-size: 18px; color: #1f2937; margin: 0 0 16px 0; text-align: center;">
+                    ✨ What You Can Do Now
+                </h3>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                    style="max-width: 480px; margin: 0 auto;">
+                    <tr>
+                        <td style="padding: 10px 0; text-align: center;">
+                            <img width="24" height="24"
+                                src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/ticket.png"
+                                alt="paid-tickets" class="dark-mode-safe"
+                                style="-ms-interpolation-mode: bicubic; color: transparent; display: inline-block; vertical-align: middle; margin-right: 8px;" />
+                            <span
+                                style="font-family: Arial, sans-serif; font-size: 15px; color: #1f2937; font-weight: bold; vertical-align: middle;">Create
+                                and sell paid event tickets</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0; text-align: center;">
+                            <img width="24" height="24"
+                                src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/money.png"
+                                alt="revenue" class="dark-mode-safe"
+                                style="-ms-interpolation-mode: bicubic; color: transparent; display: inline-block; vertical-align: middle; margin-right: 8px;" />
+                            <span
+                                style="font-family: Arial, sans-serif; font-size: 15px; color: #1f2937; font-weight: bold; vertical-align: middle;">Receive
+                                payments directly to your account</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0; text-align: center;">
+                            <img width="24" height="24"
+                                src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/analytics.png"
+                                alt="reports" class="dark-mode-safe"
+                                style="-ms-interpolation-mode: bicubic; color: transparent; display: inline-block; vertical-align: middle; margin-right: 8px;" />
+                            <span
+                                style="font-family: Arial, sans-serif; font-size: 15px; color: #1f2937; font-weight: bold; vertical-align: middle;">Track
+                                revenue and payment reports</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 10px 0; text-align: center;">
+                            <img width="24" height="24"
+                                src="https://cdn.jsdelivr.net/gh/niyojan-org/email-assets/icons/lineal/refund.png"
+                                alt="refunds" class="dark-mode-safe"
+                                style="-ms-interpolation-mode: bicubic; color: transparent; display: inline-block; vertical-align: middle; margin-right: 8px;" />
+                            <span
+                                style="font-family: Arial, sans-serif; font-size: 15px; color: #1f2937; font-weight: bold; vertical-align: middle;">Manage
+                                refunds and cancellations</span>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    {{> button
+    url=createEventUrl
+    label="Create Your First Paid Event"
+    variant="primary"
+    fullWidth=true
+    marginTop="20px"
+    marginBottom="20px"
+    }}
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="margin: 20px 0; background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 16px;">
+        <tr>
+            <td>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0 0 8px 0;">
+                    <strong>Pro Tip:</strong>
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 14px; color: #065f46; margin: 0;">
+                    Payouts are processed according to your selected payout schedule. You can view and modify your
+                    payout settings in the organization dashboard.
+                </p>
+            </td>
+        </tr>
+    </table>
+
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 30px;">
+        <tr>
+            <td align="">
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 0;">
+                    Congratulations on unlocking payment features! Start creating amazing paid events.
+                </p>
+                <p style="font-family: Arial, sans-serif; font-size: 15px; color: #4b5563; margin: 10px 0 0 0;">
+                    Best regards,<br />
+                    <strong style="color: #1f2937;">- Orgatick Team</strong>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>

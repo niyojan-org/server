@@ -8,8 +8,11 @@ import {
   purposeAndEnvParamSchema,
   validateDomainQuerySchema,
 } from "./domain.schema";
+import { authenticate } from "@core/middlewares/auth.middleware";
+import { isTaskMaster } from "@core/middlewares/taskmaster.middleware";
 
 const router = Router();
+router.use(authenticate, isTaskMaster());
 
 // POST - Create domain
 router.post("/", validate({ body: domainSchemaZod }), domainController.createDomain);
@@ -18,7 +21,7 @@ router.get("/", domainController.getDomains);
 router.get(
   "/validate",
   validate({ query: validateDomainQuerySchema }),
-  domainController.validateDomainPurpose
+  domainController.validateDomainPurpose,
 );
 
 router.get("/env/:env", validate({ params: envParamSchema }), domainController.getDomainByEnv);
@@ -26,7 +29,7 @@ router.get("/env/:env", validate({ params: envParamSchema }), domainController.g
 router.get(
   "/purpose/:purpose/env/:env",
   validate({ params: purposeAndEnvParamSchema }),
-  domainController.getDomainByPurposeAndEnv
+  domainController.getDomainByPurposeAndEnv,
 );
 
 router.get("/:id", validate({ params: idParamSchema }), domainController.getDomainById);
@@ -34,7 +37,7 @@ router.get("/:id", validate({ params: idParamSchema }), domainController.getDoma
 router.put(
   "/:id",
   validate({ params: idParamSchema, body: domainSchemaZod.partial() }),
-  domainController.updateDomain
+  domainController.updateDomain,
 );
 
 router.delete("/:id", validate({ params: idParamSchema }), domainController.deleteDomain);
