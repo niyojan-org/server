@@ -1,0 +1,27 @@
+info:
+  name: Deactivate Push Token
+  type: http
+  seq: 10
+
+http:
+  method: DELETE
+  url: "{{base_url}}/api/notifications/push-tokens"
+  body:
+    type: json
+    data: |-
+      {
+        "token": "your-push-token-here"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  Deactivate a push token (unsubscribe from push notifications)
+  
+  Body Parameters:
+  - token: The push token to deactivate

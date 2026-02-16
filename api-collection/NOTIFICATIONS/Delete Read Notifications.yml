@@ -1,0 +1,40 @@
+meta:name: Delete Read Notifications
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  - This action cannot be undone  - Unread notifications are preserved  - Only deletes notifications that are marked as read  ## Notes    ```  }    }      "deletedCount": 5    "data": {    "message": "5 read notifications deleted",    "success": true,  {  ```json  ## Response    This permanently removes read notifications from the database.  Deletes all read notifications for the authenticated user.    # Delete Read Notificationsdocs: |    mode: none  body:      enabled: true      value: "Bearer {{access_token}}"    - name: Authorization  headers:  url: "{{base_url}}/notifications/read"  method: DELETEhttp:  seq: 7  type: http  name: Delete Read Notificationstype: http
+seq: 7
+

@@ -18,6 +18,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "generate-vapid-keys": "tsx scripts/generate-vapid-keys.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -37,7 +38,9 @@
     "mongoose-paginate-v2": "^1.9.1",
     "nodemailer": "^7.0.12",
     "pg": "^8.17.1",
+    "socket.io": "^4.8.3",
     "speakeasy": "^2.0.0",
+    "web-push": "^3.6.7",
     "winston": "^3.19.0",
     "zod": "^4.3.5"
   },
@@ -52,6 +55,7 @@
     "@types/nodemailer": "^7.0.5",
     "@types/pg": "^8.16.0",
     "@types/speakeasy": "^2.0.10",
+    "@types/web-push": "^3.6.4",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

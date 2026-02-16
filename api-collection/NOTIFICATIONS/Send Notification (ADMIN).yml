@@ -1,0 +1,83 @@
+info:
+  name: Send Notification (ADMIN)
+  type: http
+  seq: 11
+
+http:
+  method: POST
+  url: "{{url}}/notifications/send"
+  body:
+    type: json
+    data: |-
+      {
+        "type": "system_announcement",
+        "title": "Welcome to Orgatick!",
+        "message": "Thank you for joining our platform. Explore events, create organizations, and manage your tasks efficiently.",
+        "recipientIds": [
+          "68b6df5ba2b20fb27b51c502",
+          "693582b11d9917e2c6b3f5a9"
+        ],
+        "priority": "normal",
+        "category": "system",
+        "actionUrl": "/dashboard",
+        "actionLabel": "Go to Dashboard",
+        "data": {
+          "customField": "customValue"
+        }
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  Send a notification to one or more users (Admin/System use)
+
+  Body Parameters:
+  - type: Notification type (required)
+    * system_announcement
+    * system_maintenance
+    * organization_verified
+    * organization_rejected
+    * event_reminder
+    * event_update
+    * event_cancelled
+    * task_assigned
+    * etc.
+
+  - title: Notification title (required, max 255 chars)
+  - message: Notification message (required)
+  - recipientIds: Array of MongoDB ObjectIds (required)
+  - priority: Priority level (optional, default: "normal")
+    * low
+    * normal
+    * high
+    * urgent
+
+  - category: Category (optional)
+    * system
+    * social
+    * updates
+    * alerts
+    * events
+
+  - actionUrl: URL to navigate when clicked (optional)
+  - actionLabel: Button label for action (optional)
+  - data: Additional JSON data (optional)
+
+  Example Response:
+  {
+    "success": true,
+    "data": {
+      "notification": {
+        "id": "uuid-here",
+        "type": "system_announcement",
+        "title": "Welcome!",
+        ...
+      },
+      "recipientCount": 1
+    }
+  }

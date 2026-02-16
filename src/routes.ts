@@ -3,6 +3,7 @@ import { domainRoutes } from "@modules/domain";
 import eventRoutes from "@modules/events/routes";
 import organizationRoutes from "@modules/organization/routes";
 import userRouter from "@modules/user/user.routes";
+import notificationRoutes from "@modules/notifications/routes/notification.routes";
 import { Router } from "express";
 
 const mainRoutes = Router();
@@ -14,5 +15,6 @@ mainRoutes.use("/domains", domainRoutes);
 mainRoutes.use("/events", eventRoutes);
 mainRoutes.use("/organizations", organizationRoutes);
 mainRoutes.use("/org", organizationRoutes);
+mainRoutes.use("/notifications", notificationRoutes);
 
 export default mainRoutes;

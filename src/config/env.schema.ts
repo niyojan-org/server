@@ -15,6 +15,7 @@ export const envSchema = z.object({
   SMTP_PORT: z.coerce.number(),
 
   //JWT
+  JWT_SECRET: z.string(),
   JWT_ACCESS_SECRET: z.string(),
   JWT_REFRESH_SECRET: z.string(),
   JWT_ACCESS_TOKEN_EXPIRY: z.string(),
@@ -25,6 +26,14 @@ export const envSchema = z.object({
   //REDIS
   REDIS_HOST: z.string(),
   REDIS_PORT: z.coerce.number(),
+
+  //WEB PUSH (Push Notifications)
+  VAPID_PUBLIC_KEY: z.string().optional(),
+  VAPID_PRIVATE_KEY: z.string().optional(),
+  VAPID_SUBJECT: z.string().optional(),
+
+  //FRONTEND
+  FRONTEND_URL: z.string().default("http://localhost:3000"),
 
   //PASSKEY
   RP_ID: z.string(),

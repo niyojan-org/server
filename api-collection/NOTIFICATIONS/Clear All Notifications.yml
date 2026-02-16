@@ -1,0 +1,36 @@
+meta:
+  name: Clear All Notifications
+  type: http
+  seq: 8
+
+http:
+  method: DELETE
+  url: "{{base_url}}/notifications/clear-all"
+  headers:
+    - name: Authorization
+      value: "Bearer {{access_token}}"
+      enabled: true
+  body:
+    mode: none
+
+docs: |
+  # Clear All Notifications
+  
+  Deletes ALL notifications for the authenticated user (both read and unread).
+  This permanently removes all notifications from the database.
+  
+  ## Response
+  ```json
+  {
+    "success": true,
+    "message": "23 notifications deleted",
+    "data": {
+      "deletedCount": 23
+    }
+  }
+  ```
+  
+  ## Notes
+  - Deletes both read and unread notifications
+  - This action cannot be undone
+  - Use with caution - consider using "Delete Read Notifications" if you want to preserve unread ones
