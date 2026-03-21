@@ -4,6 +4,8 @@ import {
   NotificationWithRecipientInfo,
   GetNotificationsOptions,
 } from "../types/notification.types";
+import z from "zod";
+import { uuidSchema } from "@helpers/zod";
 
 export async function getUserNotifications(
   options: GetNotificationsOptions,
@@ -63,7 +65,7 @@ export async function getUnreadCount(userId: string): Promise<number> {
 
 export async function markAsRead(
   userId: string,
-  notificationIds: string[],
+  notificationIds: z.infer<typeof uuidSchema>[],
 ): Promise<NotificationRecipient[]> {
   const result = await pool.query<NotificationRecipient>(
     `UPDATE notification_recipients

@@ -1,0 +1,30 @@
+info:
+  name: Replace Resource File
+  type: http
+  seq: 6
+
+http:
+  method: PUT
+  url: "{{resource_url}}/{{resourceId}}/file"
+  body:
+    type: multipartForm
+    data:
+      - name: file
+        value: ""
+        type: file
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  Replace the actual file of an existing resource
+  
+  The old file will be deleted from cloud storage and replaced with the new one.
+  File must match the resource type (e.g., can't upload video to an image resource).
+  
+  Form Data:
+  - file: New file to upload (required)

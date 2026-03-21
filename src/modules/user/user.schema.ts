@@ -72,7 +72,7 @@ export const userZodSchema = z
     {
       message: "Password is required for local authentication, providerId is required for OAuth",
       path: ["password"],
-    }
+    },
   );
 
 export type CreateUser = z.infer<typeof userZodSchema>;

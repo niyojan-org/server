@@ -1,12 +1,11 @@
 import ApiError from "@core/errors/api.error";
 import { AuthenticatedRequest } from "@core/middlewares/auth.middleware";
-import { OrganizationRequest } from "@core/middlewares/organization.middleware";
 import { sendOrganizationEmail } from "@infra/mail";
 import { OrganizationRepository } from "@modules/organization/persistence/organization.repository";
-import { OrganizationCreateSchema, OrganizationUpdateSchema } from "@modules/organization/types";
+import { OrganizationCreateSchema } from "@modules/organization/types";
 import writeOrganizationAudit from "../../../../audits/organization.audit";
 
-export const createdOrg = async (req: AuthenticatedRequest) => {
+const createAnOrganization = async (req: AuthenticatedRequest) => {
   const validatedData = OrganizationCreateSchema.parse(req.body);
   const existingOrg = await OrganizationRepository.findByOwner(req.user!._id);
   if (existingOrg) {
@@ -51,17 +50,4 @@ export const createdOrg = async (req: AuthenticatedRequest) => {
   return organization;
 };
 
-export const updateOrg = async (req: OrganizationRequest) => {
-  const validatedData = OrganizationUpdateSchema.parse(req.body);
-
-  const updatedOrganization = await OrganizationRepository.updateById(
-    req.organization._id,
-    validatedData,
-  );
-
-  if (!updatedOrganization) {
-    throw new ApiError(404, "Organization not found.", "ORGANIZATION_NOT_FOUND");
-  }
-
-  return updatedOrganization;
-};
+export default createAnOrganization;

@@ -1,0 +1,112 @@
+info:
+  name: Reject Bank Verification
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{org_tm_url}}/:id/bank/reject"
+  params:
+    - name: id
+      value: 69a2f93b33a5da5c1ffdbe92
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "reason": "Account holder name does not match organization name. Please update and resubmit."
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  # Reject Bank Verification
+
+  Rejects bank account verification with a detailed reason.
+
+  ## Endpoint
+  - **Method**: POST
+  - **URL**: `/taskmaster/:id/reject-bank`
+  - **Auth**: Required (Taskmaster)
+
+  ## Path Parameters
+  - `id` (string, required): Organization ID
+
+  ## Request Body
+  ```json
+  {
+    "reason": "Account holder name does not match organization name."
+  }
+  ```
+
+  ### Body Parameters
+  - `reason` (string, required): Clear reason for rejection (min 10 characters)
+
+  ## Prerequisites
+  - Bank verification request must be pending
+
+  ## Response
+
+  ### Success (200 OK)
+  ```json
+  {
+    "success": true,
+    "message": "Bank verification rejected",
+    "data": {
+      "_id": "69a2f93b33a5da5c1ffdbe92",
+      "bankDetails": {
+        "accountHolderName": "Tech Innovators Inc",
+        "bankName": "Bank of America",
+        "accountNumber": "****7890",
+        "ifscCode": "BOFA0001234",
+        "verified": false,
+        "reqForVerification": false,
+        "rejectionReason": "Account holder name does not match organization name.",
+        "rejectedAt": "2026-03-02T14:30:00.000Z",
+        "rejectedBy": "69a2f93b33a5da5c1ffdbe95"
+      }
+    }
+  }
+  ```
+
+  ### Error - No Pending Request (400 Bad Request)
+  ```json
+  {
+    "success": false,
+    "message": "No bank verification request pending"
+  }
+  ```
+
+  ## What Happens
+  1. `bankDetails.reqForVerification` set to `false`
+  2. `bankDetails.rejectionReason` stored
+  3. `bankDetails.rejectedAt` timestamp recorded
+  4. `bankDetails.rejectedBy` set to taskmaster ID
+  5. Email notification sent with rejection reason
+  6. Audit log created
+
+  ## Common Rejection Reasons
+  - "Account holder name does not match organization name"
+  - "Invalid IFSC code provided"
+  - "Account number format is incorrect"
+  - "Bank name not recognized or invalid"
+  - "Unable to verify bank account details"
+  - "Cancelled cheque or bank statement required"
+  - "UPI ID does not belong to this account"
+
+  ## What Organization Can Do Next
+  1. Review rejection reason carefully
+  2. Update bank details with correct information
+  3. Upload supporting documents (cancelled cheque/statement)
+  4. Raise new bank verification request
+
+  ## Best Practices
+  - Specify exact issue with bank details
+  - Suggest corrective action
+  - Request additional documentation if needed
+  - Be clear about format requirements

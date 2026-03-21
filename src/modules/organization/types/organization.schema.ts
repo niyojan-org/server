@@ -56,6 +56,7 @@ const organizationSchema = z.object({
   rejectionReason: z.string().min(10).max(500).nullable().optional(),
   trustScore: z.number().min(0).max(100).default(100),
   active: z.boolean().default(true),
+  allowsEventCreation: z.boolean().default(true),
 
   fraudFlags: z.array(FraudFlagSchema).max(10).default([]),
   warnings: z.array(WarningSchema).max(10).default([]),

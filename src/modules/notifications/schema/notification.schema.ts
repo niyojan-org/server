@@ -9,6 +9,7 @@ import {
   registerPushTokenPayloadSchema,
   updatePreferencesPayloadSchema,
 } from "../types/preferences.types";
+import { uuidSchema } from "@helpers/zod";
 
 // Re-export from types for convenience
 export {
@@ -18,9 +19,9 @@ export {
 };
 
 // Enum schemas
-export const notificationTypeSchema = z.nativeEnum(NotificationType);
-export const notificationPrioritySchema = z.nativeEnum(NotificationPriority);
-export const notificationCategorySchema = z.nativeEnum(NotificationCategory);
+export const notificationTypeSchema = z.enum(NotificationType);
+export const notificationPrioritySchema = z.enum(NotificationPriority);
+export const notificationCategorySchema = z.enum(NotificationCategory);
 
 // Create notification schema (for API input validation)
 export const createNotificationSchema = z.object({
@@ -61,7 +62,7 @@ export const createNotificationSchema = z.object({
 // Mark as read schema
 export const markAsReadSchema = z.object({
   notificationIds: z
-    .array(z.string().min(1, "Invalid notification ID"))
+    .array(uuidSchema)
     .min(1, "At least one notification ID is required")
     .max(100, "Cannot mark more than 100 notifications at once"),
 });

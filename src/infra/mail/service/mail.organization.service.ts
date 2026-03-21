@@ -139,6 +139,52 @@ const sendOrganizationEmail = {
     });
   },
 
+  // Bank Verification
+
+  organizationBankSubmitted: async (
+    to: string,
+    context: OrganizationType.OrganizationBankSubmittedType,
+  ) => {
+    await mailQueue.add("template", {
+      template: "organization/organization-bank-submitted",
+      layout: EMAIL_LAYOUTS.BASE,
+      from: EMAIL_SENDERS.AUTH,
+      to,
+      subject: "Bank Details Submitted for Verification",
+      data: context,
+    });
+  },
+
+  organizationBankVerified: async (
+    to: string,
+    context: OrganizationType.OrganizationBankVerifiedType,
+  ) => {
+    await mailQueue.add("template", {
+      template: "organization/organization-bank-verified",
+      layout: EMAIL_LAYOUTS.BASE,
+      from: EMAIL_SENDERS.AUTH,
+      to,
+      subject: "Bank Details Verified!",
+      data: context,
+    });
+  },
+
+  organizationBankRejected: async (
+    to: string,
+    context: OrganizationType.OrganizationBankRejectedType,
+  ) => {
+    await mailQueue.add("template", {
+      template: "organization/organization-bank-rejected",
+      layout: EMAIL_LAYOUTS.BASE,
+      from: EMAIL_SENDERS.AUTH,
+      to,
+      subject: "Bank Verification Update Required",
+      data: context,
+    });
+  },
+
+  // Payment & Events
+
   organizationPaymentSubmitted: async (
     to: string,
     context: OrganizationType.OrganizationPaymentSubmittedType,

@@ -1,0 +1,25 @@
+info:
+  name: Add bank details
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{org_url}}/admin/bank"
+  body:
+    type: json
+    data: |-
+      {
+        "accountHolderName": "ABC Organization Pvt. Ltd.",
+        "bankName": "State Bank of India",
+        "branchName": "Delhi Main Branch",
+        "accountNumber": "1234567890123",
+        "ifscCode": "SBIN0001234"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

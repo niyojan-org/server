@@ -62,6 +62,8 @@ const BankDetailsSchema = new Schema<OrgTypes.OrganizationBank>(
     verified: { type: Boolean, default: false },
     verifiedAt: Date,
     verifiedBy: { type: Types.ObjectId, ref: "User" },
+    reqForVerification: { type: Boolean, default: false },
+    rejectionReason: String,
   },
   { _id: false },
 );
@@ -176,6 +178,9 @@ const OrganizationSchema = new Schema<OrganizationDocument>(
     },
     blockedBy: { type: Types.ObjectId, ref: "User" },
     blockedAt: Date,
+
+    /* ---------- Event Creation Controls ---------- */
+    allowsEventCreation: { type: Boolean, default: true },
 
     /* ---------- Paid Events (SYSTEM ONLY) ---------- */
     allowsPaidEvents: { type: Boolean, default: false },

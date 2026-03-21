@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: "{{base_url}}/api/notifications/push-tokens"
+  url: "{{url}}/notifications/push-tokens"
   body:
     type: json
     data: |-
@@ -26,9 +26,9 @@ settings:
 
 docs: |
   Register a Web Push subscription token
-  
+
   Body Parameters:
   - subscription: JSON string of the PushSubscription object
   - deviceInfo: Object with userAgent and platform
-  
+
   Note: The subscription is obtained from the browser's Push API

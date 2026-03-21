@@ -1,0 +1,24 @@
+info:
+  name: Download Resource
+  type: http
+  seq: 10
+
+http:
+  method: GET
+  url: "{{resource_url}}/{{resourceId}}/download"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  Get a direct download link for the resource file
+  
+  Returns:
+  - downloadUrl: Temporary signed URL for downloading the file
+  - expiresIn: Seconds until the URL expires (typically 3600)
+  
+  The download URL is temporary and expires after 1 hour for security

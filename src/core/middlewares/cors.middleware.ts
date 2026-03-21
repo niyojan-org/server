@@ -26,14 +26,14 @@ const corsMiddleware = cors({
           403,
           "CORS Error: Access denied from this origin",
           "CORS_ERROR",
-          "Cross-origin request blocked from this origin"
+          "Cross-origin request blocked from this origin",
         ),
-        false
+        false,
       );
     }
   },
   credentials: true, // Allow cookies and credentials
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   exposedHeaders: ["X-Requested-Id"],
 

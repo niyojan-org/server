@@ -77,6 +77,29 @@ export const organizationInvitationRevokedSchema = z.object({
   revocationReason: z.string().optional(),
 });
 
+export const organizationBankSubmittedSchema = z.object({
+  ownerName: z.string(),
+  organizationName: z.string(),
+  submittedDate: z.string(),
+  bankName: z.string().optional(),
+  accountNumber: z.string().optional(),
+  dashboardUrl: z.string(),
+});
+
+export const organizationBankVerifiedSchema = z.object({
+  ownerName: z.string(),
+  organizationName: z.string(),
+  allowsPaidEvents: z.boolean(),
+  createEventUrl: z.string(),
+});
+
+export const organizationBankRejectedSchema = z.object({
+  ownerName: z.string(),
+  organizationName: z.string(),
+  rejectionReason: z.string(),
+  updateBankUrl: z.string(),
+});
+
 export const organizationPaymentSubmittedSchema = z.object({
   ownerName: z.string(),
   organizationName: z.string(),

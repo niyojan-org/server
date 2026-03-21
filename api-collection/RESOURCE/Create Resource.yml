@@ -1,0 +1,50 @@
+info:
+  name: Create Resource
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{url}}/resources"
+  body:
+    type: multipart-form
+    data:
+      - name: file
+        type: file
+        value:
+          - /home/abhi/Pictures/solve9/settings.png
+      - name: type
+        type: text
+        value: logo
+      - name: title
+        type: text
+        value: tesing
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  Upload a new resource file with metadata
+
+  Form Data (multipart/form-data):
+  - file: File to upload (required)
+  - title: Resource title, max 120 chars (required)
+  - type: Resource type - logo, carousel, event-banner, flyer, poster, 
+          profile-picture, cover-image, document, video, audio, other (required)
+  - description: Resource description, max 500 chars (optional)
+  - tags: Comma-separated tags, max 10 (optional)
+  - priority: Priority number, higher = more important (optional)
+  - isPublic: true/false for public accessibility (optional, default: false)
+  - organizationId: Organization ID (optional)
+  - eventId: Event ID (optional)
+  - link: External link/CTA URL (optional)
+
+  File Size Limits:
+  - Images: 10 MB
+  - Videos: 100 MB
+  - Documents: 25 MB
+  - Audio: 50 MB

@@ -5,12 +5,12 @@ info:
 
 http:
   method: POST
-  url: "{{base_url}}/api/notifications/read"
+  url: "{{url}}/notifications/read"
   body:
     type: json
     data: |-
       {
-        "notificationId": "your-notification-uuid-here"
+        "notificationIds": ["548e7a35-4136-4fe1-b823-49d4461f743d"]
       }
   auth: inherit
 
@@ -22,6 +22,6 @@ settings:
 
 docs: |
   Mark a specific notification as read
-  
+
   Body Parameters:
   - notificationId: UUID of the notification to mark as read

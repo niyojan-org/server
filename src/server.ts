@@ -10,13 +10,13 @@ import { createServer } from "http";
 async function bootstrap() {
   try {
     await Promise.all([redis.ping(), connectDatabase(), import("./workers")]);
-    
+
     // Create HTTP server for WebSocket support
     const httpServer = createServer(app);
-    
+
     // Initialize WebSocket
     initializeSocketIO(httpServer);
-    
+
     httpServer.listen(env.PORT, () => {
       logger.info(`API running on port ${env.PORT}`);
     });

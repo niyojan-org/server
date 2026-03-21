@@ -5,14 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{org_tm_url}}/pending-verifications?limit=2&page=1"
-  params:
-    - name: limit
-      value: "2"
-      type: query
-    - name: page
-      value: "1"
-      type: query
+  url: "{{org_tm_url}}/verifications/pending/organizations"
   auth: inherit
 
 settings:
@@ -20,3 +13,20 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |
+  # Get Pending Organization Verifications
+
+  Retrieves paginated list of organizations awaiting verification.
+
+  ## Endpoint
+  - **Method**: GET
+  - **URL**: `/taskmaster/pending-verifications`
+  - **Auth**: Required (Taskmaster)
+
+  ## Query Parameters
+  - `page` (number, optional): Page number (default: 1)
+  - `limit` (number, optional): Items per page (default: 10)
+
+  ## Response
+  Returns list of organizations with `reqForVerification: true` and `verified: false`.

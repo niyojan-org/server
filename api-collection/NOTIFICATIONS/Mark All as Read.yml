@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: "{{base_url}}/api/notifications/read-all"
+  url: "{{url}}/notifications/read-all"
   auth: inherit
 
 settings:

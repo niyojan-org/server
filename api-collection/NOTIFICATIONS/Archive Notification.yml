@@ -5,7 +5,11 @@ info:
 
 http:
   method: POST
-  url: "{{base_url}}/api/notifications/{{notificationId}}/archive"
+  url: "{{url}}/notifications/:notificationId/archive"
+  params:
+    - name: notificationId
+      value: 548e7a35-4136-4fe1-b823-49d4461f743d
+      type: path
   auth: inherit
 
 settings:
@@ -14,11 +18,8 @@ settings:
   followRedirects: true
   maxRedirects: 5
 
-vars:
-  notificationId: your-notification-uuid-here
-
 docs: |
   Archive a notification (removes it from the user's inbox)
-  
+
   Path Parameters:
   - notificationId: UUID of the notification to archive

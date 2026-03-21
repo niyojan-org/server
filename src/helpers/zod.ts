@@ -9,3 +9,7 @@ export const objectIdSchema = z
     }),
   )
   .transform((val) => (typeof val === "string" ? new Types.ObjectId(val) : val));
+
+export const uuidSchema = z.uuid({ message: "Invalid UUID format" });
+
+export type ObjectId = z.infer<typeof objectIdSchema>;

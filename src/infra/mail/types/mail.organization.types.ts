@@ -31,6 +31,16 @@ export type OrganizationInvitationRevokedType = z.infer<
   typeof OrganizationSchema.organizationInvitationRevokedSchema
 >;
 
+export type OrganizationBankSubmittedType = z.infer<
+  typeof OrganizationSchema.organizationBankSubmittedSchema
+>;
+export type OrganizationBankVerifiedType = z.infer<
+  typeof OrganizationSchema.organizationBankVerifiedSchema
+>;
+export type OrganizationBankRejectedType = z.infer<
+  typeof OrganizationSchema.organizationBankRejectedSchema
+>;
+
 export type OrganizationPaymentSubmittedType = z.infer<
   typeof OrganizationSchema.organizationPaymentSubmittedSchema
 >;

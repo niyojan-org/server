@@ -1,9 +1,11 @@
+import z from "zod";
 import * as recipientRepository from "../persistence/recipient.repository";
 import {
   GetNotificationsOptions,
   NotificationWithRecipientInfo,
   NotificationStats,
 } from "../types/notification.types";
+import { uuidSchema } from "@helpers/zod";
 
 export async function getUserNotifications(options: GetNotificationsOptions): Promise<{
   notifications: NotificationWithRecipientInfo[];
@@ -29,7 +31,7 @@ export async function getNotificationStats(userId: string): Promise<Notification
   };
 }
 
-export async function markAsRead(userId: string, notificationIds: string[]) {
+export async function markAsRead(userId: string, notificationIds: z.infer<typeof uuidSchema>[]) {
   return recipientRepository.markAsRead(userId, notificationIds);
 }
 

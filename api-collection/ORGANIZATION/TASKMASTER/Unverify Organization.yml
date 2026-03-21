@@ -1,0 +1,81 @@
+info:
+  name: Unverify Organization
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{org_tm_url}}/:id/unverify"
+  params:
+    - name: id
+      value: 69a59b4fbe836b5a7ca1cf00
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  # Unverify Organization
+
+  Removes verification status from an organization. Used when organization data needs major updates.
+
+  ## Endpoint
+  - **Method**: POST
+  - **URL**: `/admin/:id/unverify`
+  - **Auth**: Required (Organization Owner/Admin)
+
+  ## Path Parameters
+  - `id` (string, required): Organization ID
+
+  ## Prerequisites
+  - Organization must be currently verified
+
+  ## Response
+
+  ### Success (200 OK)
+  ```json
+  {
+    "success": true,
+    "message": "Organization unverified successfully",
+    "data": {
+      "_id": "69a2f93b33a5da5c1ffdbe92",
+      "name": "Tech Innovators Inc",
+      "verified": false,
+      "verifiedAt": null,
+      "verifiedBy": null,
+      "allowsEventCreation": false,
+      "allowsPaidEvents": false
+    }
+  }
+  ```
+
+  ### Error - Not Verified (400 Bad Request)
+  ```json
+  {
+    "success": false,
+    "message": "Organization is not verified"
+  }
+  ```
+
+  ## What Happens
+  1. `verified` flag set to `false`
+  2. `verifiedAt` and `verifiedBy` cleared
+  3. `allowsEventCreation` set to `false` (cannot create events)
+  4. `allowsPaidEvents` set to `false` (cannot create paid events)
+  5. Email notification sent to organization admins
+  6. Audit log created
+
+  ## Use Cases
+  1. Organization needs to update critical information
+  2. Reverting verification due to policy changes
+  3. Temporary suspension of verification status
+
+  ## Important Note
+  After unverification, organization will need to:
+  - Update required information
+  - Raise a new verification request
+  - Wait for taskmaster approval again

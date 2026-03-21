@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{base_url}}/api/notifications/stats"
+  url: "{{url}}/notifications/stats"
   auth: inherit
 
 settings:
@@ -16,7 +16,7 @@ settings:
 
 docs: |
   Get notification statistics for the authenticated user
-  
+
   Returns:
   - total: Total notifications
   - unread: Unread count

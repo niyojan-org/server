@@ -5,17 +5,16 @@ info:
 
 http:
   method: PUT
-  url: "{{base_url}}/api/notifications/preferences"
+  url: "{{url}}/notifications/preferences"
   body:
     type: json
     data: |-
       {
-        "email_enabled": true,
         "push_enabled": true,
-        "in_app_enabled": true,
+        "in_app_enabled": false,
         "preferences": {
           "event_reminder": {
-            "email": true,
+            "email": false,
             "push": true,
             "in_app": true
           },
@@ -40,7 +39,7 @@ settings:
 
 docs: |
   Update user's notification preferences
-  
+
   Body Parameters:
   - email_enabled: Enable/disable email notifications
   - push_enabled: Enable/disable push notifications

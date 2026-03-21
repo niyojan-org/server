@@ -1,0 +1,125 @@
+info:
+  name: Verify Document
+  type: http
+  seq: 12
+
+http:
+  method: POST
+  url: "{{org_tm_url}}/:id/verify-document"
+  params:
+    - name: id
+      value: 69a2f93b33a5da5c1ffdbe92
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "documentId": "69a2f93b33a5da5c1ffdbe93"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  # Verify Document
+
+  Marks a specific document as verified after review.
+
+  ## Endpoint
+  - **Method**: POST
+  - **URL**: `/taskmaster/:id/verify-document`
+  - **Auth**: Required (Taskmaster)
+
+  ## Path Parameters
+  - `id` (string, required): Organization ID
+
+  ## Request Body
+  ```json
+  {
+    "documentId": "69a2f93b33a5da5c1ffdbe93"
+  }
+  ```
+
+  ### Body Parameters
+  - `documentId` (string, required): ID of the document to verify
+
+  ## Prerequisites
+  - Document must exist in organization's documents array
+  - Document must not already be verified
+  - Document must not be rejected
+
+  ## Response
+
+  ### Success (200 OK)
+  ```json
+  {
+    "success": true,
+    "message": "Document verified successfully",
+    "data": {
+      "_id": "69a2f93b33a5da5c1ffdbe93",
+      "type": "PAN",
+      "documentId": "ABCDE1234F",
+      "url": "https://cloudinary.com/docs/pan.pdf",
+      "verified": true,
+      "verifiedAt": "2026-03-02T15:00:00.000Z",
+      "checkedBy": "69a2f93b33a5da5c1ffdbe95",
+      "rejected": false
+    }
+  }
+  ```
+
+  ### Error - Document Not Found (404 Not Found)
+  ```json
+  {
+    "success": false,
+    "message": "Document not found"
+  }
+  ```
+
+  ### Error - Already Verified (400 Bad Request)
+  ```json
+  {
+    "success": false,
+    "message": "Document already verified"
+  }
+  ```
+
+  ### Error - Document Rejected (400 Bad Request)
+  ```json
+  {
+    "success": false,
+    "message": "Document has been rejected"
+  }
+  ```
+
+  ## What Happens
+  1. `verified` flag set to `true`
+  2. `verifiedAt` timestamp recorded
+  3. `checkedBy` set to taskmaster ID (as string)
+  4. Document marked as authentic
+  5. Audit log created
+
+  ## Supported Document Types
+  - **PAN**: Permanent Account Number card
+  - **GST**: GST registration certificate
+  - **Registration**: Business registration certificate
+  - **License**: Trade license or professional license
+  - **Certificate**: Other compliance certificates
+
+  ## Verification Checklist
+  - [ ] Document is clear and readable
+  - [ ] All details are visible and not obscured
+  - [ ] Document ID matches organization details
+  - [ ] Document is not expired
+  - [ ] Issuing authority is legitimate
+  - [ ] No signs of tampering or forgery
+
+  ## Use Cases
+  1. Verify PAN card for tax compliance
+  2. Verify GST certificate for business legitimacy
+  3. Verify registration documents for legal compliance
+  4. Build trust with verified documentation

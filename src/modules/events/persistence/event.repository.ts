@@ -38,7 +38,7 @@ export class EventRepository {
 
   static async updateById(eventId: Types.ObjectId, update: Partial<EventDocument>) {
     return EventModel.findByIdAndUpdate(eventId, update, {
-      new: true,
+      returnDocument: 'after',
     }).lean();
   }
 
@@ -48,7 +48,7 @@ export class EventRepository {
     update: Partial<EventDocument>,
   ) {
     return EventModel.findOneAndUpdate({ _id: eventId, organizationId }, update, {
-      new: true,
+      returnDocument: 'after',
     }).lean();
   }
 
@@ -57,7 +57,7 @@ export class EventRepository {
     status: EventStatus,
     extra: Partial<EventDocument> = {},
   ) {
-    return EventModel.findByIdAndUpdate(eventId, { status, ...extra }, { new: true }).lean();
+    return EventModel.findByIdAndUpdate(eventId, { status, ...extra }, { returnDocument: 'after' }).lean();
   }
 
   static async softDelete(eventId: Types.ObjectId, reason?: string) {
@@ -68,7 +68,7 @@ export class EventRepository {
         unpublishedReason: reason,
         unpublishedAt: new Date(),
       },
-      { new: true },
+      { returnDocument: 'after' },
     ).lean();
   }
 

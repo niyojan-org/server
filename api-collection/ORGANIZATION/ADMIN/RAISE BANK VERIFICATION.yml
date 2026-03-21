@@ -1,0 +1,15 @@
+info:
+  name: RAISE BANK VERIFICATION
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{org_url}}/admin/bank/verification/raise"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

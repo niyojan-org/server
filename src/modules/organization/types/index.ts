@@ -6,7 +6,7 @@ import {
   SocialLinksSchema,
   SupportContactSchema,
 } from "./organization.create.schema";
-import { OrganizationBankSchema, PaymentGatewaysSchema } from "./organization.bank.schema";
+import { OrganizationBankSchema, OrganizationBankInputSchema, PaymentGatewaysSchema } from "./organization.bank.schema";
 import { OrganizationUpdateSchema } from "./organization.update.schema";
 import { OrganizationSystemSchema } from "./organization.system.schema";
 import organizationSchema, {
@@ -24,7 +24,7 @@ export {
   OrganizationCreateSchema,
 } from "./organization.create.schema";
 
-export { OrganizationBankSchema, PaymentGatewaysSchema } from "./organization.bank.schema";
+export { OrganizationBankSchema, OrganizationBankInputSchema, PaymentGatewaysSchema } from "./organization.bank.schema";
 
 export { OrganizationUpdateSchema } from "./organization.update.schema";
 
@@ -37,6 +37,8 @@ export {
   default as organizationSchema,
 } from "./organization.schema";
 
+export * from "./verification.schemas";
+
 // Enums
 export { OrganizationCategory, BlockType, RiskLevel, Severity } from "./organization.enums";
 
@@ -47,6 +49,7 @@ export type OrganizationSocialLinks = z.infer<typeof SocialLinksSchema>;
 export type OrganizationDocument = z.infer<typeof DocumentSchema>;
 export type OrganizationCreate = z.infer<typeof OrganizationCreateSchema>;
 export type OrganizationBank = z.infer<typeof OrganizationBankSchema>;
+export type OrganizationBankInput = z.infer<typeof OrganizationBankInputSchema>;
 export type PaymentGateways = z.infer<typeof PaymentGatewaysSchema>;
 export type OrganizationUpdate = z.infer<typeof OrganizationUpdateSchema>;
 export type OrganizationSystem = z.infer<typeof OrganizationSystemSchema>;

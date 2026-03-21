@@ -1,0 +1,21 @@
+info:
+  name: Restore Resource
+  type: http
+  seq: 9
+
+http:
+  method: PATCH
+  url: "{{resource_url}}/{{resourceId}}/restore"
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  Restore a soft-deleted (archived) resource
+  
+  Changes resource status from 'archived' back to 'active'
+  Only works for resources that were soft-deleted

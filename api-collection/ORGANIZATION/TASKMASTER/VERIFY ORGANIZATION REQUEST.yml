@@ -1,15 +1,21 @@
 info:
   name: VERIFY ORGANIZATION REQUEST
   type: http
-  seq: 2
+  seq: 3
 
 http:
   method: POST
   url: "{{org_tm_url}}/:id/verify"
   params:
     - name: id
-      value: 6972ffb802570490dc685142
+      value: 69a6e5a3c3315c0dfdfc225a
       type: path
+  body:
+    type: json
+    data: |-
+      {
+        "allowsEventCreation": true
+      }
   auth: inherit
 
 settings:
@@ -17,3 +23,23 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+
+docs: |
+  # Verify Organization
+
+  Approves organization verification and grants event creation permissions.
+
+  ## Endpoint
+  - **Method**: POST
+  - **URL**: `/taskmaster/:id/verify`
+  - **Auth**: Required (Taskmaster)
+
+  ## Request Body
+  ```json
+  {
+    "allowsEventCreation": true
+  }
+  ```
+
+  ## Body Parameters
+  - `allowsEventCreation` (boolean, required): Allow organization to create events

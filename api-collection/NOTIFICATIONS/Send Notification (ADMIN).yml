@@ -15,7 +15,8 @@ http:
         "message": "Thank you for joining our platform. Explore events, create organizations, and manage your tasks efficiently.",
         "recipientIds": [
           "68b6df5ba2b20fb27b51c502",
-          "693582b11d9917e2c6b3f5a9"
+          "693582b11d9917e2c6b3f5a9",
+          "6963b382b9a7ea5d7fd38de1"
         ],
         "priority": "normal",
         "category": "system",

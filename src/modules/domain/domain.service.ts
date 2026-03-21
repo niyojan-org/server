@@ -101,7 +101,7 @@ export async function validateDomainPurpose(
 
 //UPDATE DOMAIN
 export async function updateDomain(id: string, input: Partial<CreateDomain>) {
-  const domain = await DomainModel.findByIdAndUpdate(id, input, { new: true });
+  const domain = await DomainModel.findByIdAndUpdate(id, input, { returnDocument: 'after' });
   await clearAllDomainCaches();
   return domain;
 }

@@ -17,7 +17,7 @@ export const getPreferences = asyncHandler(async (req: AuthenticatedRequest, res
 
 export const updatePreferences = asyncHandler(async (req: AuthenticatedRequest, res) => {
   const userId = req.user!._id.toString();
-  
+
   // Validate request body
   const validatedPayload = updatePreferencesSchema.parse(req.body);
 
@@ -32,8 +32,9 @@ export const updatePreferences = asyncHandler(async (req: AuthenticatedRequest, 
 
 export const registerPushToken = asyncHandler(async (req: AuthenticatedRequest, res) => {
   const userId = req.user!._id.toString();
-  
+
   // Validate request body
+  // console.log(req.body);
   const validatedPayload = registerPushTokenSchema.parse(req.body);
 
   const pushToken = await pushTokenService.registerPushToken(userId, validatedPayload);

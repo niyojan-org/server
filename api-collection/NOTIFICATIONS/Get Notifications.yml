@@ -5,7 +5,14 @@ info:
 
 http:
   method: GET
-  url: "{{base_url}}/api/notifications?limit=50&isRead=false"
+  url: "{{url}}/notifications?limit=50&isRead=false"
+  params:
+    - name: limit
+      value: "50"
+      type: query
+    - name: isRead
+      value: "false"
+      type: query
   auth: inherit
 
 settings:
@@ -16,7 +23,7 @@ settings:
 
 docs: |
   Get user's notifications with optional filters
-  
+
   Query Parameters:
   - limit: Number of notifications to fetch (default: 50)
   - offset: Pagination offset (default: 0)

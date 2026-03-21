@@ -8,10 +8,10 @@ http:
   url: "{{org_url}}/admin/create"
   body:
     type: json
-    data: |
+    data: |-
       {
         "name": "Tech Innovators Inc",
-        "email": "iamabhi1906@gmail.com",
+        "email": "iamabhi0619@gmail.com",
         "phone": "+1234567890",
         "category": "startup",
         "subCategory": "SaaS",
@@ -37,15 +37,6 @@ http:
           "instagram": "https://www.instagram.com/techinnovators",
           "youtube": "https://www.youtube.com/c/techinnovators",
           "blog": "https://blog.techinnovators.com"
-        },
-        "bankDetails": {
-          "accountHolderName": "Tech Innovators Inc",
-          "bankName": "Bank of America",
-          "branchName": "San Francisco Main Branch",
-          "accountNumber": "1234567890",
-          "ifscCode": "BOFA0001234",
-          "upiId": "techinnovators@upi",
-          "verified": false
         },
         "documents": [
           {

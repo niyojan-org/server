@@ -45,7 +45,7 @@ export const envSchema = z.object({
   GOOGLE_CALLBACK_URL: z.string(),
 
   //CLOUDINARY
-  CLOUDINARY_ClOUD_NAME: z.string(),
+  CLOUDINARY_CLOUD_NAME: z.string(),
   CLOUDINARY_API_KEY: z.string(),
   CLOUDINARY_API_SECRET: z.string(),
 

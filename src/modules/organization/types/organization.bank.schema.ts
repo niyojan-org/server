@@ -1,7 +1,8 @@
 import { objectIdSchema } from "@helpers/zod";
 import z from "zod";
 
-export const OrganizationBankSchema = z.object({
+// Schema for user input - only safe fields that users can modify
+export const OrganizationBankInputSchema = z.object({
   accountHolderName: z
     .string({ message: "Account holder name is required" })
     .min(3, { message: "Account holder name must be at least 3 characters long" })
@@ -25,10 +26,16 @@ export const OrganizationBankSchema = z.object({
   upiId: z
     .string({ message: "UPI ID is required" })
     .min(5, { message: "UPI ID must be at least 5 characters long" })
-    .max(50, { message: "UPI ID must be at most 50 characters long" }),
-  verified: z.boolean().default(false),
+    .max(50, { message: "UPI ID must be at most 50 characters long" })
+    .optional(),
+});
+
+export const OrganizationBankSchema = OrganizationBankInputSchema.extend({
+  verified: z.boolean().default(false).optional(),
   verifiedAt: z.date().optional(),
   verifiedBy: objectIdSchema.optional(),
+  reqForVerification: z.boolean().default(false).optional(),
+  rejectionReason: z.string().min(10).max(500).nullable().optional(),
 });
 
 export const PaymentGatewaysSchema = z.object({

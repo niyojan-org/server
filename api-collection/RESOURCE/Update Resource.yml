@@ -1,0 +1,42 @@
+info:
+  name: Update Resource
+  type: http
+  seq: 5
+
+http:
+  method: PATCH
+  url: "{{resource_url}}/{{resourceId}}"
+  body:
+    type: json
+    data: |-
+      {
+        "title": "Updated Banner Title",
+        "description": "Updated description",
+        "tags": ["summer", "festival", "updated"],
+        "priority": 15,
+        "isPublic": true,
+        "status": "active"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  Update resource metadata (not the file itself)
+  
+  All fields are optional. Only provided fields will be updated.
+  
+  Fields:
+  - title: Resource title (max 120 chars)
+  - description: Resource description (max 500 chars)
+  - tags: Array of tags (max 10)
+  - priority: Priority number
+  - isPublic: true/false for public accessibility
+  - status: active, inactive, archived
+  - link: External link/CTA URL
+  
+  Note: To replace the actual file, use "Replace Resource File" endpoint

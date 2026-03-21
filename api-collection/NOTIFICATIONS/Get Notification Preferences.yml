@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: "{{base_url}}/api/notifications/preferences"
+  url: "{{url}}/notifications/preferences"
   auth: inherit
 
 settings:
@@ -16,7 +16,7 @@ settings:
 
 docs: |
   Get user's notification preferences
-  
+
   Returns preferences for:
   - Email notifications
   - Push notifications

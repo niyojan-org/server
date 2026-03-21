@@ -1,0 +1,78 @@
+info:
+  name: Get Pending Document Verifications
+  type: http
+  seq: 11
+
+http:
+  method: GET
+  url: "{{org_tm_url}}/:id/pending-documents"
+  params:
+    - name: id
+      value: 69a2f93b33a5da5c1ffdbe92
+      type: path
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  # Get Pending Document Verifications
+
+  Retrieves list of unverified documents for a specific organization.
+
+  ## Endpoint
+  - **Method**: GET
+  - **URL**: `/taskmaster/:id/pending-documents`
+  - **Auth**: Required (Taskmaster)
+
+  ## Path Parameters
+  - `id` (string, required): Organization ID
+
+  ## Response
+
+  ### Success (200 OK)
+  ```json
+  {
+    "success": true,
+    "message": "Pending documents retrieved successfully",
+    "data": [
+      {
+        "_id": "69a2f93b33a5da5c1ffdbe93",
+        "type": "PAN",
+        "documentId": "ABCDE1234F",
+        "url": "https://cloudinary.com/docs/pan.pdf",
+        "verified": false,
+        "rejected": false,
+        "uploadedAt": "2026-03-01T09:00:00.000Z"
+      },
+      {
+        "_id": "69a2f93b33a5da5c1ffdbe94",
+        "type": "GST",
+        "documentId": "29ABCDE1234F1Z5",
+        "url": "https://cloudinary.com/docs/gst.pdf",
+        "verified": false,
+        "rejected": false,
+        "uploadedAt": "2026-03-01T09:05:00.000Z"
+      }
+    ]
+  }
+  ```
+
+  ## Use Cases
+  1. Review documents submitted by organization
+  2. Verify authenticity of uploaded documents
+  3. Approve or reject individual documents
+
+  ## Filter Criteria
+  Shows documents where:
+  - `verified: false`
+  - `rejected: false`
+
+  ## Supported Document Types
+  - PAN (Permanent Account Number)
+  - GST (Goods and Services Tax)
+  - Registration Certificate
+  - Other compliance documents

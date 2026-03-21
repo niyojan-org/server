@@ -1,0 +1,139 @@
+info:
+  name: Reject Document
+  type: http
+  seq: 13
+
+http:
+  method: POST
+  url: "{{org_tm_url}}/:id/reject-document"
+  params:
+    - name: id
+      value: 69a2f93b33a5da5c1ffdbe92
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "documentId": "69a2f93b33a5da5c1ffdbe93",
+        "reason": "Document image is unclear. Please upload a high-quality scan showing all corners of the document."
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  # Reject Document
+
+  Rejects a document with a specific reason explaining the issue.
+
+  ## Endpoint
+  - **Method**: POST
+  - **URL**: `/taskmaster/:id/reject-document`
+  - **Auth**: Required (Taskmaster)
+
+  ## Path Parameters
+  - `id` (string, required): Organization ID
+
+  ## Request Body
+  ```json
+  {
+    "documentId": "69a2f93b33a5da5c1ffdbe93",
+    "reason": "Document is unclear and unreadable"
+  }
+  ```
+
+  ### Body Parameters
+  - `documentId` (string, required): ID of the document to reject
+  - `reason` (string, required): Clear reason for rejection (min 10 characters)
+
+  ## Prerequisites
+  - Document must exist in organization's documents array
+  - Document must not already be verified
+
+  ## Response
+
+  ### Success (200 OK)
+  ```json
+  {
+    "success": true,
+    "message": "Document rejected",
+    "data": {
+      "_id": "69a2f93b33a5da5c1ffdbe93",
+      "type": "PAN",
+      "documentId": "ABCDE1234F",
+      "url": "https://cloudinary.com/docs/pan.pdf",
+      "verified": false,
+      "rejected": true,
+      "rejectionReason": "Document is unclear and unreadable",
+      "checkedBy": "69a2f93b33a5da5c1ffdbe95",
+      "rejectedAt": "2026-03-02T15:30:00.000Z"
+    }
+  }
+  ```
+
+  ### Error - Document Not Found (404 Not Found)
+  ```json
+  {
+    "success": false,
+    "message": "Document not found"
+  }
+  ```
+
+  ### Error - Already Verified (400 Bad Request)
+  ```json
+  {
+    "success": false,
+    "message": "Cannot reject verified document"
+  }
+  ```
+
+  ## What Happens
+  1. `rejected` flag set to `true`
+  2. `rejectionReason` stored
+  3. `rejectedAt` timestamp recorded
+  4. `checkedBy` set to taskmaster ID (as string)
+  5. Email notification sent with rejection details
+  6. Audit log created
+
+  ## Common Rejection Reasons
+
+  ### Quality Issues
+  - "Document image is unclear or blurry"
+  - "Document is partially cut off or incomplete"
+  - "Image quality too low to read details"
+  - "Please upload a color scan instead of photocopy"
+
+  ### Content Issues
+  - "Document ID does not match organization name"
+  - "Document appears to be expired"
+  - "Information is obscured or redacted"
+  - "Watermark or signature missing"
+
+  ### Authenticity Issues
+  - "Document appears to be tampered with"
+  - "Unable to verify authenticity"
+  - "Issuing authority details are unclear"
+  - "Document serial number format is invalid"
+
+  ### Format Issues
+  - "Wrong document type uploaded"
+  - "PDF is password protected"
+  - "File format not supported"
+  - "Document must be in PDF or JPG format"
+
+  ## What Organization Can Do Next
+  1. Review rejection reason
+  2. Re-upload correct/clearer document
+  3. Ensure document meets quality standards
+  4. Submit for verification again
+
+  ## Best Practices
+  - Be specific about the issue
+  - Suggest how to fix the problem
+  - Reference quality standards if applicable
+  - Be professional and constructive
+  - Include examples of acceptable documents if possible

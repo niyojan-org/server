@@ -1,0 +1,44 @@
+info:
+  name: List Resources
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: "{{url}}/resources/public"
+  params:
+    - name: page
+      value: "1"
+      type: query
+      disabled: true
+    - name: limit
+      value: "20"
+      type: query
+      disabled: true
+    - name: type
+      value: carousel
+      type: query
+      disabled: true
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |
+  Get all resources with filtering and pagination
+
+  Query Parameters:
+  - page: Page number (default: 1)
+  - limit: Items per page, max 100 (default: 20)
+  - type: Filter by resource type (logo, carousel, event-banner, etc.)
+  - status: Filter by status (active, inactive, archived, processing)
+  - organizationId: Filter by organization
+  - eventId: Filter by event
+  - tags: Filter by tags (comma-separated, matches all)
+  - search: Full-text search in title, description, tags
+  - sort: Sort field (prefix with - for descending, e.g., -priority)
+  - minPriority/maxPriority: Filter by priority range
+  - isPublic: Filter by public status (true/false)

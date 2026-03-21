@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 import OrganizationModel, { OrganizationDocument } from "./organization.model";
 import ApiError from "@core/errors/api.error";
+import { OrganizationUpdateInput } from "../types/organization.update.schema";
 
 export class OrganizationRepository {
   static async create(data: Partial<OrganizationDocument>) {
@@ -54,14 +55,18 @@ export class OrganizationRepository {
   }
 
   static async updateById(id: string | Types.ObjectId, update: Partial<OrganizationDocument>) {
-    return OrganizationModel.findByIdAndUpdate(id, { $set: update }, { new: true, lean: true });
+    return OrganizationModel.findByIdAndUpdate(
+      id,
+      { $set: update },
+      { returnDocument: "after", lean: true },
+    );
   }
 
   static async deactivate(id: string | Types.ObjectId) {
     return OrganizationModel.findByIdAndUpdate(
       id,
       { $set: { active: false } },
-      { new: true, lean: true },
+      { returnDocument: "after", lean: true },
     );
   }
 

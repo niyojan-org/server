@@ -7,4 +7,4 @@ request:
   auth: inherit
   variables:
     - name: org_tm_url
-      value: "{{url}}/org/taskmaster"
+      value: "{{url}}/organizations/taskmaster"

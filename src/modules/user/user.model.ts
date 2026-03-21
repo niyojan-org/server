@@ -35,7 +35,7 @@ const UserSchema = new Schema<UserDocument>(
       invitedBy: { type: Schema.Types.ObjectId, ref: "User" },
     },
   },
-  { timestamps: true, versionKey: false }
+  { timestamps: true, versionKey: false },
 );
 
 UserSchema.index({ "organization.id": 1 });
