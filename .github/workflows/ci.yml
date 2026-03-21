@@ -53,3 +53,5 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/server:latest
             ${{ secrets.DOCKER_USERNAME }}/server:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
