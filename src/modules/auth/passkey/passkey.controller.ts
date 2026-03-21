@@ -33,14 +33,18 @@ export const finishPasskeyRegistration = asyncHandler(async (req: AuthenticatedR
 
 export const editPasskey = asyncHandler(async (req: AuthenticatedRequest, res) => {
   const userId = req.user!._id.toString();
-  const { passkeyId } = req.params;
+  const passkeyId = Array.isArray(req.params.passkeyId)
+    ? req.params.passkeyId[0]
+    : req.params.passkeyId;
   const { name } = req.body;
   const passkey = await PasskeyManagement.editPasskey(userId, passkeyId!, name);
   res.status(200).json({ success: true, message: "Passkey updated successfully", passkey });
 });
 export const deletePasskey = asyncHandler(async (req: AuthenticatedRequest, res) => {
   const userId = req.user!._id.toString();
-  const { passkeyId } = req.params;
+  const passkeyId = Array.isArray(req.params.passkeyId)
+    ? req.params.passkeyId[0]
+    : req.params.passkeyId;
   await PasskeyManagement.deletePasskey(userId, passkeyId!);
   res.status(200).json({ success: true, message: "Passkey deleted successfully" });
 });

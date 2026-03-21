@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Model, Schema } from "mongoose";
 import { UserSecurityDocument } from "./user-security.types";
 
 const PasskeySchema = new Schema(
@@ -64,6 +64,6 @@ const UserSecuritySchema = new Schema<UserSecurityDocument>(
   }
 );
 
-export const UserSecurityModel =
-  mongoose.models.UserSecurity ??
+export const UserSecurityModel: Model<UserSecurityDocument> =
+  (mongoose.models.UserSecurity as Model<UserSecurityDocument> | undefined) ??
   mongoose.model<UserSecurityDocument>("UserSecurity", UserSecuritySchema);

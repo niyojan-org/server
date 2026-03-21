@@ -10,7 +10,19 @@ import { existsSync, readdirSync, readFileSync } from "fs";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const TEMPLATES_DIR = path.join(__dirname, "../mail_templates");
+const resolveTemplatesDir = () => {
+  const distTemplatesDir = path.join(__dirname, "../mail_templates");
+  if (existsSync(distTemplatesDir)) return distTemplatesDir;
+
+  // During local start from dist, template assets may not be copied to dist.
+  const projectRoot = path.resolve(__dirname, "../../..");
+  const srcTemplatesDir = path.join(projectRoot, "src/infra/mail_templates");
+  if (existsSync(srcTemplatesDir)) return srcTemplatesDir;
+
+  return distTemplatesDir;
+};
+
+const TEMPLATES_DIR = resolveTemplatesDir();
 
 const registerHelpers = () => {
   Handlebars.registerHelper("buttonVariant", (variant: keyof typeof buttonStyles) => {

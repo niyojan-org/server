@@ -16,7 +16,10 @@
   "main": "server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build:ts": "tsc",
+    "build:alias": "tsc-alias --resolve-full-paths --resolve-full-extension .js",
+    "build:assets": "mkdir -p dist/infra && cp -R src/infra/mail_templates dist/infra/mail_templates",
+    "build": "pnpm run build:ts && pnpm run build:alias && pnpm run build:assets",
     "start": "node dist/server.js",
     "generate-vapid-keys": "tsx scripts/generate-vapid-keys.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -59,6 +62,7 @@
     "@types/pg": "^8.16.0",
     "@types/speakeasy": "^2.0.10",
     "@types/web-push": "^3.6.4",
+    "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
