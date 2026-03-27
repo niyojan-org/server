@@ -14,7 +14,7 @@ const PasskeySchema = new Schema(
     createdAt: { type: Date, default: Date.now },
     lastUsedAt: { type: Date },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const TotpSchema = new Schema(
@@ -23,7 +23,7 @@ const TotpSchema = new Schema(
     enabled: { type: Boolean, default: false },
     verifiedAt: Date,
   },
-  { _id: false }
+  { _id: false },
 );
 
 const BackupCodeSchema = new Schema(
@@ -31,7 +31,7 @@ const BackupCodeSchema = new Schema(
     codeHash: { type: String, required: true },
     usedAt: { type: Date, default: null },
   },
-  { _id: true }
+  { _id: true },
 );
 
 const UserSecuritySchema = new Schema<UserSecurityDocument>(
@@ -43,7 +43,12 @@ const UserSecuritySchema = new Schema<UserSecurityDocument>(
       index: true,
       required: true,
     },
-
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
     totp: TotpSchema,
 
     passkeys: {
@@ -61,7 +66,7 @@ const UserSecuritySchema = new Schema<UserSecurityDocument>(
   {
     timestamps: true,
     versionKey: false,
-  }
+  },
 );
 
 export const UserSecurityModel: Model<UserSecurityDocument> =

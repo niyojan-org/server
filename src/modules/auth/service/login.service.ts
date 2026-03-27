@@ -13,14 +13,20 @@ import { checkMfa } from "../mfa/mfa.service";
 export const login = async (input: LoginInput, req: Request) => {
   const user = await UserModel.findOne({ email: input.email }).select("+password");
   if (!user) {
-    throw new ApiError(401, "User not found", "AUTH_SERVICE", "User not found with provided email");
-  }
-  if (!user.password) {
     throw new ApiError(
       401,
-      "Password not set",
+      "Invalid email or password",
       "AUTH_SERVICE",
-      "User does not have a password set. Please use another login method or reset your password."
+      "The email or password you entered is incorrect. Please try again.",
+    );
+  }
+  if (!user.password) {
+    //TODO: try sending email to set password and then throw error
+    throw new ApiError(
+      401,
+      "Invalid email or password",
+      "AUTH_SERVICE",
+      "The email or password you entered is incorrect. Please try again.",
     );
   }
   await verifyPassword(input.password, user.password);
@@ -31,7 +37,7 @@ export const login = async (input: LoginInput, req: Request) => {
         403,
         "Account not verified",
         "ACCOUNT_NOT_VERIFIED",
-        "User account is not verified. A new verification email has been sent."
+        "User account is not verified. A new verification email has been sent.",
       );
     } catch (error) {
       if (error instanceof ApiError && error.code === "RATE_LIMIT_EXCEEDED") {
@@ -39,13 +45,13 @@ export const login = async (input: LoginInput, req: Request) => {
           403,
           "Account not verified",
           "ACCOUNT_NOT_VERIFIED",
-          `User account is not verified. ${error.details}`
+          `User account is not verified. ${error.details}`,
         );
       }
       throw error;
     }
   }
-  const mfa = await checkMfa(user._id.toString());
+  const mfa = await checkMfa(user.email);
   if (mfa.required) {
     await markMfaPending(user._id.toString());
     return {

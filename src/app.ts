@@ -18,7 +18,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (_req: Request, res: Response) => {
-  res.status(200).json({ message: "Welcome to Orgatick v2" });
+  res.status(200).json({ message: "Welcome to Orgatick" });
 });
 
 app.use("/", mainRoutes);

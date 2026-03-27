@@ -6,6 +6,16 @@ import type { Request } from "express";
 import { extractIntent, resolveRedirect } from "./utils/redirect";
 import env from "@config/env";
 
+export const emailCheck = asyncHandler(async (req, res) => {
+  const { email } = req.query;
+  const options = await authService.checkEmailExists(email as string);
+  res.status(200).json({
+    success: true,
+    message: "Email check completed",
+    options,
+  });
+});
+
 export const login = asyncHandler(async (req, res) => {
   const result = await authService.login(req.body, req);
   res.status(200).json({
@@ -64,7 +74,7 @@ export const resetPassword = asyncHandler(async (req: Request, res) => {
     req.body.email,
     req.body.newPassword,
     req.body.token,
-    req
+    req,
   );
   res.status(200).json({
     success: true,
@@ -77,7 +87,7 @@ export const changePassword = asyncHandler(async (req: AuthenticatedRequest, res
     req.user?._id.toString()!,
     req.body.oldPassword,
     req.body.newPassword,
-    req
+    req,
   );
   res.status(200).json({
     success: true,

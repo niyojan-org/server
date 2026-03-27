@@ -19,20 +19,18 @@ export const sendVerificationEmail = async (user: { name: string; email: string 
       429,
       "Too many requests",
       "RATE_LIMIT_EXCEEDED",
-      `Please wait ${minutesRemaining} minute(s) before requesting another verification email.`
+      `Please wait ${minutesRemaining} minute(s) before requesting another verification email.`,
     );
   }
-  
+
   const token = crypto.randomBytes(16).toString("hex");
   await redis.setex(key(user.email), TOKEN_TTL, token);
-  const url = `${env.AUTH_URL}/auth/verifyEmail?email=${encodeURIComponent(
-    user.email
-  )}&token=${token}`;
+  const url = `${env.AUTH_URL}/verify-email?email=${encodeURIComponent(user.email)}&token=${token}`;
   await sendAuthEmail.verifyEmail(user.email, {
     name: user.name,
     verificationUrl: url,
   });
-  
+
   // Set rate limit after successful send
   await redis.setex(rateLimitKey(user.email), RESEND_COOLDOWN, Date.now().toString());
 };
@@ -44,7 +42,7 @@ export const verifyEmailToken = async (email: string, token: string) => {
       401,
       "Invalid or expired verification token",
       "INVALID_VERIFICATION_TOKEN",
-      "The provided email verification token is either invalid or has expired."
+      "The provided email verification token is either invalid or has expired.",
     );
   }
   await redis.del(key(email));

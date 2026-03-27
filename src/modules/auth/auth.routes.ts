@@ -13,9 +13,15 @@ import {
 import totpRoutes from "./totp/totp.routes";
 import mfaRoutes from "./mfa/mfa.routes";
 import passkeyRoutes from "./passkey/passkey.routes";
+import z from "zod";
 
 const router = Router();
 
+router.get(
+  "/email-check",
+  validate({ query: z.object({ email: z.email() }) }),
+  AuthController.emailCheck,
+);
 router.post("/login", validate({ body: loginSchema }), AuthController.login);
 router.post("/register", validate({ body: registerSchema }), AuthController.register);
 router.post("/verify-email", validate({ body: verifyEmailSchema }), AuthController.verifyEmail);
@@ -24,18 +30,18 @@ router.post("/logout", authenticate, AuthController.logout);
 router.post(
   "/forgot-password",
   validate({ body: forgetPasswordSchema }),
-  AuthController.forgotPassword
+  AuthController.forgotPassword,
 );
 router.post(
   "/reset-password",
   validate({ body: resetPasswordSchema }),
-  AuthController.resetPassword
+  AuthController.resetPassword,
 );
 router.post(
   "/change-password",
   authenticate,
   validate({ body: changePasswordSchema }),
-  AuthController.changePassword
+  AuthController.changePassword,
 );
 
 router.get("/google", AuthController.googleRedirect);

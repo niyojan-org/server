@@ -12,4 +12,4 @@ export * from "./password-change.service";
 export * from "./logout.service";
 export * from "./oauth.service";
 export * from "./google-oauth.service";
-
+export * from "./email-check.service";

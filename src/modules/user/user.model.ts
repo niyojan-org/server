@@ -25,6 +25,11 @@ const UserSchema = new Schema<UserDocument>(
     avatar: { type: String },
     address: { type: String, trim: true },
     bio: { type: String, trim: true },
+    notificationsPreference: {
+      email: { type: Boolean, default: true },
+      sms: { type: Boolean, default: false },
+      push: { type: Boolean, default: true },
+    },
     role: { type: String, enum: USER_ROLES, default: "user" },
     organization: {
       id: { type: Schema.Types.ObjectId, ref: "Organization" },

@@ -34,6 +34,7 @@ export const userSecurityZodSchema = z.object({
   userId: z.custom<Types.ObjectId>((val) => val instanceof Types.ObjectId, {
     message: "Invalid ObjectId",
   }),
+  email: z.email(),
   totp: totpZodSchema.optional(),
   passkeys: z.array(passkeyZodSchema).default([]),
   backupCodes: z.array(backupCodeZodSchema).default([]),

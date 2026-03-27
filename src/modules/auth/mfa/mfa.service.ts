@@ -12,8 +12,8 @@ import {
 import ApiError from "@core/errors/api.error";
 import { setRefreshToken } from "../helper/cookies.helper";
 
-export const checkMfa = async (userId: string) => {
-  const security = await getOrCreateUserSecurity(userId);
+export const checkMfa = async (email: string) => {
+  const security = await getOrCreateUserSecurity(email);
   const hasTotp = security.totp?.enabled;
   const hasPasskeys = security.passkeys.length > 0;
   const hasBackupCodes = security.backupCodes.length > 0;
@@ -28,7 +28,7 @@ export const checkMfa = async (userId: string) => {
 };
 
 export const getMfaStatus = async (user: UserDocument) => {
-  const security = await getOrCreateUserSecurity(user._id.toString());
+  const security = await getOrCreateUserSecurity(user.email);
   return {
     enabled:
       security.totp?.enabled || security.passkeys.length > 0 || security.backupCodes.length > 0,
@@ -40,26 +40,26 @@ export const getMfaStatus = async (user: UserDocument) => {
   };
 };
 
-export const completeMfaLogin = async (userId: string, req: Request) => {
-  const pendingMfa = await isMfaPending(userId);
+export const completeMfaLogin = async (email: string, req: Request) => {
+  const pendingMfa = await isMfaPending(email);
   if (!pendingMfa) {
     throw new ApiError(
       400,
       "No pending MFA",
       "NO_PENDING_MFA",
-      "There is no pending MFA verification for this user."
+      "There is no pending MFA verification for this user.",
     );
   }
-  const user = await UserModel.findById(userId);
+  const user = await UserModel.findOne({ email });
   if (!user) {
     throw new ApiError(
       404,
       "User not found",
       "USER_NOT_FOUND",
-      "The specified user does not exist."
+      "The specified user does not exist.",
     );
   }
-  await clearMfaPending(userId);
+  await clearMfaPending(email);
   const sessionId = await createSession(user._id.toString());
   const { accessToken, refreshToken } = await generateTokens({
     userId: user._id.toString(),

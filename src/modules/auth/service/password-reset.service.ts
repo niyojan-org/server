@@ -17,7 +17,7 @@ export const verifyResetToken = async (email: string, token: string) => {
       400,
       "Invalid or expired reset token",
       "INVALID_RESET_TOKEN",
-      "The provided password reset token is invalid or has expired"
+      "The provided password reset token is invalid or has expired",
     );
   }
   await redis.del(key(email));

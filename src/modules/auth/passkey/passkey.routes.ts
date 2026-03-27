@@ -17,24 +17,24 @@ passkeyRoutes.post("/register/verify", authenticate, passkeyController.finishPas
 passkeyRoutes.post(
   "/authenticate/options",
   validate({ body: passkeyAuthenticationSchema }),
-  passkeyController.startPasskeyAuthenticationOption
+  passkeyController.startPasskeyAuthenticationOption,
 );
 passkeyRoutes.post(
   "/authenticate/verify",
   validate({ body: finishPasskeyAuthenticationSchema }),
-  passkeyController.finishPasskeyAuthentication
+  passkeyController.finishPasskeyAuthentication,
 );
 passkeyRoutes.put(
   "/:passkeyId",
   authenticate,
   validate({ params: passkeyIdParamSchema, body: editPasskeySchema }),
-  passkeyController.editPasskey
+  passkeyController.editPasskey,
 );
 passkeyRoutes.delete(
   "/:passkeyId",
   authenticate,
   validate({ params: passkeyIdParamSchema }),
-  passkeyController.deletePasskey
+  passkeyController.deletePasskey,
 );
 
 export default passkeyRoutes;

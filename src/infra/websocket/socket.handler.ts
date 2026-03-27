@@ -37,7 +37,7 @@ export function initializeSocketIO(server: any) {
 
   io.on("connection", (socket: Socket) => {
     const userId = socket.data.userId;
-    logger.info(`User ${userId} connected via WebSocket`);
+    // logger.info(`User ${userId} connected via WebSocket`);
 
     // Track user's socket connections
     if (!userSockets.has(userId)) {
@@ -46,7 +46,7 @@ export function initializeSocketIO(server: any) {
     userSockets.get(userId)!.add(socket.id);
 
     socket.on("disconnect", () => {
-      logger.info(`User ${userId} disconnected`);
+      // logger.info(`User ${userId} disconnected`);
       const sockets = userSockets.get(userId);
       if (sockets) {
         sockets.delete(socket.id);
