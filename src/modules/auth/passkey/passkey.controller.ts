@@ -9,8 +9,8 @@ import {
 import { completeMfaLogin } from "../mfa/mfa.service";
 
 export const getListOfPasskeys = asyncHandler(async (req: AuthenticatedRequest, res) => {
-  const userId = req.user!._id.toString();
-  const passkeys = await PasskeyManagement.getPasskeys(userId);
+  const email = req.user!.email;
+  const passkeys = await PasskeyManagement.getPasskeys(email);
   res.status(200).json({ success: true, message: "Passkeys retrieved successfully", passkeys });
 });
 
@@ -25,14 +25,14 @@ export const startPasskeyRegistration = asyncHandler(async (req: AuthenticatedRe
 export const finishPasskeyRegistration = asyncHandler(async (req: AuthenticatedRequest, res) => {
   const { credential } = req.body;
   const { backupCodes } = await PasskeyRegistrationService.finishPasskeyRegistration(
-    req.user!._id.toString(),
-    credential
+    req.user!.email,
+    credential,
   );
   res.status(200).json({ success: true, message: "Passkey registered successfully", backupCodes });
 });
 
 export const editPasskey = asyncHandler(async (req: AuthenticatedRequest, res) => {
-  const userId = req.user!._id.toString();
+  const userId = req.user!.email;
   const passkeyId = Array.isArray(req.params.passkeyId)
     ? req.params.passkeyId[0]
     : req.params.passkeyId;
@@ -41,7 +41,7 @@ export const editPasskey = asyncHandler(async (req: AuthenticatedRequest, res) =
   res.status(200).json({ success: true, message: "Passkey updated successfully", passkey });
 });
 export const deletePasskey = asyncHandler(async (req: AuthenticatedRequest, res) => {
-  const userId = req.user!._id.toString();
+  const userId = req.user!.email;
   const passkeyId = Array.isArray(req.params.passkeyId)
     ? req.params.passkeyId[0]
     : req.params.passkeyId;
@@ -50,16 +50,16 @@ export const deletePasskey = asyncHandler(async (req: AuthenticatedRequest, res)
 });
 
 export const startPasskeyAuthenticationOption = asyncHandler(async (req, res) => {
-  const { userId } = req.body;
-  const options = await startPasskeyAuthentication(userId);
+  const { email } = req.body;
+  const options = await startPasskeyAuthentication(email);
   res
     .status(200)
     .json({ success: true, message: "Passkey authentication options generated", options });
 });
 
 export const finishPasskeyAuthentication = asyncHandler(async (req, res) => {
-  const { userId, assertion } = req.body;
-  await verifyPasskeyAuthentication(userId, assertion);
-  const data = await completeMfaLogin(userId, req);
+  const { email, assertion } = req.body;
+  await verifyPasskeyAuthentication(email, assertion);
+  const data = await completeMfaLogin(email, req);
   res.status(200).json({ success: true, message: "Passkey authentication successful", data });
 });

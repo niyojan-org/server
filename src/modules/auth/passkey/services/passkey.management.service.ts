@@ -1,8 +1,8 @@
 import ApiError from "@core/errors/api.error";
 import { getOrCreateUserSecurity } from "@modules/auth/security/user-security.service";
 
-export const getPasskeys = async (userId: string) => {
-  const security = await getOrCreateUserSecurity(userId);
+export const getPasskeys = async (email: string) => {
+  const security = await getOrCreateUserSecurity(email);
   return security.passkeys.map((pk) => ({
     id: pk._id?.toString() ?? pk.credentialId,
     credentialId: pk.credentialId,
@@ -13,15 +13,15 @@ export const getPasskeys = async (userId: string) => {
   }));
 };
 
-export const editPasskey = async (userId: string, passkeyId: string, name: string) => {
-  const security = await getOrCreateUserSecurity(userId);
+export const editPasskey = async (email: string, passkeyId: string, name: string) => {
+  const security = await getOrCreateUserSecurity(email);
   const passkey = security.passkeys.find((pk) => pk.credentialId === passkeyId);
   if (!passkey) {
     throw new ApiError(
       404,
       "Passkey not found",
       "PASSKEY_NOT_FOUND",
-      "The specified passkey could not be found in your account."
+      "The specified passkey could not be found in your account.",
     );
   }
   passkey.name = name;
@@ -29,15 +29,15 @@ export const editPasskey = async (userId: string, passkeyId: string, name: strin
   return passkey;
 };
 
-export const deletePasskey = async (userId: string, passkeyId: string) => {
-  const security = await getOrCreateUserSecurity(userId);
+export const deletePasskey = async (email: string, passkeyId: string) => {
+  const security = await getOrCreateUserSecurity(email);
   const passkeyIndex = security.passkeys.findIndex((pk) => pk.credentialId === passkeyId);
   if (passkeyIndex === -1) {
     throw new ApiError(
       404,
       "Passkey not found",
       "PASSKEY_NOT_FOUND",
-      "The specified passkey could not be found in your account."
+      "The specified passkey could not be found in your account.",
     );
   }
   security.passkeys.splice(passkeyIndex, 1);

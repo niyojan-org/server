@@ -17,7 +17,7 @@ const RP_NAME = "Orgatick";
 const RP_ID = env.RP_ID;
 
 export const getRegistrationChallenge = async (user: UserDocument, deviceName?: string) => {
-  const security = await getOrCreateUserSecurity(user._id.toString());
+  const security = await getOrCreateUserSecurity(user.email);
   const excludeCredentials = security.passkeys.map((pk) => ({
     id: pk.credentialId,
     transports: pk.transports as AuthenticatorTransportFuture[],
@@ -34,26 +34,25 @@ export const getRegistrationChallenge = async (user: UserDocument, deviceName?: 
     },
     excludeCredentials,
   });
-  await passkeyRedis.setRegistrationChallenge(user._id.toString(), challenge.challenge, deviceName);
+  await passkeyRedis.setRegistrationChallenge(user.email, challenge.challenge, deviceName);
   return challenge;
 };
 
 export const finishPasskeyRegistration = async (
-  userId: string,
-  credential: RegistrationResponseJSON
+  email: string,
+  credential: RegistrationResponseJSON,
 ) => {
-  const security = await getOrCreateUserSecurity(userId);
-  const challengeData = await passkeyRedis.getRegistrationChallenge(userId);
+  const security = await getOrCreateUserSecurity(email);
+  const challengeData = await passkeyRedis.getRegistrationChallenge(email);
   if (!challengeData) {
     throw new ApiError(
       400,
       "No registration challenge found",
       "NO_REGISTRATION_CHALLENGE",
-      "No registration challenge found for completing passkey registration. Please initiate the registration process again."
+      "No registration challenge found for completing passkey registration. Please initiate the registration process again.",
     );
   }
   const domains = await getPasskeyDomain();
-
   const verification = await verifyRegistrationResponse({
     response: credential,
     expectedChallenge: challengeData.challenge,
@@ -66,19 +65,19 @@ export const finishPasskeyRegistration = async (
       400,
       "Passkey registration verification failed",
       "PASSKEY_REGISTRATION_VERIFICATION_FAILED",
-      "The passkey registration verification process failed. Please try registering your passkey again."
+      "The passkey registration verification process failed. Please try registering your passkey again.",
     );
   }
   const { registrationInfo } = verification;
   const existing = security.passkeys.find(
-    (pk) => pk.credentialId === registrationInfo!.credential.id
+    (pk) => pk.credentialId === registrationInfo!.credential.id,
   );
   if (existing) {
     throw new ApiError(
       400,
       "Passkey already registered",
       "PASSKEY_ALREADY_REGISTERED",
-      "This passkey is already registered with your account."
+      "This passkey is already registered with your account.",
     );
   }
   const deviceName = challengeData.deviceName || "Unnamed Device";

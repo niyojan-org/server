@@ -24,11 +24,11 @@ export const finishPasskeySchema = z.object({
 });
 
 export const passkeyAuthenticationSchema = z.object({
-  userId: z.string({ message: "User ID must be a string" }),
+  email: z.email({ message: "Email must be a valid email address" }),
   assertion: z.any(),
 });
 
 export const finishPasskeyAuthenticationSchema = z.object({
-  userId: z.string({ message: "User ID must be a string" }),
+  email: z.email({ message: "Email must be a valid email address" }),
   assertion: z.any(),
 });

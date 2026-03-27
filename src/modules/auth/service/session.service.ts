@@ -6,7 +6,7 @@ const SESSION_TTL = 30 * 10 * 60 * 60; // 30 days in seconds
 const MFA_TTL = 10 * 60; // 10 minutes in seconds
 
 const sessionKey = (userId: string) => `user:${userId}:session`;
-const mfaKey = (userId: string) => `mfa:pending:${userId}`;
+const mfaKey = (email: string) => `mfa:pending:${email}`;
 
 export const createSession = async (userId: string): Promise<string> => {
   const sessionId = crypto.randomBytes(16).toString("hex");
@@ -21,7 +21,7 @@ export const validateSession = async (userId: string, sessionId: string): Promis
       401,
       "Session expired",
       "SESSION_EXPIRED",
-      "User session has expired, please log in again"
+      "User session has expired, please log in again",
     );
   }
   return storedSessionId === sessionId;
@@ -33,13 +33,13 @@ export const destroySession = async (userId: string): Promise<void> => {
 
 //MFA Session Management
 
-export const markMfaPending = async (userId: string): Promise<void> => {
-  await redis.setex(mfaKey(userId), MFA_TTL, "1");
+export const markMfaPending = async (email: string): Promise<void> => {
+  await redis.setex(mfaKey(email), MFA_TTL, "1");
 };
-export const isMfaPending = async (userId: string): Promise<boolean> => {
-  const pending = await redis.get(mfaKey(userId));
+export const isMfaPending = async (email: string): Promise<boolean> => {
+  const pending = await redis.get(mfaKey(email));
   return Boolean(pending);
 };
-export const clearMfaPending = async (userId: string): Promise<void> => {
-  await redis.del(mfaKey(userId));
+export const clearMfaPending = async (email: string): Promise<void> => {
+  await redis.del(mfaKey(email));
 };
