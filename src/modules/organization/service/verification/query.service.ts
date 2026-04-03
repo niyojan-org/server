@@ -5,6 +5,7 @@ export const getPendingVerifications = async (options: { limit: number; page: nu
   const { limit, page } = options;
   const skip = (page - 1) * limit;
   return OrganizationModel.find({ reqForVerification: true, verified: false })
+    .populate("owner")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)
@@ -15,10 +16,11 @@ export const getPendingVerifications = async (options: { limit: number; page: nu
 export const getPendingBankVerifications = async (options: { limit: number; page: number }) => {
   const { limit, page } = options;
   const skip = (page - 1) * limit;
-  return OrganizationModel.find({
+  return await OrganizationModel.find({
     "bankDetails.reqForVerification": true,
     "bankDetails.verified": false,
   })
+    .populate("owner", "name email")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit)

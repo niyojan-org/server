@@ -50,6 +50,7 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/axios": "^0.9.36",
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
@@ -62,8 +63,12 @@
     "@types/pg": "^8.16.0",
     "@types/speakeasy": "^2.0.10",
     "@types/web-push": "^3.6.4",
+    "eslint": "^10.1.0",
+    "globals": "^17.4.0",
+    "jiti": "^2.6.1",
     "tsc-alias": "^1.8.16",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.2"
   }
 }

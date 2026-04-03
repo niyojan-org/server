@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: "{{org_tm_url}}/:id/verify-document"
+  url: "{{org_tm_url}}/:id/document/verify"
   params:
     - name: id
       value: 69a2f93b33a5da5c1ffdbe92
