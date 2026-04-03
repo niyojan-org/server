@@ -19,6 +19,7 @@ const corsMiddleware = cors({
       if (!origin) {
         return callback(null, true);
       }
+      console.log(origin) //TODO: remove it just to debug
       await validateDomainPurpose(origin, env.NODE_ENV, "cors");
       return callback(null, true);
     } catch (error) {
