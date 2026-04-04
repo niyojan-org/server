@@ -1,32 +1,34 @@
-import type { Request } from "express";
-import UserModel from "@modules/user/user.model";
-import { LoginInput } from "../schemas/login.schema";
-import ApiError from "@core/errors/api.error";
-import { verifyPassword } from "./password.service";
-import { createSession, markMfaPending } from "./session.service";
-import { generateTokens } from "./token.service";
-import { setRefreshToken } from "../helper/cookies.helper";
-import { sendVerificationEmail } from "./verification.service";
-import { UserDocument } from "@modules/user/user.types";
-import { checkMfa } from "../mfa/mfa.service";
+import type { Request } from 'express';
+import UserModel from '@modules/user/user.model';
+import { LoginInput } from '../schemas/login.schema';
+import ApiError from '@core/errors/api.error';
+import { verifyPassword } from './password.service';
+import { createSession, markMfaPending } from './session.service';
+import { generateTokens } from './token.service';
+import { setRefreshToken } from '../helper/cookies.helper';
+import { sendVerificationEmail } from './verification.service';
+import { UserDocument } from '@modules/user/user.types';
+import { checkMfa } from '../mfa/mfa.service';
 
 export const login = async (input: LoginInput, req: Request) => {
-  const user = await UserModel.findOne({ email: input.email }).select("+password");
+  const user = await UserModel.findOne({ email: input.email }).select(
+    '+password',
+  );
   if (!user) {
     throw new ApiError(
       401,
-      "Invalid email or password",
-      "AUTH_SERVICE",
-      "The email or password you entered is incorrect. Please try again.",
+      'Invalid email or password',
+      'AUTH_SERVICE',
+      'The email or password you entered is incorrect. Please try again.',
     );
   }
   if (!user.password) {
     //TODO: try sending email to set password and then throw error
     throw new ApiError(
       401,
-      "Invalid email or password",
-      "AUTH_SERVICE",
-      "The email or password you entered is incorrect. Please try again.",
+      'Invalid email or password',
+      'AUTH_SERVICE',
+      'The email or password you entered is incorrect. Please try again.',
     );
   }
   await verifyPassword(input.password, user.password);
@@ -35,16 +37,16 @@ export const login = async (input: LoginInput, req: Request) => {
       await sendVerificationEmail({ name: user.name, email: user.email });
       throw new ApiError(
         403,
-        "Account not verified",
-        "ACCOUNT_NOT_VERIFIED",
-        "User account is not verified. A new verification email has been sent.",
+        'Account not verified',
+        'ACCOUNT_NOT_VERIFIED',
+        'User account is not verified. A new verification email has been sent.',
       );
     } catch (error) {
-      if (error instanceof ApiError && error.code === "RATE_LIMIT_EXCEEDED") {
+      if (error instanceof ApiError && error.code === 'RATE_LIMIT_EXCEEDED') {
         throw new ApiError(
           403,
-          "Account not verified",
-          "ACCOUNT_NOT_VERIFIED",
+          'Account not verified',
+          'ACCOUNT_NOT_VERIFIED',
           `User account is not verified. ${error.details}`,
         );
       }
@@ -67,7 +69,7 @@ export const login = async (input: LoginInput, req: Request) => {
     sessionId,
   });
   setRefreshToken(req.res!, refreshToken);
-  const { password, ...userWithoutPassword } = user.toJSON();
+  const { ...userWithoutPassword } = user.toJSON();
   return { token: accessToken, ...userWithoutPassword };
 };
 
@@ -79,6 +81,6 @@ export const completeOAuthLogin = async (user: UserDocument, req: Request) => {
     sessionId,
   });
   setRefreshToken(req.res!, refreshToken);
-  const { password, ...userWithoutPassword } = user.toJSON();
+  const { ...userWithoutPassword } = user.toJSON();
   return { token: accessToken, ...userWithoutPassword };
 };
