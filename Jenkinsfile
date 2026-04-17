@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'server'
         DOCKERHUB_CREDENTIALS = 'orgatick'
+        DOCKER_USER = 'orgatick'
     }
 
     stages {
