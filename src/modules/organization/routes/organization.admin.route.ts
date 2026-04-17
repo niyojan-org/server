@@ -1,10 +1,11 @@
-import { authenticate } from "@core/middlewares/auth.middleware";
-import { RequestHandler, Router } from "express";
-import * as adminController from "../controllers/admin.organization.controller";
-import * as verificationController from "../controllers/verification.controller";
-import { validate } from "@core/middlewares/validate.middleware";
-import { OrganizationCreateSchema, OrganizationUpdateSchema } from "../types";
-import { organizationRole } from "@core/middlewares/organization.middleware";
+import { authenticate } from '@core/middlewares/auth.middleware';
+import { RequestHandler, Router } from 'express';
+import * as adminController from '../controllers/admin.organization.controller';
+import * as verificationController from '../controllers/verification.controller';
+import { validate } from '@core/middlewares/validate.middleware';
+import { OrganizationCreateSchema, OrganizationUpdateSchema } from '../types';
+import { organizationRole } from '@core/middlewares/organization.middleware';
+import organizationEventRouter from './organization.event.route';
 
 const organizationAdminRoute = Router();
 
@@ -12,29 +13,29 @@ organizationAdminRoute.use(authenticate);
 
 // get org
 organizationAdminRoute.get(
-  "/",
-  organizationRole("owner", "admin", "manager", "member", "volunteer"),
+  '/',
+  organizationRole('owner', 'admin', 'manager', 'member', 'volunteer'),
   adminController.getOrganizationAdmin,
 );
 
 // create org
 organizationAdminRoute.post(
-  "/create",
+  '/create',
   validate({ body: OrganizationCreateSchema }) as RequestHandler,
   adminController.createOrganization,
 );
 
 // update org
 organizationAdminRoute.patch(
-  "/update",
-  organizationRole("owner", "admin") as RequestHandler,
+  '/update',
+  organizationRole('owner', 'admin') as RequestHandler,
   validate({ body: OrganizationUpdateSchema }),
   adminController.updateOrganization,
 );
 
 organizationAdminRoute.post(
-  "/bank",
-  organizationRole("owner", "admin") as RequestHandler,
+  '/bank',
+  organizationRole('owner', 'admin') as RequestHandler,
   adminController.addBankDetails,
 );
 
@@ -42,23 +43,28 @@ organizationAdminRoute.post(
 
 // check verification readiness
 organizationAdminRoute.get(
-  "/verification/check",
-  organizationRole("owner", "admin") as RequestHandler,
+  '/verification/check',
+  organizationRole('owner', 'admin') as RequestHandler,
   verificationController.checkOrgVerificationReadiness,
 );
 
 // raise org verification
 organizationAdminRoute.post(
-  "/verification/raise",
-  organizationRole("owner", "admin") as RequestHandler,
+  '/verification/raise',
+  organizationRole('owner', 'admin') as RequestHandler,
   verificationController.raiseOrgVerificationRequest,
 );
 
 // raise bank verification
 organizationAdminRoute.post(
-  "/bank/verification/raise",
-  organizationRole("owner", "admin") as RequestHandler,
+  '/bank/verification/raise',
+  organizationRole('owner', 'admin') as RequestHandler,
   verificationController.raiseBankVerificationRequest,
 );
+
+//EVENTS
+organizationAdminRoute.use('/events', organizationEventRouter);
+
+// organizationAdminRoute.get();
 
 export default organizationAdminRoute;

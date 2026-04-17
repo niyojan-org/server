@@ -12,7 +12,7 @@ http:
       - name: file
         type: file
         value:
-          - /home/abhi/Pictures/solve9/settings.png
+          - /home/abhi/Downloads/Orgatick.png
       - name: type
         type: text
         value: logo

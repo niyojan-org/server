@@ -1,8 +1,8 @@
-import ApiError from "@core/errors/api.error";
-import { AuthenticatedRequest } from "@core/middlewares/auth.middleware";
-import { OrganizationRepository } from "../../persistence/organization.repository";
-import writeOrganizationAudit from "../../../../audits/organization.audit";
-import { ObjectId } from "@helpers/zod";
+import ApiError from '@core/errors/api.error';
+import { AuthenticatedRequest } from '@core/middlewares/auth.middleware';
+import { OrganizationRepository } from '../../persistence/organization.repository';
+import writeOrganizationAudit from '../../../../audits/organization.audit';
+import { ObjectId } from '@helpers/zod';
 
 // verify document (taskmaster)
 export const verifyDocument = async (
@@ -14,19 +14,21 @@ export const verifyDocument = async (
   if (!organization) {
     throw new ApiError(
       404,
-      "Organization not found.",
-      "ORGANIZATION_NOT_FOUND",
-      "The organization you are trying to verify does not exist.",
+      'Organization not found.',
+      'ORGANIZATION_NOT_FOUND',
+      'The organization you are trying to verify does not exist.',
     );
   }
 
-  const document = organization.documents.find((doc) => doc._id!.toString() === documentId.toString());
+  const document = organization.documents.find(
+    (doc) => doc._id!.toString() === documentId.toString(),
+  );
   if (!document) {
     throw new ApiError(
       404,
-      "Document not found.",
-      "DOCUMENT_NOT_FOUND",
-      "The document you are trying to verify does not exist.",
+      'Document not found.',
+      'DOCUMENT_NOT_FOUND',
+      'The document you are trying to verify does not exist.',
     );
   }
 
@@ -35,17 +37,17 @@ export const verifyDocument = async (
   document.verifiedBy = req.user!._id;
   document.rejected = false;
   document.rejectionReason = undefined;
-  document.checkedBy = req.user!._id.toString();
+  document.checkedBy = req.user!._id;
 
   await organization.save();
 
   writeOrganizationAudit({
     organizationId: organization._id.toString(),
     actorUserId: req.user!._id.toString(),
-    actorRole: "taskmaster",
-    action: "DOCUMENT_VERIFIED",
-    severity: "info",
-    targetType: "document",
+    actorRole: 'taskmaster',
+    action: 'DOCUMENT_VERIFIED',
+    severity: 'info',
+    targetType: 'document',
     targetId: documentId.toString(),
     metadata: {
       message: `Document verified for ${organization.name} by ${req.user!.name}`,
@@ -66,36 +68,38 @@ export const rejectDocument = async (
   if (!organization) {
     throw new ApiError(
       404,
-      "Organization not found.",
-      "ORGANIZATION_NOT_FOUND",
-      "The organization you are trying to access does not exist.",
+      'Organization not found.',
+      'ORGANIZATION_NOT_FOUND',
+      'The organization you are trying to access does not exist.',
     );
   }
 
-  const document = organization.documents.find((doc) => doc._id!.toString() === documentId.toString());
+  const document = organization.documents.find(
+    (doc) => doc._id!.toString() === documentId.toString(),
+  );
   if (!document) {
     throw new ApiError(
       404,
-      "Document not found.",
-      "DOCUMENT_NOT_FOUND",
-      "The document you are trying to reject does not exist.",
+      'Document not found.',
+      'DOCUMENT_NOT_FOUND',
+      'The document you are trying to reject does not exist.',
     );
   }
 
   document.verified = false;
   document.rejected = true;
   document.rejectionReason = reason;
-  document.checkedBy = req.user!._id.toString();
+  document.checkedBy = req.user!._id;
 
   await organization.save();
 
   writeOrganizationAudit({
     organizationId: organization._id.toString(),
     actorUserId: req.user!._id.toString(),
-    actorRole: "taskmaster",
-    action: "DOCUMENT_REJECTED",
-    severity: "info",
-    targetType: "document",
+    actorRole: 'taskmaster',
+    action: 'DOCUMENT_REJECTED',
+    severity: 'info',
+    targetType: 'document',
     targetId: documentId.toString(),
     metadata: {
       message: `Document rejected for ${organization.name} by ${req.user!.name}`,

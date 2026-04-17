@@ -1,59 +1,64 @@
-import { Router } from "express";
-import * as tmController from "../controllers/taskmaster.organization.controller";
-import * as verificationController from "../controllers/verification.controller";
-import { isTaskMaster } from "@core/middlewares/taskmaster.middleware";
-import { authenticate } from "@core/middlewares/auth.middleware";
+import { Router } from 'express';
+import * as tmController from '../controllers/taskmaster.organization.controller';
+import * as verificationController from '../controllers/verification.controller';
+import { isTaskMaster } from '@core/middlewares/taskmaster.middleware';
+import { authenticate } from '@core/middlewares/auth.middleware';
 
 const organizationTaskmasterRouter = Router();
 organizationTaskmasterRouter.use(authenticate, isTaskMaster());
 
 // org summary
-organizationTaskmasterRouter.get("/summary", tmController.getOrganizationsSummary);
-organizationTaskmasterRouter.get("/:orgId", tmController.getOrganizationById);
+organizationTaskmasterRouter.get(
+  '/summary',
+  tmController.getOrganizationsSummary,
+);
+organizationTaskmasterRouter.get('/', tmController.listOrganizations);
+organizationTaskmasterRouter.get('/:orgId', tmController.getOrganizationById);
+organizationTaskmasterRouter.patch('/:orgId', tmController.updateOrganization);
 
 /* ---------- Organization Verification Routes ---------- */
 organizationTaskmasterRouter.get(
-  "/verifications/pending/organizations",
+  '/verifications/pending/organizations',
   verificationController.getPendingOrgVerifications,
 );
 organizationTaskmasterRouter.post(
-  "/:orgId/verify",
+  '/:orgId/verify',
   verificationController.verifyOrganizationRequest,
 );
 organizationTaskmasterRouter.post(
-  "/:orgId/reject",
+  '/:orgId/reject',
   verificationController.rejectOrganizationRequest,
 );
 organizationTaskmasterRouter.post(
-  "/:orgId/unverify",
+  '/:orgId/unverify',
   verificationController.unverifyOrganizationRequest,
 );
 
 /* ---------- Bank Verification Routes ---------- */
 organizationTaskmasterRouter.get(
-  "/verifications/pending/bank",
+  '/verifications/pending/bank',
   verificationController.getPendingBankVerifications,
 );
 organizationTaskmasterRouter.post(
-  "/:orgId/bank/verify",
+  '/:orgId/bank/verify',
   verificationController.verifyBankDetailsRequest,
 );
 organizationTaskmasterRouter.post(
-  "/:orgId/bank/reject",
+  '/:orgId/bank/reject',
   verificationController.rejectBankVerificationRequest,
 );
 
 /* ---------- Document Verification Routes ---------- */
 organizationTaskmasterRouter.get(
-  "/verifications/pending/documents",
+  '/verifications/pending/documents',
   verificationController.getPendingDocumentVerifications,
 );
 organizationTaskmasterRouter.post(
-  "/:orgId/document/verify",
+  '/:orgId/document/verify',
   verificationController.verifyDocumentRequest,
 );
 organizationTaskmasterRouter.post(
-  "/:orgId/document/reject",
+  '/:orgId/document/reject',
   verificationController.rejectDocumentRequest,
 );
 

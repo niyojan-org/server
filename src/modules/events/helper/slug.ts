@@ -1,4 +1,4 @@
-import { EventRepository } from "../persistence/event.repository";
+import { EventRepository } from '../persistence/event.repository';
 
 /**
  * Converts a string to a URL-friendly slug
@@ -6,21 +6,22 @@ import { EventRepository } from "../persistence/event.repository";
  * @returns A URL-friendly slug
  */
 const slugify = (text: string): string => {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    // Replace spaces with hyphens
-    .replace(/\s+/g, "-")
-    // Remove all non-word chars (except hyphens)
-    .replace(/[^\w\-]+/g, "")
-    // Replace multiple hyphens with single hyphen
-    .replace(/\-\-+/g, "-")
-    // Remove leading/trailing hyphens
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
+  return (
+    text
+      .toString()
+      .toLowerCase()
+      .trim()
+      // Replace spaces with hyphens
+      .replace(/\s+/g, '-')
+      // Remove all non-word chars (except hyphens)
+      .replace(/[^\w-]+/g, '')
+      // Replace multiple hyphens with single hyphen
+      .replace(/--+/g, '-')
+      // Remove leading/trailing hyphens
+      .replace(/^-+/, '')
+      .replace(/-+$/, '')
+  );
 };
-
 
 export const generateUniqueSlug = async (title: string): Promise<string> => {
   const baseSlug = slugify(title);

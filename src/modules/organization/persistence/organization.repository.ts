@@ -1,7 +1,7 @@
-import { Types } from "mongoose";
-import OrganizationModel, { OrganizationDocument } from "./organization.model";
-import ApiError from "@core/errors/api.error";
-import { OrganizationUpdateInput } from "../types/organization.update.schema";
+import { Types } from 'mongoose';
+import OrganizationModel, { OrganizationDocument } from './organization.model';
+import ApiError from '@core/errors/api.error';
+// import { OrganizationUpdateInput } from '../types/organization.update.schema';
 
 export class OrganizationRepository {
   static async create(data: Partial<OrganizationDocument>) {
@@ -11,17 +11,25 @@ export class OrganizationRepository {
 
   static async find(input: string | Types.ObjectId) {
     let organization;
-    if (input instanceof Types.ObjectId || Types.ObjectId.isValid(input)) {
+
+    if (input instanceof Types.ObjectId) {
       organization = await OrganizationModel.findById(input);
     } else {
+      // Prefer slug for string input so hex-like slugs are not misrouted to _id lookup.
       organization = await OrganizationModel.findOne({ slug: input });
+      if (!organization && Types.ObjectId.isValid(input)) {
+        organization = await OrganizationModel.findById(
+          new Types.ObjectId(input),
+        );
+      }
     }
+
     if (!organization) {
       throw new ApiError(
         404,
-        "Organization not found.",
-        "ORGANIZATION_NOT_FOUND",
-        "The organization you are trying to access does not exist.",
+        'Organization not found.',
+        'ORGANIZATION_NOT_FOUND',
+        'The organization you are trying to access does not exist.',
       );
     }
     return organization;
@@ -45,20 +53,27 @@ export class OrganizationRepository {
   static async existsByEmail(email: string) {
     return OrganizationModel.exists({ email: email.toLowerCase() });
   }
-  static async getOwnerName(organization: OrganizationDocument): Promise<string> {
-    const populatedOrg = await organization.populate<{ owner: { name: string } }>("owner", "name");
-    return populatedOrg.owner?.name || "";
+  static async getOwnerName(
+    organization: OrganizationDocument,
+  ): Promise<string> {
+    const populatedOrg = await organization.populate<{
+      owner: { name: string };
+    }>('owner', 'name');
+    return populatedOrg.owner?.name || '';
   }
 
   static async existsBySlug(slug: string) {
     return OrganizationModel.exists({ slug });
   }
 
-  static async updateById(id: string | Types.ObjectId, update: Partial<OrganizationDocument>) {
+  static async updateById(
+    id: string | Types.ObjectId,
+    update: Partial<OrganizationDocument>,
+  ) {
     return OrganizationModel.findByIdAndUpdate(
       id,
       { $set: update },
-      { returnDocument: "after", lean: true },
+      { returnDocument: 'after', lean: true },
     );
   }
 
@@ -66,7 +81,7 @@ export class OrganizationRepository {
     return OrganizationModel.findByIdAndUpdate(
       id,
       { $set: { active: false } },
-      { returnDocument: "after", lean: true },
+      { returnDocument: 'after', lean: true },
     );
   }
 
@@ -81,7 +96,7 @@ export class OrganizationRepository {
     limit?: number;
     page?: number;
   }) {
-    const query: any = {};
+    const query: { verified?: boolean; active?: boolean } = {};
 
     if (verified !== undefined) query.verified = verified;
     if (active !== undefined) query.active = active;

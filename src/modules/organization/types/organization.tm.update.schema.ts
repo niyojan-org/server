@@ -16,29 +16,29 @@ import { userZodSchema } from '@modules/user/user.schema';
 export const FraudFlagSchema = z.object({
   _id: objectIdSchema.optional(),
   reason: z.string().min(10).max(500),
-  flaggedAt: z.date().default(new Date()),
+  flaggedAt: z.date(),
   flaggedBy: objectIdSchema,
-  severity: z
-    .enum(Object.values(OrganizationEnums.Severity) as [string, ...string[]])
-    .default(OrganizationEnums.Severity.MINOR),
+  severity: z.enum(
+    Object.values(OrganizationEnums.Severity) as [string, ...string[]],
+  ),
   resolvedFeedback: z.string().min(10).max(500).nullable().optional(),
-  resolved: z.boolean().default(false),
+  resolved: z.boolean(),
   resolvedBy: objectIdSchema.nullable().optional(),
   resolvedAt: z.date().nullable().optional(),
 });
 
 export const WarningSchema = z.object({
   message: z.string().min(10).max(500),
-  issuedAt: z.date().default(new Date()),
+  issuedAt: z.date(),
   issuedBy: objectIdSchema,
-  acknowledged: z.boolean().default(false),
+  acknowledged: z.boolean(),
 });
 
 export const StatsSchema = z.object({
-  totalEventsHosted: z.number().default(0),
+  totalEventsHosted: z.number(),
 });
 
-const organizationSchema = z.object({
+const organizationTmUpdateSchema = z.object({
   _id: objectIdSchema.optional(),
   name: z.string().min(3).max(100),
   slug: z.string().min(3).max(100).optional(),
@@ -53,19 +53,19 @@ const organizationSchema = z.object({
   supportContact: SupportContactSchema,
   socialLinks: SocialLinksSchema,
   owner: z.union([objectIdSchema, userZodSchema]),
-  verified: z.boolean().default(false),
+  verified: z.boolean(),
   verifiedAt: z.date().nullable().optional(),
   verifiedBy: objectIdSchema.nullable().optional(),
-  reqForVerification: z.boolean().default(false).optional(),
+  reqForVerification: z.boolean().optional(),
   rejectionReason: z.string().min(10).max(500).nullable().optional(),
-  trustScore: z.number().min(0).max(100).default(100),
-  active: z.boolean().default(true),
-  allowsEventCreation: z.boolean().default(true),
+  trustScore: z.number().min(0).max(100),
+  active: z.boolean(),
+  allowsEventCreation: z.boolean(),
 
-  fraudFlags: z.array(FraudFlagSchema).max(10).default([]),
-  warnings: z.array(WarningSchema).max(10).default([]),
+  fraudFlags: z.array(FraudFlagSchema).max(10),
+  warnings: z.array(WarningSchema).max(10),
 
-  isBlocked: z.boolean().default(false),
+  isBlocked: z.boolean(),
   blockReason: z.string().min(10).max(500).nullable().optional(),
   blockType: z
     .enum(Object.values(OrganizationEnums.BlockType))
@@ -74,7 +74,7 @@ const organizationSchema = z.object({
   blockedBy: objectIdSchema.nullable().optional(),
   blockedAt: z.date().nullable().optional(),
 
-  allowsPaidEvents: z.boolean().default(false),
+  allowsPaidEvents: z.boolean(),
 
   bankDetails: OrganizationBankSchema.optional(),
   paymentGateways: PaymentGatewaysSchema.optional(),
@@ -86,5 +86,5 @@ const organizationSchema = z.object({
   updatedAt: z.date().optional(),
 });
 
-export type Organization = z.infer<typeof organizationSchema>;
-export default organizationSchema;
+export type Organization = z.infer<typeof organizationTmUpdateSchema>;
+export default organizationTmUpdateSchema;

@@ -1,8 +1,8 @@
-import env from "@config/env";
-import logger from "@config/logger";
-import ApiError from "@core/errors/api.error";
-import { validateDomainPurpose } from "@modules/domain";
-import cors from "cors";
+import env from '@config/env';
+import logger from '@config/logger';
+import ApiError from '@core/errors/api.error';
+import { validateDomainPurpose } from '@modules/domain';
+import cors from 'cors';
 
 // function normalizeOrigin(origin: string): string {
 //   try {
@@ -19,25 +19,24 @@ const corsMiddleware = cors({
       if (!origin) {
         return callback(null, true);
       }
-      await validateDomainPurpose(origin, env.NODE_ENV, "cors");
+      await validateDomainPurpose(origin, env.NODE_ENV, 'cors');
       return callback(null, true);
-    } catch (error) {
+    } catch {
       return callback(
         new ApiError(
           403,
-          "CORS Error: Access denied from this origin",
-          "CORS_ERROR",
-          "Cross-origin request blocked from this origin",
+          'CORS Error: Access denied from this origin',
+          'CORS_ERROR',
+          'Cross-origin request blocked from this origin',
         ),
         false,
       );
-      logger.warn("Some one trying to access", error);
     }
   },
   credentials: true, // Allow cookies and credentials
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  exposedHeaders: ["X-Requested-Id"],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['X-Requested-Id'],
 
   maxAge: 43200, // 12 hours
 });

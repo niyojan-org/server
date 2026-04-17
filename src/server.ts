@@ -1,15 +1,15 @@
-import connectDatabase from "@config/database";
-import app from "./app";
-import { env } from "@config/env";
+import connectDatabase from '@config/database';
+import app from './app';
+import { env } from '@config/env';
 
-import logger from "@config/logger";
-import redis from "@config/redis";
-import { initializeSocketIO } from "@infra/websocket/socket.handler";
-import { createServer } from "http";
+import logger from '@config/logger';
+import redis from '@config/redis';
+import { initializeSocketIO } from '@infra/websocket/socket.handler';
+import { createServer } from 'http';
 
 async function bootstrap() {
   try {
-    await Promise.all([redis.ping(), connectDatabase(), import("./workers")]);
+    await Promise.all([redis.ping(), connectDatabase(), import('./workers')]);
 
     // Create HTTP server for WebSocket support
     const httpServer = createServer(app);
@@ -21,18 +21,18 @@ async function bootstrap() {
       logger.info(`API running on port ${env.PORT}`);
     });
   } catch (err) {
-    logger.error("Failed to start server", err);
+    logger.error('Failed to start server', err);
     process.exit(1);
   }
 }
 
 bootstrap();
 
-process.on("SIGTERM", shutdown);
-process.on("SIGINT", shutdown);
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
 
 async function shutdown() {
-  logger.warn("Shutting down server...");
+  logger.warn('Shutting down server...');
   await Promise.all([redis.quit()]);
   process.exit(0);
 }

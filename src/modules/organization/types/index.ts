@@ -1,19 +1,23 @@
-import z from "zod";
+import z from 'zod';
 import {
   AddressSchema,
   DocumentSchema,
   OrganizationCreateSchema,
   SocialLinksSchema,
   SupportContactSchema,
-} from "./organization.create.schema";
-import { OrganizationBankSchema, OrganizationBankInputSchema, PaymentGatewaysSchema } from "./organization.bank.schema";
-import { OrganizationUpdateSchema } from "./organization.update.schema";
-import { OrganizationSystemSchema } from "./organization.system.schema";
+} from './organization.create.schema';
+import {
+  OrganizationBankSchema,
+  OrganizationBankInputSchema,
+  PaymentGatewaysSchema,
+} from './organization.bank.schema';
+import { OrganizationUpdateSchema } from './organization.update.schema';
+import { OrganizationSystemSchema } from './organization.system.schema';
 import organizationSchema, {
   FraudFlagSchema,
   StatsSchema,
   WarningSchema,
-} from "./organization.schema";
+} from './organization.schema';
 
 // Schemas
 export {
@@ -22,25 +26,36 @@ export {
   SocialLinksSchema,
   DocumentSchema,
   OrganizationCreateSchema,
-} from "./organization.create.schema";
+} from './organization.create.schema';
 
-export { OrganizationBankSchema, OrganizationBankInputSchema, PaymentGatewaysSchema } from "./organization.bank.schema";
+export {
+  OrganizationBankSchema,
+  OrganizationBankInputSchema,
+  PaymentGatewaysSchema,
+} from './organization.bank.schema';
 
-export { OrganizationUpdateSchema } from "./organization.update.schema";
+export { OrganizationUpdateSchema } from './organization.update.schema';
 
-export { OrganizationSystemSchema } from "./organization.system.schema";
+export { OrganizationSystemSchema } from './organization.system.schema';
+
+export { default } from './organization.tm.update.schema';
 
 export {
   FraudFlagSchema,
   WarningSchema,
   StatsSchema,
   default as organizationSchema,
-} from "./organization.schema";
+} from './organization.schema';
 
-export * from "./verification.schemas";
+export * from './verification.schemas';
 
 // Enums
-export { OrganizationCategory, BlockType, RiskLevel, Severity } from "./organization.enums";
+export {
+  OrganizationCategory,
+  BlockType,
+  RiskLevel,
+  Severity,
+} from './organization.enums';
 
 // Types derived from schemas
 export type OrganizationAddress = z.infer<typeof AddressSchema>;

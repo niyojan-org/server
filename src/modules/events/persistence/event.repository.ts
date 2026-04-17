@@ -1,7 +1,7 @@
-import { Types } from "mongoose";
-import { EventModel } from "./event.model";
-import { EventStatus } from "../core/event.enums";
-import { Event, EventDocument } from "../core/event.types";
+import { Types } from 'mongoose';
+import { EventModel } from './event.model';
+import { EventStatus } from '../core/event.enums';
+import { Event, EventDocument } from '../core/event.types';
 
 export class EventRepository {
   static async create(event: Event): Promise<EventDocument> {
@@ -25,18 +25,45 @@ export class EventRepository {
     return EventModel.findOne({ slug }).lean();
   }
 
-  static async findOrgEvent(eventId: Types.ObjectId, organizationId: Types.ObjectId) {
+  static async findOrgEvent(
+    eventId: Types.ObjectId,
+    organizationId: Types.ObjectId,
+  ) {
     return EventModel.findOne({ _id: eventId, organizationId }).lean();
   }
 
-  static async listByOrganization(organizationId: Types.ObjectId, status?: EventStatus) {
-    const query: any = { organizationId };
+  static async listByOrganization(
+    organizationId: Types.ObjectId,
+    status?: EventStatus,
+  ) {
+    const query: { organizationId: Types.ObjectId; status?: EventStatus } = {
+      organizationId,
+    };
     if (status) query.status = status;
 
     return EventModel.find(query).sort({ createdAt: -1 }).lean();
   }
 
-  static async updateById(eventId: Types.ObjectId, update: Partial<EventDocument>) {
+  static async findAll(
+    query: Record<string, unknown>,
+    skip: number,
+    limit: number,
+  ) {
+    return EventModel.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+  }
+
+  static async countAll(query: Record<string, unknown>) {
+    return EventModel.countDocuments(query);
+  }
+
+  static async updateById(
+    eventId: Types.ObjectId,
+    update: Partial<EventDocument>,
+  ) {
     return EventModel.findByIdAndUpdate(eventId, update, {
       returnDocument: 'after',
     }).lean();
@@ -47,9 +74,13 @@ export class EventRepository {
     organizationId: Types.ObjectId,
     update: Partial<EventDocument>,
   ) {
-    return EventModel.findOneAndUpdate({ _id: eventId, organizationId }, update, {
-      returnDocument: 'after',
-    }).lean();
+    return EventModel.findOneAndUpdate(
+      { _id: eventId, organizationId },
+      update,
+      {
+        returnDocument: 'after',
+      },
+    ).lean();
   }
 
   static async updateStatus(
@@ -57,7 +88,11 @@ export class EventRepository {
     status: EventStatus,
     extra: Partial<EventDocument> = {},
   ) {
-    return EventModel.findByIdAndUpdate(eventId, { status, ...extra }, { returnDocument: 'after' }).lean();
+    return EventModel.findByIdAndUpdate(
+      eventId,
+      { status, ...extra },
+      { returnDocument: 'after' },
+    ).lean();
   }
 
   static async softDelete(eventId: Types.ObjectId, reason?: string) {
@@ -73,6 +108,6 @@ export class EventRepository {
   }
 
   static async incrementView(slug: string) {
-    return EventModel.updateOne({ slug }, { $inc: { "metrics.view": 1 } });
+    return EventModel.updateOne({ slug }, { $inc: { 'metrics.view': 1 } });
   }
 }

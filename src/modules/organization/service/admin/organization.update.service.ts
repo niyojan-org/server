@@ -1,11 +1,11 @@
-import ApiError from "@core/errors/api.error";
-import { OrganizationRequest } from "@core/middlewares/organization.middleware";
-import { OrganizationRepository } from "@modules/organization/persistence/organization.repository";
-import { OrganizationUpdateSchema } from "@modules/organization/types";
+import ApiError from '@core/errors/api.error';
+import { OrganizationRequest } from '@core/middlewares/organization.middleware';
+import { OrganizationRepository } from '@modules/organization/persistence/organization.repository';
+import { OrganizationUpdateSchema } from '@modules/organization/types';
 
 const updateAnOrganization = async (req: OrganizationRequest) => {
   const validatedData = OrganizationUpdateSchema.parse(req.body);
-  const updateData: Record<string, any> = {};
+  const updateData: Record<string, unknown> = {};
   if (validatedData.description !== undefined) {
     updateData.description = validatedData.description;
   }
@@ -45,7 +45,11 @@ const updateAnOrganization = async (req: OrganizationRequest) => {
   );
 
   if (!updatedOrganization) {
-    throw new ApiError(404, "Organization not found.", "ORGANIZATION_NOT_FOUND");
+    throw new ApiError(
+      404,
+      'Organization not found.',
+      'ORGANIZATION_NOT_FOUND',
+    );
   }
 
   return updatedOrganization;

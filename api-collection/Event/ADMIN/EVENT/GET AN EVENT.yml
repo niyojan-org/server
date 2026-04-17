@@ -1,0 +1,31 @@
+info:
+  name: GET AN EVENT
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{admin_event}}?page=&limit=&status=&isPublished=&search="
+  params:
+    - name: page
+      value: ""
+      type: query
+    - name: limit
+      value: ""
+      type: query
+    - name: status
+      value: ""
+      type: query
+    - name: isPublished
+      value: ""
+      type: query
+    - name: search
+      value: ""
+      type: query
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,5 +1,5 @@
-import { Organization, OrganizationDocument, organizationSchema } from "../types";
-import { ORGANIZATION_ROLES } from "@modules/user/user.constants";
+import { Organization, organizationSchema } from '../types';
+import { ORGANIZATION_ROLES } from '@modules/user/user.constants';
 
 const OwnerOrganizationViewSchema = organizationSchema;
 const AdminOrganizationViewSchema = organizationSchema;
@@ -28,14 +28,14 @@ const getOrganizationView = (
   role: (typeof ORGANIZATION_ROLES)[number],
 ) => {
   switch (role) {
-    case "owner":
+    case 'owner':
       return OwnerOrganizationViewSchema.parse(organization);
-    case "admin":
+    case 'admin':
       return AdminOrganizationViewSchema.parse(organization);
-    case "manager":
+    case 'manager':
       return ManagerOrganizationViewSchema.parse(organization);
-    case "member":
-    case "volunteer":
+    case 'member':
+    case 'volunteer':
       return MemberOrganizationViewSchema.parse(organization);
     default:
       return MemberOrganizationViewSchema.parse(organization);
