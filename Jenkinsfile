@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'orgatick-backend'
-        DOCKERHUB_CREDENTIALS = 'orgatick' // Jenkins credentials ID
+        DOCKER_IMAGE = 'server'
+        DOCKERHUB_CREDENTIALS = 'orgatick'
     }
 
     stages {
