@@ -14,22 +14,6 @@ pipeline {
             }
         }
 
-        stage('Get Git Info') {
-            steps {
-                script {
-                    env.GIT_COMMIT_MSG = sh(
-                        script: 'git log -1 --pretty=%B',
-                        returnStdout: true
-                    ).trim()
-
-                    env.GIT_AUTHOR = sh(
-                        script: 'git log -1 --pretty=%an',
-                        returnStdout: true
-                    ).trim()
-                }
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t $DOCKER_IMAGE .'
@@ -58,51 +42,16 @@ pipeline {
                 '''
             }
         }
+
+        // Later do the ssh and do the things
     }
 
     post {
         success {
-            emailext(
-                to: 'abhishek@orgatick.in',
-                subject: "✅ SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}",
-                body: """
-Build Status: SUCCESS ✅
-
-Project: ${JOB_NAME}
-Build Number: ${BUILD_NUMBER}
-
-Docker Image:
-${DOCKER_USER}/${DOCKER_IMAGE}:latest
-${DOCKER_USER}/${DOCKER_IMAGE}:${BUILD_NUMBER}
-
-Git Info:
-Author: ${GIT_AUTHOR}
-Message: ${GIT_COMMIT_MSG}
-Commit: ${GIT_COMMIT}
-
-Details: ${BUILD_URL}
-"""
-            )
+            echo 'Build & Deployment Successful!'
         }
-
         failure {
-            emailext(
-                to: 'abhishek@orgatick.in',
-                subject: "❌ FAILURE: ${JOB_NAME} #${BUILD_NUMBER}",
-                body: """
-Build Status: FAILURE ❌
-
-Project: ${JOB_NAME}
-Build Number: ${BUILD_NUMBER}
-
-Git Info:
-Author: ${GIT_AUTHOR}
-Message: ${GIT_COMMIT_MSG}
-Commit: ${GIT_COMMIT}
-
-Check logs: ${BUILD_URL}
-"""
-            )
+            echo 'Pipeline Failed!'
         }
     }
 }
