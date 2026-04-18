@@ -6,6 +6,7 @@ import { jsonValidation } from '@core/middlewares/validate.middleware';
 import mainRoutes from '@routes';
 import cookieParser from 'cookie-parser';
 import express, { Request, Response } from 'express';
+import { register } from './metrics';
 
 const app = express();
 
@@ -19,6 +20,12 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (_req: Request, res: Response) => {
   res.status(200).json({ message: 'Welcome to Orgatick Server' });
+});
+
+app.get('/metrics', async (req, res) => {
+  console.log(req.ip);
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
 });
 
 app.use('/', mainRoutes);
