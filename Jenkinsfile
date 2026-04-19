@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'server'
         DOCKERHUB_CREDENTIALS = 'orgatick'
+        DOCKER_USER = 'orgatick'
     }
 
     stages {
@@ -51,6 +52,11 @@ pipeline {
         }
         failure {
             echo 'Pipeline Failed!'
+            emailext(
+            to: '$DEFAULT_RECIPIENTS',
+            subject: "CI/CD FAILURE: ${JOB_NAME} #${BUILD_NUMBER}",
+            body: "Build failed\n${BUILD_URL}"
+            )
         }
     }
 }
