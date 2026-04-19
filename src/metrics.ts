@@ -5,7 +5,6 @@ export const register = new client.Registry();
 // Default system metrics
 client.collectDefaultMetrics({
   register,
-  prefix: "orgatick_",
 });
 
 // HTTP Metrics
