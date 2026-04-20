@@ -11,6 +11,8 @@ import { metricsMiddleware } from '@core/middlewares/metrics.middleware';
 
 const app = express();
 
+app.set('trust proxy', true);
+
 //MIDDLEWARES
 app.use(helmetMiddleware);
 app.use(corsMiddleware);
