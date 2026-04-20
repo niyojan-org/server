@@ -25,7 +25,9 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 app.get('/metrics', async (req, res) => {
-  console.log(req.ip);
+  if (req.ip !== '::ffff:172.18.0.4') {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
   res.set('Content-Type', register.contentType);
   res.end(await register.metrics());
 });
