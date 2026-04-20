@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import express, { Request, Response } from 'express';
 import { register } from './metrics';
 import { metricsMiddleware } from '@core/middlewares/metrics.middleware';
+import logger from '@config/logger';
 
 const app = express();
 
@@ -32,6 +33,11 @@ app.get('/metrics', async (req, res) => {
   }
   res.set('Content-Type', register.contentType);
   res.end(await register.metrics());
+});
+
+app.get('/error', () => {
+  logger.error('This is a test error log');
+  throw new ApiError(500, 'Test error', 'TEST_ERROR', 'This is a test error');
 });
 
 app.use('/', mainRoutes);

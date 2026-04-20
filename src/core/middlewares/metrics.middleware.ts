@@ -26,15 +26,21 @@ export const metricsMiddleware = (
       .labels(req.method, route, res.statusCode.toString())
       .inc();
 
-    logger.info({
-      message: 'http_request',
-      method: req.method,
-      route,
-      status: res.statusCode,
-      duration,
-      ip,
-      userAgent: req.headers['user-agent'],
-    });
+    if (route !== '/metrics') {
+      const durationMs = duration * 1000;
+      logger.info(
+        JSON.stringify({
+          message: `http_request`,
+          method: req.method,
+          route,
+          status: res.statusCode,
+          duration,
+          durationMs,
+          ip,
+          userAgent: req.headers['user-agent'],
+        }),
+      );
+    }
   });
 
   next();
