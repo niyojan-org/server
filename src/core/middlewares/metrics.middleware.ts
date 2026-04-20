@@ -26,7 +26,8 @@ export const metricsMiddleware = (
       .labels(req.method, route, res.statusCode.toString())
       .inc();
 
-    logger.info('http_request', {
+    logger.info({
+      message: 'http_request',
       method: req.method,
       route,
       status: res.statusCode,

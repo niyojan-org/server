@@ -23,16 +23,6 @@ transports.push(
 
 if (env.NODE_ENV === 'production') {
   transports.push(
-    new winston.transports.Console({
-      level: 'warn',
-      format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.json(),
-      ),
-    }),
-  );
-
-  transports.push(
     new LokiTransport({
       host: env.LOKI_HOST,
       basicAuth: `${env.LOKI_USER}:${env.LOKI_API_KEY}`,
