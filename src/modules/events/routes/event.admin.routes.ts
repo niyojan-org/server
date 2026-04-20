@@ -19,8 +19,21 @@ eventAdminRoutes.get(
   eventAdminController.getEvents,
 );
 
+eventAdminRoutes.get(
+  '/:id',
+  organizationRole(
+    'owner',
+    'admin',
+    'member',
+    'manager',
+    'volunteer',
+    'system',
+  ),
+  eventAdminController.getEventById,
+);
+
 eventAdminRoutes.post(
-  '/',
+  '/create',
   organizationRole('owner', 'admin'),
   validate({ body: EventSchema }),
   eventAdminController.createEvent,
