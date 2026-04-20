@@ -1,12 +1,14 @@
-import z from "zod";
-import { REDIS_KEYS } from "./redis.keys";
+import z from 'zod';
+// import { REDIS_KEYS } from './redis.keys';
 
 export const envSchema = z.object({
-  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
+  NODE_ENV: z
+    .enum(['development', 'production', 'test'])
+    .default('development'),
   PORT: z.coerce.number().default(5050),
   MONGO_URI: z.string(),
   PSQL_URI: z.string(),
-  APP_NAME: z.string().default("Orgatick"),
+  APP_NAME: z.string().default('Orgatick'),
 
   //SMTP
   SMTP_USER: z.string(),
@@ -33,7 +35,7 @@ export const envSchema = z.object({
   VAPID_SUBJECT: z.string().optional(),
 
   //FRONTEND
-  FRONTEND_URL: z.string().default("http://localhost:3000"),
+  FRONTEND_URL: z.string().default('http://localhost:3000'),
 
   //PASSKEY
   RP_ID: z.string(),
@@ -62,8 +64,9 @@ export const envSchema = z.object({
   PHONEPE_CLIENT_SECRET: z.string(),
 
   //MONITORING
-  OTEL_SERVICE_NAME: z.string().default("orgatick-backend"),
-  OTEL_EXPORTER_OTLP_ENDPOINT: z.string().default("http://localhost:4318"),
+  LOKI_HOST: z.url(),
+  LOKI_USER: z.string(),
+  LOKI_API_KEY: z.string(),
 });
 
 export type Env = z.infer<typeof envSchema>;
