@@ -6,9 +6,12 @@ import { EventRepository } from '../persistence/event.repository';
 import { EventAdminDataRequestParamsType } from '../types/event.admin.query';
 import writeOrganizationAudit from '../../../audits/organization.audit';
 import {
+  getEventViewByRole,
   getEventListViewByRole,
   type OrganizationRole,
 } from '../views/event.role.view';
+import { EventModel } from '../persistence/event.model';
+import ApiError from '@core/errors/api.error';
 
 export const createNewEvent = async (event: Event) => {
   const slug = await generateUniqueSlug(event.title);
@@ -91,4 +94,41 @@ export const getAllEvents = async (
       nextPage: page < Math.ceil(total / limit) ? page + 1 : null,
     },
   };
+};
+
+export const getByEventId = async (
+  organizationId: string | Types.ObjectId,
+  eventId: string,
+  role?: OrganizationRole,
+) => {
+  const orgObjectId =
+    organizationId instanceof Types.ObjectId
+      ? organizationId
+      : new Types.ObjectId(organizationId);
+
+  const matchByIdOrSlug: Array<Record<string, unknown>> = [{ slug: eventId }];
+  if (Types.ObjectId.isValid(eventId)) {
+    matchByIdOrSlug.push({ _id: new Types.ObjectId(eventId) });
+  }
+
+  const event = await EventModel.findOne({
+    organizationId: orgObjectId,
+    $or: matchByIdOrSlug,
+  }).lean();
+
+  if (!event) {
+    throw new ApiError(
+      404,
+      'Event not found',
+      'EVENT_NOT_FOUND',
+      'No event found with the provided ID or slug for this organization.',
+    );
+  }
+
+  const visibleEvent = getEventViewByRole(
+    event as unknown as Record<string, unknown>,
+    role,
+  );
+
+  return visibleEvent;
 };

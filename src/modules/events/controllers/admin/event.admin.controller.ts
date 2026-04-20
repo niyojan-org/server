@@ -1,14 +1,20 @@
 import ApiError from '@core/errors/api.error';
 import { AuthenticatedRequest } from '@core/middlewares/auth.middleware';
+import { OrganizationRequest } from '@core/middlewares/organization.middleware';
 import { asyncHandler } from '@core/utils/asyncHandler';
 import { EventSchema } from '@modules/events/core/event.zod';
 import {
   createNewEvent,
   getAllEvents,
+  getByEventId,
 } from '@modules/events/services/event.service';
 import { EventAdminDataRequestParams } from '@modules/events/types/event.admin.query';
 import { getEventViewByRole } from '@modules/events/views/event.role.view';
 import z from 'zod';
+
+const EventIdParamsSchema = z.object({
+  id: z.string().min(1, 'Event id is required'),
+});
 
 export const createEvent = asyncHandler(
   async (req: AuthenticatedRequest, res) => {
@@ -56,6 +62,23 @@ export const getEvents = asyncHandler(
       success: true,
       message: 'Events retrieved successfully',
       ...data,
+    });
+  },
+);
+
+export const getEventById = asyncHandler(
+  async (req: OrganizationRequest, res) => {
+    const { id: eventId } = z.parse(EventIdParamsSchema, req.params);
+
+    const event = await getByEventId(
+      req.organization._id,
+      eventId,
+      req.user?.organization?.role,
+    );
+    res.status(200).json({
+      success: true,
+      message: 'Events retrieved successfully',
+      event,
     });
   },
 );

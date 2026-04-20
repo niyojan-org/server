@@ -5,7 +5,7 @@ info:
 
 http:
   method: POST
-  url: "{{admin_event}}"
+  url: "{{admin_event}}/create"
   body:
     type: json
     data: |-
