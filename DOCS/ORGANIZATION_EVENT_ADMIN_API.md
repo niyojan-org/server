@@ -117,6 +117,12 @@ Rules:
 - manager: hides coupons and joinCode
 - member, volunteer, undefine, missing role: hides coupons, joinCode, governance, createdBy
 
+Detailed matrix (including route-level access vs serializer-level filtering):
+- DOCS/EVENT_ROLE_DATA_ACCESS.md
+
+Note:
+- taskmaster has full serializer access, but current admin event routes do not allow taskmaster.
+
 Implementation source:
 - src/modules/events/views/event.role.view.ts
 
