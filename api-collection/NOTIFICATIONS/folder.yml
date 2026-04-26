@@ -1,7 +1,0 @@
-info:
-  name: NOTIFICATIONS
-  type: folder
-
-settings:
-  timeout: 0
-  followRedirects: true
