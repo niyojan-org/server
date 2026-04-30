@@ -94,13 +94,8 @@ export const TicketSchema = z
       .int()
       .min(1, { message: 'Ticket capacity must be at least 1' }),
     sold: z.number().int().min(0).default(0),
-
-    salesStartTime: z.coerce
-      .date({ message: 'Invalid sales start time' })
-      .optional(),
-    salesEndTime: z.coerce
-      .date({ message: 'Invalid sales end time' })
-      .optional(),
+    salesStartTime: z.coerce.date({ message: 'Invalid sales start time' }),
+    salesEndTime: z.coerce.date({ message: 'Invalid sales end time' }),
 
     isActive: z.boolean().default(true),
     template: objectIdSchema.optional(),

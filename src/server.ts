@@ -6,17 +6,20 @@ import logger from '@config/logger';
 import redis from '@config/redis';
 import { initializeSocketIO } from '@infra/websocket/socket.handler';
 import { createServer } from 'http';
+import { transporter } from '@infra/mail';
 
 async function bootstrap() {
   try {
-    await Promise.all([redis.ping(), connectDatabase(), import('./workers')]);
-
+    await Promise.all([
+      redis.ping(),
+      connectDatabase(),
+      import('./workers'),
+      transporter,
+    ]);
     // Create HTTP server for WebSocket support
     const httpServer = createServer(app);
-
     // Initialize WebSocket
     initializeSocketIO(httpServer);
-
     httpServer.listen(env.PORT, () => {
       logger.info(`API running on port ${env.PORT}`);
     });

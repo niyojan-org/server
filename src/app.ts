@@ -34,7 +34,6 @@ app.get('/metrics', async (req, res) => {
   res.end(await register.metrics());
 });
 
-
 app.use('/', mainRoutes);
 
 app.get('/health', (_req: Request, res: Response) => {

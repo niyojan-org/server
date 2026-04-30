@@ -1,14 +1,14 @@
-import env from "@config/env";
-import logger from "@config/logger";
-import { sendTemplateEmail } from "@infra/mail/mail.sender";
-import { Worker } from "bullmq";
+import env from '@config/env';
+import logger from '@config/logger';
+import { sendTemplateEmail } from '@infra/mail/mail.sender';
+import { Worker } from 'bullmq';
 
 const mailWorker = new Worker(
-  "mail",
+  'mail',
   async (job) => {
     const payload = job.data;
     const name = job.name;
-    if (name === "template") {
+    if (name === 'template') {
       await sendTemplateEmail(payload);
     } else {
       throw new Error(`Unknown job name: ${name}`);
@@ -20,11 +20,11 @@ const mailWorker = new Worker(
       host: env.REDIS_HOST,
       port: env.REDIS_PORT,
     },
-  }
+  },
 );
 
-mailWorker.on("error", (error) => {
-  logger.error("Mail worker encountered an error:", error);
+mailWorker.on('error', (error) => {
+  logger.error('Mail worker encountered an error:', error);
 });
 
-logger.info("Mail worker started");
+logger.info('Mail worker started');
