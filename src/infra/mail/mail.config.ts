@@ -14,11 +14,15 @@ const SMTP_CONFIG = {
 
 const createTransporter = async () => {
   const transporter = nodemailer.createTransport(SMTP_CONFIG);
-  transporter.verify((error: Error | null, _success: boolean) => {
+  transporter.verify((error: Error | null, success: boolean) => {
     if (error) {
       logger.error('Error configuring mail transporter:', error);
-    } else {
+    } else if (success) {
       logger.info('SMTP service is configured and ready to send emails');
+    } else {
+      logger.warn(
+        'SMTP transporter verification returned an unexpected result',
+      );
     }
   });
   return transporter;
