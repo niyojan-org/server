@@ -8,7 +8,6 @@ import cookieParser from 'cookie-parser';
 import express, { Request, Response } from 'express';
 
 const app = express();
-
 //MIDDLEWARES
 app.use(helmetMiddleware);
 app.use(corsMiddleware);
