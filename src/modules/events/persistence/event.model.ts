@@ -1,6 +1,6 @@
-import mongoose, { Schema, Types, Model } from "mongoose";
-import * as EventEnums from "../core/event.enums";
-import { EventDocument } from "../core/event.types";
+import mongoose, { Schema, Types, Model } from 'mongoose';
+import * as EventEnums from '../core/event.enums';
+import { EventDocument } from '../core/event.types';
 
 /* -------------------- Sub Schemas -------------------- */
 
@@ -78,7 +78,11 @@ const CustomFieldSchema = new Schema(
 const CouponSchema = new Schema(
   {
     code: { type: String, required: true, uppercase: true },
-    discountType: { type: String, enum: ["percentage", "fixed"], required: true },
+    discountType: {
+      type: String,
+      enum: ['percentage', 'fixed'],
+      required: true,
+    },
     discountValue: { type: Number, required: true },
 
     maxUsage: Number,
@@ -99,7 +103,7 @@ const GovernanceSchema = new Schema(
   {
     flagged: { type: Boolean, default: false },
     flaggedReason: String,
-    reviewedBy: { type: Types.ObjectId, ref: "User" },
+    reviewedBy: { type: Types.ObjectId, ref: 'User' },
     reviewedAt: Date,
     trustScore: Number,
   },
@@ -119,7 +123,7 @@ const EventSchema = new Schema<EventDocument>(
 
     organizationId: {
       type: Types.ObjectId,
-      ref: "Organization",
+      ref: 'Organization',
       required: true,
       index: true,
     },
@@ -179,7 +183,7 @@ const EventSchema = new Schema<EventDocument>(
     unpublishedReason: String,
 
     governance: { type: GovernanceSchema, default: { flagged: false } },
-    createdBy: { type: Types.ObjectId, ref: "User" },
+    createdBy: { type: Types.ObjectId, ref: 'User' },
   },
   { timestamps: true },
 );
@@ -190,4 +194,4 @@ EventSchema.index({ organizationId: 1, status: 1 });
 EventSchema.index({ createdAt: -1 });
 
 export const EventModel: Model<EventDocument> =
-  mongoose.models.Event || mongoose.model<EventDocument>("Event", EventSchema);
+  mongoose.models.Event || mongoose.model<EventDocument>('Event', EventSchema);
