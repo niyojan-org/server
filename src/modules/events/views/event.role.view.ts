@@ -26,6 +26,7 @@ const toLimitedEventView = (event: EventLike) => {
     'joinCode',
     'governance',
     'createdBy',
+    'metrics'
   ]);
 };
 
