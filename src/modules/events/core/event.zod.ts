@@ -14,8 +14,7 @@ const objectIdSchema = z
     typeof val === 'string' ? new Types.ObjectId(val) : val,
   );
 
-export const SessionSchema = z
-  .object({
+export const SessionBaseSchema = z.object({
     _id: objectIdSchema.optional(),
     title: z
       .string()
@@ -58,10 +57,14 @@ export const SessionSchema = z
       .date({ message: 'Invalid check-in end time' })
       .optional(),
     speakers: z.array(z.string().min(1)).optional(),
-  })
-  .refine((s) => s.endTime > s.startTime, {
-    message: 'Session end time must be after start time',
   });
+
+export const SessionSchema = SessionBaseSchema.refine(
+  (s) => s.endTime > s.startTime,
+  {
+    message: 'Session end time must be after start time',
+  },
+);
 
 export const GroupSettingsSchema = z
   .object({
@@ -80,15 +83,17 @@ export const GroupSettingsSchema = z
       'Maximum participants must be greater than or equal to minimum participants',
   });
 
-export const TicketSchema = z
-  .object({
+export const TicketBaseSchema = z.object({
     _id: objectIdSchema.optional(),
     type: z
       .string()
       .min(1)
       .max(100, { message: 'Ticket type cannot exceed 100 characters' }),
 
-    price: z.number().min(0, { message: 'Ticket price cannot be negative' }),
+    price: z
+      .number()
+      .int({ message: 'Ticket price must be in paisa as a whole number' })
+      .min(0, { message: 'Ticket price cannot be negative' }),
     capacity: z
       .number()
       .int()
@@ -102,11 +107,14 @@ export const TicketSchema = z
 
     isGroupTicket: z.boolean().default(false),
     groupSettings: GroupSettingsSchema.optional(),
-  })
-  .refine((t) => (t.isGroupTicket ? !!t.groupSettings : true), {
+  });
+
+export const TicketSchema = TicketBaseSchema.refine(
+  (t) => (t.isGroupTicket ? !!t.groupSettings : true),
+  {
     message: 'Group settings must be provided for group tickets',
-  })
-  .refine(
+  },
+).refine(
     (t) =>
       t.salesEndTime && t.salesStartTime
         ? t.salesEndTime > t.salesStartTime
@@ -140,8 +148,7 @@ export const CustomFieldSchema = z.object({
   minLength: z.number().int().min(0).optional(),
   maxLength: z.number().int().min(1).optional(),
 });
-export const CouponSchema = z
-  .object({
+export const CouponBaseSchema = z.object({
     _id: objectIdSchema.optional(),
     code: z
       .string()
@@ -167,13 +174,23 @@ export const CouponSchema = z
 
     expiresAt: z.coerce.date({ message: 'Invalid expiration date' }).optional(),
     isActive: z.boolean().default(true),
-  })
-  .refine((c) => (c.startsAt && c.endsAt ? c.endsAt > c.startsAt : true), {
+  });
+
+export const CouponSchema = CouponBaseSchema.refine(
+    (coupon) =>
+      coupon.discountType === 'percentage'
+        ? coupon.discountValue <= 100
+        : Number.isInteger(coupon.discountValue),
+    {
+      message:
+        'Percentage discount must be 100 or less and fixed discount must be a whole paisa amount',
+      path: ['discountValue'],
+    },
+  ).refine((c) => (c.startsAt && c.endsAt ? c.endsAt > c.startsAt : true), {
     message: 'Coupon end date must be after start date',
   });
 
-export const EventBaseSchema = z
-  .object({
+export const EventBaseObjectSchema = z.object({
     title: z
       .string()
       .min(1, { message: 'Title cannot be empty' })
@@ -209,10 +226,14 @@ export const EventBaseSchema = z
 
     enableEmailNotifications: z.boolean().default(true),
     enableWhatsappNotifications: z.boolean().default(false),
-  })
-  .refine((e) => e.registrationEnd > e.registrationStart, {
-    message: 'Registration end date must be after start date',
   });
+
+export const EventBaseSchema = EventBaseObjectSchema.refine(
+  (e) => e.registrationEnd > e.registrationStart,
+  {
+    message: 'Registration end date must be after start date',
+  },
+);
 
 export const EventGovernanceSchema = z.object({
   flagged: z.boolean().default(false),
@@ -299,3 +320,85 @@ export const EventSchema = EventBaseSchema.safeExtend({
     path: ['sessions'],
   },
 );
+
+const hasDuplicates = (values: string[]) =>
+  new Set(values.map((value) => value.trim().toUpperCase())).size !==
+  values.length;
+
+const hasDuplicateFieldNames = (values: string[]) =>
+  new Set(values.map((value) => value.trim().toLowerCase())).size !==
+  values.length;
+
+export const CreateEventSchema = EventBaseObjectSchema.omit({
+  organizationId: true,
+}).extend({
+  sessions: z
+    .array(SessionSchema)
+    .max(50, { message: 'Cannot add more than 50 sessions' })
+    .default([]),
+  tickets: z
+    .array(TicketSchema)
+    .max(20, { message: 'Cannot add more than 20 ticket types' })
+    .default([]),
+  customFields: z
+    .array(CustomFieldSchema)
+    .max(30, { message: 'Cannot add more than 30 custom fields' })
+    .default([]),
+  coupons: z
+    .array(CouponSchema)
+    .max(100, { message: 'Cannot add more than 100 coupons' })
+    .default([]),
+}).superRefine((event, ctx) => {
+  if (event.registrationEnd <= event.registrationStart) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Registration end date must be after start date',
+      path: ['registrationEnd'],
+    });
+  }
+
+  if (!event.allowMultipleSessions && event.sessions.length > 1) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message:
+        'Multiple sessions are not allowed unless allowMultipleSessions is true',
+      path: ['sessions'],
+    });
+  }
+
+  if (!event.allowCoupons && event.coupons.length > 0) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Coupons can only be added when allowCoupons is true',
+      path: ['coupons'],
+    });
+  }
+
+  if (hasDuplicates(event.tickets.map((ticket) => ticket.type))) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Ticket types must be unique within an event',
+      path: ['tickets'],
+    });
+  }
+
+  if (hasDuplicates(event.coupons.map((coupon) => coupon.code))) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Coupon codes must be unique within an event',
+      path: ['coupons'],
+    });
+  }
+
+  if (
+    hasDuplicateFieldNames(
+      event.customFields.map((field) => field.name),
+    )
+  ) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: 'Custom field names must be unique within an event',
+      path: ['customFields'],
+    });
+  }
+});

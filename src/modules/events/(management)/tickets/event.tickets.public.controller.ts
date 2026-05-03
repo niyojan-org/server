@@ -1,26 +1,34 @@
 import { asyncHandler } from '@core/utils/asyncHandler';
+import z from 'zod';
+import EventTicketsService from './event.tickets.services';
+import { TicketPurchaseValidationSchema } from './event.tickets.schema';
+
+const TicketParamsSchema = z.object({
+  eventId: z.string().min(1, 'Invalid event ID'),
+  ticketId: z.string().min(1, 'Invalid ticket ID').optional(),
+});
+
+const getPublicEventTickets = asyncHandler(async (req, res) => {
+  const { eventId } = TicketParamsSchema.parse(req.params);
+  const data = await EventTicketsService.getPublicEventTickets(eventId);
+  res.status(200).json({ message: 'Public event tickets retrieved successfully', data });
+});
+
+const getPublicEventTicket = asyncHandler(async (req, res) => {
+  const { eventId, ticketId } = TicketParamsSchema.parse(req.params);
+  const data = await EventTicketsService.getSingleEventTicket(eventId, ticketId!);
+  res.status(200).json({ message: 'Public event ticket retrieved successfully', data });
+});
 
 const validateTicketPurchase = asyncHandler(async (req, res) => {
-  const { eventId } = req.params;
-  const { ticketId } = req.body;
-  // Logic to validate ticket purchase for the event
-  res.status(200).json({
-    message: `Ticket purchase for event with ID ${eventId} validated successfully`,
-    data: {
-      ticketId,
-    }, // This is just a placeholder. In a real implementation, you would return validation results.
-  });
+  const { eventId } = TicketParamsSchema.parse(req.params);
+  const { ticketId, quantity } = TicketPurchaseValidationSchema.parse(req.body);
+  const data = await EventTicketsService.validateTicketPurchase(
+    eventId,
+    ticketId,
+    quantity,
+  );
+  res.status(200).json({ message: 'Ticket purchase validated successfully', data });
 });
 
-const validateTicket = asyncHandler(async (req, res) => {
-  const { ticketId } = req.params;
-  // Logic to validate a ticket by ID
-  res.status(200).json({
-    message: `Ticket with ID ${ticketId} validated successfully`,
-    data: {
-      ticketId,
-    }, // This is just a placeholder. In a real implementation, you would return validation results.
-  });
-});
-
-export { validateTicketPurchase, validateTicket };
+export { getPublicEventTicket, getPublicEventTickets, validateTicketPurchase };

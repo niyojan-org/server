@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 
 export type Event = z.infer<typeof Schema.EventSchema>;
 export type EventBase = z.infer<typeof Schema.EventBaseSchema>;
+export type CreateEventInput = z.infer<typeof Schema.CreateEventSchema>;
 export type Session = z.infer<typeof Schema.SessionSchema>;
 export type Ticket = z.infer<typeof Schema.TicketSchema>;
 export type CustomField = z.infer<typeof Schema.CustomFieldSchema>;

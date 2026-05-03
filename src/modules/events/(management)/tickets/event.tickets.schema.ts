@@ -1,59 +1,53 @@
-import { objectIdSchema } from '@helpers/zod';
+import { TicketBaseSchema } from '@modules/events/core/event.zod';
 import z from 'zod';
 
-export const GroupSettingsSchema = z
-  .object({
-    minParticipants: z
-      .number()
-      .int()
-      .min(1, { message: 'Minimum participants must be at least 1' }),
-    maxParticipants: z
-      .number()
-      .int()
-      .min(1, { message: 'Maximum participants must be at least 1' }),
-    groupLeaderRequired: z.boolean().default(true),
-  })
-  .refine((data) => data.maxParticipants >= data.minParticipants, {
-    message:
-      'Maximum participants must be greater than or equal to minimum participants',
-  });
+const TicketWriteObjectSchema = TicketBaseSchema.omit({ sold: true });
 
-export const AddingTicketBaseSchema = z.object({
-  _id: objectIdSchema.optional(),
-  type: z
-    .string()
-    .min(1)
-    .max(100, { message: 'Ticket type cannot exceed 100 characters' }),
-
-  price: z.number().min(0, { message: 'Ticket price cannot be negative' }),
-  capacity: z
-    .number()
-    .int()
-    .min(1, { message: 'Ticket capacity must be at least 1' }),
-  sold: z.number().int().min(0).default(0),
-  salesStartTime: z.coerce.date({ message: 'Invalid sales start time' }),
-  salesEndTime: z.coerce.date({ message: 'Invalid sales end time' }),
-
-  isActive: z.boolean().default(true),
-  template: objectIdSchema.optional(),
-  isGroupTicket: z.boolean().default(false),
-  groupSettings: GroupSettingsSchema.optional(),
-});
-
-export const AddingTicketSchema = AddingTicketBaseSchema.refine(
-  (t) => (t.isGroupTicket ? !!t.groupSettings : true),
+const TicketWriteSchema = TicketWriteObjectSchema.refine(
+  (ticket) => (ticket.isGroupTicket ? !!ticket.groupSettings : true),
   {
     message: 'Group settings must be provided for group tickets',
+    path: ['groupSettings'],
   },
 ).refine(
-  (t) =>
-    t.salesEndTime && t.salesStartTime
-      ? t.salesEndTime > t.salesStartTime
-      : true,
+  (ticket) => ticket.salesEndTime > ticket.salesStartTime,
   {
     message: 'Ticket sales end time must be after sales start time',
+    path: ['salesEndTime'],
   },
 );
 
-export const UpdatingTicketSchema = AddingTicketBaseSchema.partial();
+export const AddingTicketSchema = TicketWriteSchema;
+export const UpdatingTicketSchema = TicketWriteObjectSchema.partial().superRefine(
+  (ticket, ctx) => {
+    if (ticket.isGroupTicket === true && !ticket.groupSettings) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Group settings must be provided for group tickets',
+        path: ['groupSettings'],
+      });
+    }
+    if (
+      ticket.salesStartTime &&
+      ticket.salesEndTime &&
+      ticket.salesEndTime <= ticket.salesStartTime
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'Ticket sales end time must be after sales start time',
+        path: ['salesEndTime'],
+      });
+    }
+  },
+);
+
+export const TicketPurchaseValidationSchema = z.object({
+  ticketId: z.string().min(1, 'Ticket id is required'),
+  quantity: z
+    .number()
+    .int({ message: 'Quantity must be a whole number' })
+    .min(1, { message: 'Quantity must be at least 1' })
+    .default(1),
+});
+
 export type AddingTicketInput = z.infer<typeof AddingTicketSchema>;

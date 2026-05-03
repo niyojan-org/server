@@ -1,18 +1,19 @@
 import { authenticate } from '@core/middlewares/auth.middleware';
 import { organizationRole } from '@core/middlewares/organization.middleware';
+import { isTaskMaster } from '@core/middlewares/taskmaster.middleware';
 import * as adminController from './event.tickets.admin.controller';
 import * as publicController from './event.tickets.public.controller';
 import express from 'express';
+
 const eventTicketsRouter = express.Router();
 const adminRouter = express.Router({ mergeParams: true });
 const publicRouter = express.Router({ mergeParams: true });
 const tmRouter = express.Router({ mergeParams: true });
 
-// Define routes for event tickets management
-// Public routes for event tickets can be defined here (if needed)
-publicRouter.get('/validate/:ticketId', publicController.validateTicket);
+publicRouter.get('/', publicController.getPublicEventTickets);
+publicRouter.get('/:ticketId', publicController.getPublicEventTicket);
+publicRouter.post('/validate', publicController.validateTicketPurchase);
 
-// Admin routes for event tickets management
 adminRouter.use(authenticate);
 adminRouter.get(
   '/',
@@ -49,6 +50,17 @@ adminRouter.delete(
   organizationRole('owner', 'admin', 'manager'),
   adminController.deleteEventTicket,
 );
+
+tmRouter.use(authenticate, isTaskMaster());
+tmRouter.get('/', adminController.getAllEventTickets);
+tmRouter.get('/:ticketId', adminController.getSingleEventTicket);
+tmRouter.post('/', adminController.addEventTicket);
+tmRouter.put('/:ticketId', adminController.updateEventTicket);
+tmRouter.patch(
+  '/:ticketId/toggle-status',
+  adminController.toggleEventTicketStatus,
+);
+tmRouter.delete('/:ticketId', adminController.deleteEventTicket);
 
 eventTicketsRouter.use('/:eventId/admin', adminRouter);
 eventTicketsRouter.use('/:eventId/tm', tmRouter);

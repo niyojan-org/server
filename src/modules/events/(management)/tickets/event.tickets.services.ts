@@ -1,194 +1,156 @@
 import ApiError from '@core/errors/api.error';
-import { EventRepository } from '@modules/events/persistence/event.repository';
 import { EventTicket } from '@modules/events/types';
 import { OrganizationRole } from '@modules/events/views/event.role.view';
-import { Organization } from '@modules/organization/types';
-import EventTicketsRepository from './event.tickets.repository';
-import EventsTicketsHelper from './events.tickets.helper';
-import mongoose from 'mongoose';
+import {
+  findEventOrThrow,
+  findEventOrganizationOrThrow,
+  resolveCollectionItemIndex,
+  throwItemNotFound,
+  updateEventCollection,
+} from '../shared/event.management.repository';
+import EventTicketsHelper from './events.tickets.helper';
 import { AddingTicketInput } from './event.tickets.schema';
+
+const findTicketOrThrow = (eventId: string, tickets: EventTicket[], ticketId: string) => {
+  const index = resolveCollectionItemIndex(tickets, ticketId, 'type');
+  if (index === -1 || !tickets[index]) {
+    throwItemNotFound('ticket', ticketId, eventId);
+  }
+  return { index, ticket: tickets[index] as EventTicket };
+};
 
 export default class EventTicketsService {
   static async getAllEventTickets(eventId: string, role: OrganizationRole) {
-    const result = await EventTicketsRepository.getAllEventTickets(eventId);
-    return result.map((ticket) =>
-      EventsTicketsHelper.filterTicketData(role, ticket),
+    const event = await findEventOrThrow(eventId);
+    return event.tickets.map((ticket) =>
+      EventTicketsHelper.filterTicketData(role, ticket),
     );
   }
+
+  static async getPublicEventTickets(eventId: string) {
+    const event = await findEventOrThrow(eventId);
+    return event.tickets
+      .filter((ticket) => ticket.isActive)
+      .map(EventTicketsHelper.buildPublicTicket);
+  }
+
   static async getSingleEventTicket(
     eventId: string,
     ticketId: string,
-    role: OrganizationRole,
+    role?: OrganizationRole,
   ) {
-    const result = await EventTicketsRepository.getSingleEventTicket(
-      eventId,
-      ticketId,
-    );
-    if (!result)
-      throw new ApiError(
-        404,
-        `Event ticket with ID ${ticketId} not found for event ${eventId}`,
-        'EVENT_TICKET_NOT_FOUND',
-        `No event ticket found with ID ${ticketId} for event ${eventId}`,
-      );
-    return EventsTicketsHelper.filterTicketData(role, result);
+    const event = await findEventOrThrow(eventId);
+    const { ticket } = findTicketOrThrow(eventId, event.tickets, ticketId);
+    if (!role && !ticket.isActive) {
+      throwItemNotFound('ticket', ticketId, eventId);
+    }
+    return role
+      ? EventTicketsHelper.filterTicketData(role, ticket)
+      : EventTicketsHelper.buildPublicTicket(ticket);
   }
 
-  static async addEventTicket(
-    eventId: string,
-    ticketData: AddingTicketInput,
-    organization: Organization,
-  ) {
-    ticketData.type = ticketData.type.trim().toUpperCase();
-    const event = await EventRepository.find(eventId);
-    if (!event) {
-      throw new ApiError(
-        404,
-        'Event not found',
-        'EVENT_NOT_FOUND',
-        `No event found with ID ${eventId}`,
-      );
-    }
-    EventsTicketsHelper.validateTicket(event, ticketData, true, organization);
-    const updatedEvent = await EventTicketsRepository.updateEventTickets(
-      eventId,
-      [...event.tickets, ticketData as EventTicket],
-    );
-    return updatedEvent?.tickets;
+  static async addEventTicket(eventId: string, ticketData: AddingTicketInput) {
+    const event = await findEventOrThrow(eventId);
+    const organization = await findEventOrganizationOrThrow(event);
+    const nextTicket = {
+      ...ticketData,
+      sold: 0,
+      type: ticketData.type.trim().toUpperCase(),
+    };
+    EventTicketsHelper.validateTicket(event, nextTicket, true, organization);
+    const updatedEvent = await updateEventCollection(eventId, 'tickets', [
+      ...event.tickets,
+      nextTicket as EventTicket,
+    ]);
+    return updatedEvent?.tickets ?? [];
   }
 
   static async updateEventTicket(
     eventId: string,
     ticketId: string,
     ticketData: Partial<EventTicket>,
-    organization: Organization,
   ) {
-    const event = await EventRepository.find(eventId);
-    if (!event) {
-      throw new ApiError(
-        404,
-        'Event not found',
-        'EVENT_NOT_FOUND',
-        `No event found with ID ${eventId}`,
-      );
-    }
-    const { isObjectId } = this.resolveTicketMatch(ticketId);
-    const ticketIndex = event.tickets.findIndex((ticket) =>
-      isObjectId
-        ? ticket._id?.toString() === ticketId
-        : ticket.type === ticketId,
-    );
-    if (ticketIndex === -1) {
-      throw new ApiError(
-        404,
-        `Event ticket with ID ${ticketId} not found for event ${eventId}`,
-        'EVENT_TICKET_NOT_FOUND',
-        `No event ticket found with ID ${ticketId} for event ${eventId}`,
-      );
-    }
-    const originalTicket = event.tickets[ticketIndex];
-    if (ticketData.type) {
-      ticketData.type = ticketData.type.trim().toUpperCase();
-      // Check for duplicate type if it was changed
-      if (ticketData.type !== originalTicket?.type) {
-        const duplicateType = event.tickets.find(
-          (t) =>
-            t.type.toUpperCase() === ticketData.type!.toUpperCase() &&
-            t._id?.toString() !== originalTicket?._id?.toString(),
-        );
-        if (duplicateType) {
-          throw new ApiError(
-            400,
-            `A ticket with the type "${ticketData.type}" already exists for this event`,
-            'DUPLICATE_TICKET_TYPE',
-            `Please choose a different name for the ticket type.`,
-          );
-        }
-      }
-    }
-    const updatedTicket: EventTicket = {
-      ...originalTicket,
+    const event = await findEventOrThrow(eventId);
+    const organization = await findEventOrganizationOrThrow(event);
+    const { index, ticket } = findTicketOrThrow(eventId, event.tickets, ticketId);
+    const updatedTicket = {
+      ...ticket,
       ...ticketData,
+      type: ticketData.type?.trim().toUpperCase() ?? ticket.type,
     } as EventTicket;
 
-    if (updatedTicket.capacity < (originalTicket?.sold || 0)) {
+    if (updatedTicket.capacity < ticket.sold) {
       throw new ApiError(
         400,
-        'Ticket capacity cannot be less than the number of tickets already sold',
-        'INVALID_CAPACITY',
-        `Cannot set capacity to ${updatedTicket.capacity} because ${originalTicket?.sold} tickets have already been sold.`,
+        'Ticket capacity cannot be less than sold count',
+        'INVALID_TICKET_CAPACITY',
+        `This ticket already has ${ticket.sold} sold seats.`,
       );
     }
-    EventsTicketsHelper.validateTicket(
-      event,
-      updatedTicket,
-      false,
-      organization,
-    );
-    event.tickets[ticketIndex] = updatedTicket;
-    const updatedEvent = await EventTicketsRepository.updateEventTickets(
-      eventId,
-      event.tickets,
-    );
-    return updatedEvent?.tickets[ticketIndex];
+
+    EventTicketsHelper.validateTicket(event, updatedTicket, false, organization);
+    const tickets = [...event.tickets];
+    tickets[index] = updatedTicket;
+    const updatedEvent = await updateEventCollection(eventId, 'tickets', tickets);
+    return updatedEvent?.tickets[index];
   }
+
   static async toggleEventTicketStatus(eventId: string, ticketId: string) {
-    const event = await EventRepository.find(eventId);
-    if (!event) {
-      throw new ApiError(
-        404,
-        'Event not found',
-        'EVENT_NOT_FOUND',
-        `No event found with ID ${eventId}`,
-      );
-    }
-
-    const { isObjectId } = this.resolveTicketMatch(ticketId);
-    const ticketIndex = event.tickets.findIndex((t) =>
-      isObjectId ? t._id?.toString() === ticketId : t.type === ticketId,
-    );
-
-    if (ticketIndex === -1 || !event.tickets[ticketIndex]) {
-      throw new ApiError(
-        404,
-        `Event ticket with ID ${ticketId} not found for event ${eventId}`,
-        'EVENT_TICKET_NOT_FOUND',
-        `No event ticket found with ID ${ticketId} for event ${eventId}`,
-      );
-    }
-
-    event.tickets[ticketIndex].isActive = !event.tickets[ticketIndex].isActive;
-    await EventTicketsRepository.updateEventTickets(eventId, event.tickets);
-    return event.tickets[ticketIndex];
+    const event = await findEventOrThrow(eventId);
+    const { index, ticket } = findTicketOrThrow(eventId, event.tickets, ticketId);
+    const tickets = [...event.tickets];
+    tickets[index] = { ...ticket, isActive: !ticket.isActive };
+    await updateEventCollection(eventId, 'tickets', tickets);
+    return tickets[index];
   }
 
   static async deleteEventTicket(eventId: string, ticketId: string) {
-    const result = await EventTicketsRepository.deleteEventTicket(
-      eventId,
-      ticketId,
-    );
-    if (result instanceof ApiError) {
-      throw result;
-    }
-    if (!result) {
+    const event = await findEventOrThrow(eventId);
+    const { ticket } = findTicketOrThrow(eventId, event.tickets, ticketId);
+    if (ticket.sold > 0) {
       throw new ApiError(
-        404,
-        `Event ticket with ID ${ticketId} not found for event ${eventId}`,
-        'EVENT_TICKET_NOT_FOUND',
-        `No event ticket found with ID ${ticketId} for event ${eventId}`,
+        400,
+        'Cannot delete a ticket that already has sales',
+        'TICKET_DELETE_FAILED',
+        `This ticket already has ${ticket.sold} successful sales.`,
       );
     }
-    return result;
+    await updateEventCollection(
+      eventId,
+      'tickets',
+      event.tickets.filter((item) => item._id?.toString() !== ticket._id?.toString()),
+    );
   }
 
-  private static resolveTicketMatch(ticketId: string) {
-    const isObjectId = mongoose.Types.ObjectId.isValid(ticketId);
+  static async validateTicketPurchase(
+    eventId: string,
+    ticketId: string,
+    quantity: number,
+  ) {
+    const event = await findEventOrThrow(eventId);
+    const { ticket } = findTicketOrThrow(eventId, event.tickets, ticketId);
+    const now = new Date();
+    if (!ticket.isActive) throwItemNotFound('ticket', ticketId, eventId);
+    if (ticket.salesStartTime > now || ticket.salesEndTime < now) {
+      throw new ApiError(
+        400,
+        'Ticket sales are not active right now',
+        'TICKET_SALES_CLOSED',
+        'Use this ticket only inside its sales window.',
+      );
+    }
+    if (ticket.sold + quantity > ticket.capacity) {
+      throw new ApiError(
+        400,
+        'Not enough ticket inventory available',
+        'TICKET_INVENTORY_EXHAUSTED',
+        'Reduce the quantity or choose another ticket type.',
+      );
+    }
     return {
-      isObjectId,
-      query: isObjectId
-        ? { _id: new mongoose.Types.ObjectId(ticketId) }
-        : { type: ticketId },
-      matchKey: isObjectId ? '_id' : 'type',
+      ticket: EventTicketsHelper.buildPublicTicket(ticket),
+      quantity,
+      totalAmountPaisa: ticket.price * quantity,
     };
   }
 }

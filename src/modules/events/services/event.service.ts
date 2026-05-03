@@ -1,5 +1,5 @@
 import { Types } from 'mongoose';
-import { Event } from '../core/event.types';
+import { CreateEventInput, Event } from '../core/event.types';
 import { EventStatus } from '../core/event.enums';
 import { generateUniqueSlug } from '../helper/slug';
 import { EventRepository } from '../persistence/event.repository';
@@ -12,11 +12,33 @@ import {
 } from '../views/event.role.view';
 import { EventModel } from '../persistence/event.model';
 import ApiError from '@core/errors/api.error';
+import { OrganizationRepository } from '@modules/organization/persistence/organization.repository';
+import { validateEventCreation } from '../core/event.creation';
 
-export const createNewEvent = async (event: Event) => {
+export const createNewEvent = async (
+  event: CreateEventInput,
+  organizationId: string | Types.ObjectId,
+  createdBy: string | Types.ObjectId,
+) => {
+  const organization = await OrganizationRepository.findById(organizationId);
+  if (!organization) {
+    throw new ApiError(
+      404,
+      'Organization not found',
+      'ORGANIZATION_NOT_FOUND',
+      'The organization for this event could not be found.',
+    );
+  }
+
+  validateEventCreation(event, organization);
+
   const slug = await generateUniqueSlug(event.title);
-  event.slug = slug;
-  const newEvent = await EventRepository.create(event);
+  const newEvent = await EventRepository.create({
+    ...event,
+    slug,
+    organizationId,
+    createdBy,
+  } as Event);
   await writeOrganizationAudit({
     organizationId: newEvent.organizationId.toString(),
     actorUserId: newEvent.createdBy?.toString(),

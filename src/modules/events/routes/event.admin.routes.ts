@@ -2,7 +2,7 @@ import { Router } from 'express';
 import * as eventAdminController from '../controllers/admin/event.admin.controller';
 import { organizationRole } from '@core/middlewares/organization.middleware';
 import { validate } from '@core/middlewares/validate.middleware';
-import { EventSchema } from '../core/event.zod';
+import { CreateEventSchema } from '../core/event.zod';
 
 const eventAdminRoutes = Router();
 
@@ -35,7 +35,7 @@ eventAdminRoutes.get(
 eventAdminRoutes.post(
   '/create',
   organizationRole('owner', 'admin'),
-  validate({ body: EventSchema }),
+  validate({ body: CreateEventSchema }),
   eventAdminController.createEvent,
 );
 

@@ -2,7 +2,7 @@ import ApiError from '@core/errors/api.error';
 import { AuthenticatedRequest } from '@core/middlewares/auth.middleware';
 import { OrganizationRequest } from '@core/middlewares/organization.middleware';
 import { asyncHandler } from '@core/utils/asyncHandler';
-import { EventSchema } from '@modules/events/core/event.zod';
+import { CreateEventSchema } from '@modules/events/core/event.zod';
 import {
   createNewEvent,
   getAllEvents,
@@ -18,7 +18,7 @@ const EventIdParamsSchema = z.object({
 
 export const createEvent = asyncHandler(
   async (req: AuthenticatedRequest, res) => {
-    const event = z.parse(EventSchema, req.body);
+    const event = z.parse(CreateEventSchema, req.body);
     const organizationId = req.user?.organization?.id;
     const createdBy = req.user?._id;
     if (!organizationId || !createdBy) {
@@ -29,9 +29,7 @@ export const createEvent = asyncHandler(
         'Ensure that the user is authenticated and belongs to an organization.',
       );
     }
-    event.organizationId = organizationId;
-    event.createdBy = createdBy;
-    const newEvent = await createNewEvent(event);
+    const newEvent = await createNewEvent(event, organizationId, createdBy);
     const role = req.user?.organization?.role;
     res.status(201).json({
       success: true,
