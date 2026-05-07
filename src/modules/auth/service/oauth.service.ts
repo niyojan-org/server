@@ -1,7 +1,8 @@
 import UserModel from "@modules/user/user.model";
+import type { AuthProvider } from "@modules/user/user.constants";
 
 export interface OAuthProfile {
-  provider: string;
+  provider: AuthProvider;
   providerId: string;
   email: string;
   name: string;
@@ -17,7 +18,7 @@ const findOrCreateOAuthUser = async (profile: OAuthProfile) => {
   if (user) return user;
   user = await UserModel.findOne({ email: profile.email });
   if (user) {
-    user.provider = profile.provider as any;
+    user.provider = profile.provider;
     user.providerId = profile.providerId;
     if (profile.emailVerified) {
       user.isVerified = true;
@@ -29,7 +30,7 @@ const findOrCreateOAuthUser = async (profile: OAuthProfile) => {
     name: profile.name,
     email: profile.email,
     avatar: profile.avatar,
-    provider: profile.provider as any,
+    provider: profile.provider,
     providerId: profile.providerId,
     isVerified: profile.emailVerified || false,
   });

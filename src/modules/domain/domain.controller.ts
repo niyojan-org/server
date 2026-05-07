@@ -1,6 +1,7 @@
 import { asyncHandler } from "@core/utils/asyncHandler";
 import * as domainService from "./domain.service";
-import { CreateDomain } from "./domain.schema";
+import type { DomainEnvironment } from "./domain.constants";
+import type { DomainPurpose } from "./domain.schema";
 
 export const createDomain = asyncHandler(async (req, res) => {
   const domain = await domainService.createDomain(req.body);
@@ -31,8 +32,9 @@ export const getDomainById = asyncHandler(async (req, res) => {
 });
 
 export const getDomainByEnv = asyncHandler(async (req, res) => {
-
-  const domains = await domainService.getDomainByEnv(req.params.env);
+  const domains = await domainService.getDomainByEnv(
+    req.params.env as DomainEnvironment,
+  );
   res.status(200).json({
     success: true,
     message: "Domains fetched successfully",
@@ -43,8 +45,8 @@ export const getDomainByEnv = asyncHandler(async (req, res) => {
 export const getDomainByPurposeAndEnv = asyncHandler(async (req, res) => {
   const { purpose, env } = req.params;
   const domains = await domainService.getDomainByPurposeAndEnv(
-    purpose as keyof CreateDomain["purposes"],
-    env as string
+    purpose as DomainPurpose,
+    env as DomainEnvironment
   );
   res.status(200).json({
     success: true,
@@ -57,8 +59,8 @@ export const validateDomainPurpose = asyncHandler(async (req, res) => {
   const { domain, environment, purpose } = req.query;
   const isValid = await domainService.validateDomainPurpose(
     domain as string,
-    environment as string,
-    purpose as keyof CreateDomain["purposes"]
+    environment as DomainEnvironment,
+    purpose as DomainPurpose
   );
   res.status(200).json({
     success: true,

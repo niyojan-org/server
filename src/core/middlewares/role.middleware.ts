@@ -1,9 +1,8 @@
-import type { Response, NextFunction } from "express";
-import type { AuthenticatedRequest } from "./auth.middleware";
+import type { RequestHandler } from "express";
 import ApiError from "@core/errors/api.error";
 
-export const requireRole = (...roles: string[]) => {
-  return (req: AuthenticatedRequest, _res: Response, next: NextFunction) => {
+export const requireRole = (...roles: string[]): RequestHandler => {
+  return (req, _res, next) => {
     if (!req.user) {
       throw new ApiError(
         401,
