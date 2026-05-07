@@ -1,4 +1,4 @@
-import type { Response, NextFunction } from 'express';
+import type { RequestHandler } from 'express';
 import type { AuthenticatedRequest } from './auth.middleware';
 import ApiError from '@core/errors/api.error';
 import { ORGANIZATION_ROLES } from '@modules/user/user.constants';
@@ -11,13 +11,10 @@ export interface OrganizationRequest extends AuthenticatedRequest {
   organization: OrganizationDocument;
 }
 
-export const organizationRole = (...roles: OrganizationRole[]) => {
-  return async (
-    req: AuthenticatedRequest,
-    _res: Response,
-    next: NextFunction,
-  ) => {
-    if (!req.user) {
+export const organizationRole = (...roles: OrganizationRole[]): RequestHandler => {
+  return async (req, _res, next) => {
+    const authReq = req as AuthenticatedRequest;
+    if (!authReq.user) {
       return next(
         new ApiError(
           401,
@@ -28,7 +25,7 @@ export const organizationRole = (...roles: OrganizationRole[]) => {
       );
     }
 
-    if (!req.user.organization?.id) {
+    if (!authReq.user.organization?.id) {
       return next(
         new ApiError(
           403,
@@ -39,18 +36,18 @@ export const organizationRole = (...roles: OrganizationRole[]) => {
       );
     }
 
-    if (!roles.includes(req.user.organization.role as OrganizationRole)) {
+    if (!roles.includes(authReq.user.organization.role as OrganizationRole)) {
       return next(
         new ApiError(
           403,
           'Forbidden: Insufficient organization role',
           'INSUFFICIENT_ORGANIZATION_ROLE',
-          `User organization role '${req.user.organization.role}' does not have access to this resource`,
+          `User organization role '${authReq.user.organization.role}' does not have access to this resource`,
         ),
       );
     }
     const organization = await OrganizationRepository.findById(
-      req.user.organization.id,
+      authReq.user.organization.id,
     );
     if (!organization) {
       return next(

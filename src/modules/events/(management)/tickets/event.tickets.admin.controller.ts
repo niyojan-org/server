@@ -1,12 +1,12 @@
 import { asyncHandler } from '@core/utils/asyncHandler';
-import z from 'zod';
+import { object, string } from 'zod';
 import EventTicketsService from './event.tickets.services';
 import { AddingTicketSchema } from './event.tickets.schema';
 
 const getAllEventTickets = asyncHandler(async (req, res) => {
-  const eventId = z
-    .string({ message: 'Invalid event ID' })
-    .parse(req.params.eventId);
+  const eventId = string({ message: 'Invalid event ID' }).parse(
+    req.params.eventId,
+  );
   const result = await EventTicketsService.getAllEventTickets(
     eventId,
     req.user?.organization?.role,
@@ -18,12 +18,10 @@ const getAllEventTickets = asyncHandler(async (req, res) => {
 });
 
 const getSingleEventTicket = asyncHandler(async (req, res) => {
-  const { eventId, ticketId } = z
-    .object({
-      eventId: z.string({ message: 'Invalid event ID' }),
-      ticketId: z.string({ message: 'Invalid ticket ID' }),
-    })
-    .parse(req.params);
+  const { eventId, ticketId } = object({
+    eventId: string({ message: 'Invalid event ID' }),
+    ticketId: string({ message: 'Invalid ticket ID' }),
+  }).parse(req.params);
   const result = await EventTicketsService.getSingleEventTicket(
     eventId,
     ticketId,
@@ -36,9 +34,9 @@ const getSingleEventTicket = asyncHandler(async (req, res) => {
 });
 
 const addEventTicket = asyncHandler(async (req, res) => {
-  const eventId = z
-    .string({ message: 'Invalid event ID' })
-    .parse(req.params.eventId);
+  const eventId = string({ message: 'Invalid event ID' }).parse(
+    req.params.eventId,
+  );
   const ticketData = AddingTicketSchema.parse(req.body);
   const result = await EventTicketsService.addEventTicket(
     eventId,
@@ -52,12 +50,10 @@ const addEventTicket = asyncHandler(async (req, res) => {
 });
 
 const updateEventTicket = asyncHandler(async (req, res) => {
-  const { eventId, ticketId } = z
-    .object({
-      eventId: z.string({ message: 'Invalid event ID' }),
-      ticketId: z.string({ message: 'Invalid ticket ID' }),
-    })
-    .parse(req.params);
+  const { eventId, ticketId } = object({
+    eventId: string({ message: 'Invalid event ID' }),
+    ticketId: string({ message: 'Invalid ticket ID' }),
+  }).parse(req.params);
   const ticketData = AddingTicketSchema.partial().parse(req.body);
   const updatedTicket = await EventTicketsService.updateEventTicket(
     eventId,
@@ -72,12 +68,10 @@ const updateEventTicket = asyncHandler(async (req, res) => {
 });
 
 const toggleEventTicketStatus = asyncHandler(async (req, res) => {
-  const { eventId, ticketId } = z
-    .object({
-      eventId: z.string({ message: 'Invalid event ID' }),
-      ticketId: z.string({ message: 'Invalid ticket ID' }),
-    })
-    .parse(req.params);
+  const { eventId, ticketId } = object({
+    eventId: string({ message: 'Invalid event ID' }),
+    ticketId: string({ message: 'Invalid ticket ID' }),
+  }).parse(req.params);
   const toggledTicket = await EventTicketsService.toggleEventTicketStatus(
     eventId,
     ticketId,
@@ -89,12 +83,10 @@ const toggleEventTicketStatus = asyncHandler(async (req, res) => {
 });
 
 const deleteEventTicket = asyncHandler(async (req, res) => {
-  const { eventId, ticketId } = z
-    .object({
-      eventId: z.string({ message: 'Invalid event ID' }),
-      ticketId: z.string({ message: 'Invalid ticket ID' }),
-    })
-    .parse(req.params);
+  const { eventId, ticketId } = object({
+    eventId: string({ message: 'Invalid event ID' }),
+    ticketId: string({ message: 'Invalid ticket ID' }),
+  }).parse(req.params);
   await EventTicketsService.deleteEventTicket(eventId, ticketId);
   res.status(200).json({
     message: `Event ticket ${ticketId} deleted successfully`,

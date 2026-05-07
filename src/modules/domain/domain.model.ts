@@ -1,4 +1,5 @@
 import mongoose, { Model } from "mongoose";
+import { DOMAIN_ENVIRONMENTS } from "./domain.constants";
 import { Domain } from "./domain.types";
 
 export type DomainDocument = Domain & mongoose.Document;
@@ -26,7 +27,7 @@ const domainSchema = new mongoose.Schema<DomainDocument>(
     },
     environment: {
       type: String,
-      enum: ["development", "production", "test"],
+      enum: DOMAIN_ENVIRONMENTS,
       required: true,
     },
     notes: {
