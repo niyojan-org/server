@@ -1,15 +1,15 @@
 import { AuthenticatedRequest } from '@core/middlewares/auth.middleware';
-import z from 'zod';
 import OrganizationModel from '../persistence/organization.model';
 import { ListOrganizationsQuery } from '../types/taskmaster.schemas';
 import { Types } from 'mongoose';
 import { objectIdSchema } from '@helpers/zod';
 import organizationTmUpdateSchema, { Organization } from '../types';
+import { object, string, union } from 'zod';
 
 const getOrganizationById = async (req: AuthenticatedRequest) => {
-  const { orgId } = z
-    .object({ orgId: z.union([objectIdSchema, z.string().min(1)]) })
-    .parse(req.params);
+  const { orgId } = object({
+    orgId: union([objectIdSchema, string().min(1)]),
+  }).parse(req.params);
   if (orgId instanceof Types.ObjectId) {
     return await OrganizationModel.findById(orgId).populate('owner');
   } else {

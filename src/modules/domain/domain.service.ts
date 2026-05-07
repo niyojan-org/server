@@ -8,6 +8,7 @@ import {
   setDomainPurpose,
   setPurposeAndEnvCachedDomains,
 } from "./domain.cache";
+import { DomainEnvironment } from "./domain.constants";
 import { DomainModel } from "./domain.model";
 import { CreateDomain, DomainPurpose } from "./domain.schema";
 
@@ -41,7 +42,7 @@ export async function getDomainById(id: string) {
   return domain;
 }
 
-export async function getDomainByEnv(env: string) {
+export async function getDomainByEnv(env: DomainEnvironment) {
   const cached = await getCachedDomains(env);
   if (cached) {
     return cached;
@@ -53,7 +54,7 @@ export async function getDomainByEnv(env: string) {
 
 export async function getDomainByPurposeAndEnv(
   purpose: DomainPurpose,
-  env: string
+  env: DomainEnvironment
 ) {
   const cached = await getPurposeAndEnvCachedDomains(purpose, env);
   if (cached) {
@@ -70,7 +71,7 @@ export async function getDomainByPurposeAndEnv(
 
 export async function validateDomainPurpose(
   domain: string,
-  env: string,
+  env: DomainEnvironment,
   purpose: DomainPurpose
 ) {
   const cached = await getDomainPurpose(domain, env, purpose);

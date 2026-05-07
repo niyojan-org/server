@@ -10,15 +10,15 @@ import {
 } from '@modules/events/services/event.service';
 import { EventAdminDataRequestParams } from '@modules/events/types/event.admin.query';
 import { getEventViewByRole } from '@modules/events/views/event.role.view';
-import z from 'zod';
+import { object, string } from 'zod';
 
-const EventIdParamsSchema = z.object({
-  id: z.string().min(1, 'Event id is required'),
+const EventIdParamsSchema = object({
+  id: string().min(1, 'Event id is required'),
 });
 
 export const createEvent = asyncHandler(
   async (req: AuthenticatedRequest, res) => {
-    const event = z.parse(CreateEventSchema, req.body);
+    const event = CreateEventSchema.parse(req.body);
     const organizationId = req.user?.organization?.id;
     const createdBy = req.user?._id;
     if (!organizationId || !createdBy) {
@@ -66,7 +66,7 @@ export const getEvents = asyncHandler(
 
 export const getEventById = asyncHandler(
   async (req: OrganizationRequest, res) => {
-    const { id: eventId } = z.parse(EventIdParamsSchema, req.params);
+    const { id: eventId } = EventIdParamsSchema.parse(req.params);
 
     const event = await getByEventId(
       req.organization._id,

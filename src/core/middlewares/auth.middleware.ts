@@ -2,19 +2,16 @@ import ApiError from '@core/errors/api.error';
 import { validateSession, verifyAccessToken } from '@modules/auth/service';
 import UserModel from '@modules/user/user.model';
 import { UserDocument } from '@modules/user/user.types';
-import type { Request, Response, NextFunction } from 'express';
+import type { Request, RequestHandler } from 'express';
 
 export interface AuthenticatedRequest extends Request {
-  user?: UserDocument;
+  user: UserDocument;
 }
 
-export const authenticate = async (
-  req: AuthenticatedRequest,
-  _res: Response,
-  next: NextFunction,
-) => {
+export const authenticate: RequestHandler = async (req, _res, next) => {
+  const authReq = req as AuthenticatedRequest;
   try {
-    const authHeader = req.headers.authorization;
+    const authHeader = authReq.headers.authorization;
     const token = authHeader?.startsWith('Bearer ')
       ? authHeader.slice(7)
       : null;
@@ -37,7 +34,7 @@ export const authenticate = async (
         'The user associated with the provided token does not exist',
       );
     }
-    req.user = user;
+    authReq.user = user;
     next();
   } catch (error) {
     next(error);

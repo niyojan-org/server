@@ -11,3 +11,5 @@ export const ORGANIZATION_ROLES = [
 ] as const;
 export const AUTH_PROVIDERS = ["local", "google"] as const;
 export const GENDER_OPTIONS = ["male", "female", "other", "prefer_not_to_say"] as const;
+
+export type AuthProvider = (typeof AUTH_PROVIDERS)[number];

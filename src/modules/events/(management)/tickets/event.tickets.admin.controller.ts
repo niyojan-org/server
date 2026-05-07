@@ -1,18 +1,10 @@
 import { asyncHandler } from '@core/utils/asyncHandler';
-import z from 'zod';
+import { object, string } from 'zod';
 import EventTicketsService from './event.tickets.services';
-import {
-  AddingTicketSchema,
-  UpdatingTicketSchema,
-} from './event.tickets.schema';
+import { AddingTicketSchema } from './event.tickets.schema';
 import { writeEventManagementAudit } from '../shared/event.management.audit';
 import { findEventOrThrow } from '../shared/event.management.repository';
 import { OrganizationRequest } from '@core/middlewares/organization.middleware';
-
-const TicketParamsSchema = z.object({
-  eventId: z.string().min(1, 'Invalid event ID'),
-  ticketId: z.string().min(1, 'Invalid ticket ID').optional(),
-});
 
 const writeAudit = async (
   req: OrganizationRequest,
@@ -38,71 +30,92 @@ const writeAudit = async (
 };
 
 const getAllEventTickets = asyncHandler(async (req, res) => {
-  const { eventId } = TicketParamsSchema.parse(req.params);
-  const data = await EventTicketsService.getAllEventTickets(
+  const eventId = string({ message: 'Invalid event ID' }).parse(
+    req.params.eventId,
+  );
+  const result = await EventTicketsService.getAllEventTickets(
     eventId,
     req.user.organization.role,
   );
   res
     .status(200)
-    .json({ message: 'Event tickets retrieved successfully', data });
+    .json({ message: 'Event tickets retrieved successfully', result });
 });
 
 const getSingleEventTicket = asyncHandler(async (req, res) => {
-  const { eventId, ticketId } = TicketParamsSchema.parse(req.params);
-  const data = await EventTicketsService.getSingleEventTicket(
+  const { eventId, ticketId } = object({
+    eventId: string({ message: 'Invalid event ID' }),
+    ticketId: string({ message: 'Invalid ticket ID' }),
+  }).parse(req.params);
+  const result = await EventTicketsService.getSingleEventTicket(
     eventId,
     ticketId!,
     req.user.organization.role,
   );
   res
     .status(200)
-    .json({ message: 'Event ticket retrieved successfully', data });
+    .json({ message: 'Event ticket retrieved successfully', result });
 });
 
 const addEventTicket = asyncHandler(async (req, res) => {
-  const { eventId } = TicketParamsSchema.parse(req.params);
-  const payload = AddingTicketSchema.parse(req.body);
-  const data = await EventTicketsService.addEventTicket(eventId, payload);
-  await writeAudit(req, eventId, 'add', undefined, {
-    ticketType: payload.type,
+  const eventId = string({ message: 'Invalid event ID' }).parse(
+    req.params.eventId,
+  );
+  const ticketData = AddingTicketSchema.parse(req.body);
+  const result = await EventTicketsService.addEventTicket(eventId, ticketData);
+  res.status(201).json({
+    message: 'Event ticket created successfully',
+    data: result,
   });
-  res.status(201).json({ message: 'Event ticket created successfully', data });
 });
 
 const updateEventTicket = asyncHandler(async (req, res) => {
-  const { eventId, ticketId } = TicketParamsSchema.parse(req.params);
-  const payload = UpdatingTicketSchema.parse(req.body);
-  const data = await EventTicketsService.updateEventTicket(
+  const { eventId, ticketId } = object({
+    eventId: string({ message: 'Invalid event ID' }),
+    ticketId: string({ message: 'Invalid ticket ID' }),
+  }).parse(req.params);
+  const ticketData = AddingTicketSchema.partial().parse(req.body);
+  const updatedTicket = await EventTicketsService.updateEventTicket(
     eventId,
     ticketId!,
-    payload,
+    ticketData,
   );
   await writeAudit(req, eventId, 'update', ticketId, {
-    updatedFields: Object.keys(payload),
+    updatedFields: Object.keys(ticketData),
   });
-  res.status(200).json({ message: 'Event ticket updated successfully', data });
+  res.status(200).json({
+    message: 'Event ticket updated successfully',
+    data: updatedTicket,
+  });
 });
 
 const toggleEventTicketStatus = asyncHandler(async (req, res) => {
-  const { eventId, ticketId } = TicketParamsSchema.parse(req.params);
-  const data = await EventTicketsService.toggleEventTicketStatus(
+  const { eventId, ticketId } = object({
+    eventId: string({ message: 'Invalid event ID' }),
+    ticketId: string({ message: 'Invalid ticket ID' }),
+  }).parse(req.params);
+  const toggledTicket = await EventTicketsService.toggleEventTicketStatus(
     eventId,
     ticketId!,
   );
   await writeAudit(req, eventId, 'toggle_status', ticketId, {
-    isActive: data.isActive,
+    isActive: toggledTicket.isActive,
   });
-  res
-    .status(200)
-    .json({ message: 'Event ticket status updated successfully', data });
+  res.status(200).json({
+    message: 'Event ticket status updated successfully',
+    data: toggledTicket,
+  });
 });
 
 const deleteEventTicket = asyncHandler(async (req, res) => {
-  const { eventId, ticketId } = TicketParamsSchema.parse(req.params);
-  await EventTicketsService.deleteEventTicket(eventId, ticketId!);
-  await writeAudit(req, eventId, 'delete', ticketId, undefined);
-  res.status(200).json({ message: 'Event ticket deleted successfully' });
+  const { eventId, ticketId } = object({
+    eventId: string({ message: 'Invalid event ID' }),
+    ticketId: string({ message: 'Invalid ticket ID' }),
+  }).parse(req.params);
+  await EventTicketsService.deleteEventTicket(eventId, ticketId);
+  res.status(200).json({
+    message: `Event ticket ${ticketId} deleted successfully`,
+  });
 });
 
 export {

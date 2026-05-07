@@ -1,11 +1,11 @@
-import "dotenv/config";
-import { Env, envSchema } from "./env.schema";
-import z from "zod";
+import 'dotenv/config';
+import { Env, envSchema } from './env.schema';
+import { treeifyError } from 'zod';
 
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-  console.error("Invalid environment variables:", z.treeifyError(parsed.error));
+  console.error('Invalid environment variables:', treeifyError(parsed.error));
   process.exit(1);
 }
 
