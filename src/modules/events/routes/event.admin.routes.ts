@@ -32,6 +32,25 @@ eventAdminRoutes.get(
   eventAdminController.getEventById,
 );
 
+eventAdminRoutes.get(
+  '/:id/publish-test',
+  organizationRole(
+    'owner',
+    'admin',
+    'member',
+    'manager',
+    'volunteer',
+    'system',
+  ),
+  eventAdminController.testPublishEvent,
+);
+
+eventAdminRoutes.post(
+  '/:id/publish',
+  organizationRole('owner', 'admin'),
+  eventAdminController.publishEvent,
+);
+
 eventAdminRoutes.post(
   '/create',
   organizationRole('owner', 'admin'),

@@ -11,7 +11,11 @@ import {
 import EventTicketsHelper from './events.tickets.helper';
 import { AddingTicketInput } from './event.tickets.schema';
 
-const findTicketOrThrow = (eventId: string, tickets: EventTicket[], ticketId: string) => {
+const findTicketOrThrow = (
+  eventId: string,
+  tickets: EventTicket[],
+  ticketId: string,
+) => {
   const index = resolveCollectionItemIndex(tickets, ticketId, 'type');
   if (index === -1 || !tickets[index]) {
     throwItemNotFound('ticket', ticketId, eventId);
@@ -57,7 +61,20 @@ export default class EventTicketsService {
       sold: 0,
       type: ticketData.type.trim().toUpperCase(),
     };
-    EventTicketsHelper.validateTicket(event, nextTicket, true, organization);
+    const res = await EventTicketsHelper.validateTicket(
+      event,
+      nextTicket,
+      true,
+      organization,
+    );
+    if (res.length > 0) {
+      throw new ApiError(
+        400,
+        'Invalid ticket data',
+        'INVALID_TICKET_DATA',
+        res,
+      );
+    }
     const updatedEvent = await updateEventCollection(eventId, 'tickets', [
       ...event.tickets,
       nextTicket as EventTicket,
@@ -72,7 +89,11 @@ export default class EventTicketsService {
   ) {
     const event = await findEventOrThrow(eventId);
     const organization = await findEventOrganizationOrThrow(event);
-    const { index, ticket } = findTicketOrThrow(eventId, event.tickets, ticketId);
+    const { index, ticket } = findTicketOrThrow(
+      eventId,
+      event.tickets,
+      ticketId,
+    );
     const updatedTicket = {
       ...ticket,
       ...ticketData,
@@ -88,16 +109,37 @@ export default class EventTicketsService {
       );
     }
 
-    EventTicketsHelper.validateTicket(event, updatedTicket, false, organization);
+    const res = await EventTicketsHelper.validateTicket(
+      event,
+      updatedTicket,
+      false,
+      organization,
+    );
+    if (res.length > 0) {
+      throw new ApiError(
+        400,
+        'Invalid ticket data',
+        'INVALID_TICKET_DATA',
+        res,
+      );
+    }
     const tickets = [...event.tickets];
     tickets[index] = updatedTicket;
-    const updatedEvent = await updateEventCollection(eventId, 'tickets', tickets);
+    const updatedEvent = await updateEventCollection(
+      eventId,
+      'tickets',
+      tickets,
+    );
     return updatedEvent?.tickets[index];
   }
 
   static async toggleEventTicketStatus(eventId: string, ticketId: string) {
     const event = await findEventOrThrow(eventId);
-    const { index, ticket } = findTicketOrThrow(eventId, event.tickets, ticketId);
+    const { index, ticket } = findTicketOrThrow(
+      eventId,
+      event.tickets,
+      ticketId,
+    );
     const tickets = [...event.tickets];
     tickets[index] = { ...ticket, isActive: !ticket.isActive };
     await updateEventCollection(eventId, 'tickets', tickets);
@@ -118,7 +160,9 @@ export default class EventTicketsService {
     await updateEventCollection(
       eventId,
       'tickets',
-      event.tickets.filter((item) => item._id?.toString() !== ticket._id?.toString()),
+      event.tickets.filter(
+        (item) => item._id?.toString() !== ticket._id?.toString(),
+      ),
     );
   }
 

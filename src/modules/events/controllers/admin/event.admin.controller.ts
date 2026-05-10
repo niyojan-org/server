@@ -8,6 +8,10 @@ import {
   getAllEvents,
   getByEventId,
 } from '@modules/events/services/event.service';
+import {
+  publishOrganizationEvent,
+  testOrganizationEventPublish,
+} from '@modules/events/services/event.publish';
 import { EventAdminDataRequestParams } from '@modules/events/types/event.admin.query';
 import { getEventViewByRole } from '@modules/events/views/event.role.view';
 import { object, string } from 'zod';
@@ -77,6 +81,54 @@ export const getEventById = asyncHandler(
       success: true,
       message: 'Events retrieved successfully',
       event,
+    });
+  },
+);
+
+export const publishEvent = asyncHandler(
+  async (req: OrganizationRequest, res) => {
+    const { id: eventId } = EventIdParamsSchema.parse(req.params);
+
+    const event = await publishOrganizationEvent({
+      eventId,
+      organizationId: req.organization._id,
+      actorUserId: req.user?._id.toString() ?? 'system',
+      actorRole: req.user?.organization?.role ?? req.user?.role ?? 'system',
+      req: {
+        ip: req.ip,
+        userAgent: req.get('user-agent') ?? undefined,
+      },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Event published successfully',
+      event: getEventViewByRole(
+        event as unknown as Record<string, unknown>,
+        req.user?.organization?.role,
+      ),
+    });
+  },
+);
+
+export const testPublishEvent = asyncHandler(
+  async (req: OrganizationRequest, res) => {
+    const { id: eventId } = EventIdParamsSchema.parse(req.params);
+
+    const result = await testOrganizationEventPublish({
+      eventId,
+      organizationId: req.organization._id,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Event publish test completed',
+      canPublish: result.canPublish,
+      errors: result.errors,
+      event: getEventViewByRole(
+        result.event as unknown as Record<string, unknown>,
+        req.user?.organization?.role,
+      ),
     });
   },
 );

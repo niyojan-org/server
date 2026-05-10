@@ -1,43 +1,49 @@
-import ApiError from "@core/errors/api.error";
-import { EventDocument } from "./event.types";
-import { EventStatus } from "./event.enums";
+import ApiError from '@core/errors/api.error';
+import { EventDocument } from './event.types';
+import { EventStatus } from './event.enums';
 
 const assert = (condition: boolean, message: string) => {
   if (!condition)
     throw new ApiError(
       400,
       message,
-      "EVENT_RULE_VIOLATION",
-      "Violation of event rules: - " + message,
+      'EVENT_RULE_VIOLATION',
+      'Violation of event rules: - ' + message,
     );
 };
 
 export class EventRules {
   static canEdit(event: EventDocument) {
-    assert(!event.isBlocked, "Blocked events cannot be edited");
+    assert(!event.isBlocked, 'Blocked events cannot be edited');
     assert(
-      event.status !== "PUBLISHED",
-      "Published events cannot be edited. Please unpublish the event first.",
+      event.status !== EventStatus.PUBLISHED,
+      'Published events cannot be edited. Please unpublish the event first.',
     );
   }
   static canModifySessions(event: EventDocument) {
-    assert(!event.isBlocked, "Blocked events cannot be modified");
+    assert(!event.isBlocked, 'Blocked events cannot be modified');
     // assert()
   }
-  static validateSessions(sessions: EventDocument["sessions"]) {
-    assert(sessions.length > 0, "At least one session is required");
+  static validateSessions(sessions: EventDocument['sessions']) {
+    assert(sessions.length > 0, 'At least one session is required');
     for (const s of sessions) {
-      assert(s.startTime < s.endTime, `Session ${s.title} start time must be before end time`);
+      assert(
+        s.startTime < s.endTime,
+        `Session ${s.title} start time must be before end time`,
+      );
     }
   }
   static canModifyTickets(event: EventDocument) {
-    assert(!event.isBlocked, "Blocked events cannot be modified");
+    assert(!event.isBlocked, 'Blocked events cannot be modified');
   }
-  static validateTickets(tickets: EventDocument["tickets"]) {
-    assert(tickets.length > 0, "At least one ticket is required");
+  static validateTickets(tickets: EventDocument['tickets']) {
+    assert(tickets.length > 0, 'At least one ticket is required');
     for (const t of tickets) {
       assert(t.price >= 0, `Ticket ${t.type} price cannot be negative`);
-      assert(t.sold <= t.capacity, `Ticket ${t.type} sold count cannot exceed capacity`);
+      assert(
+        t.sold <= t.capacity,
+        `Ticket ${t.type} sold count cannot exceed capacity`,
+      );
       assert(t.capacity > 0, `Ticket ${t.type} capacity must be at least 1`);
       if (t.salesStartTime && t.salesEndTime) {
         assert(
@@ -65,23 +71,38 @@ export class EventRules {
     if (event.registrationStart && event.registrationEnd) {
       assert(
         event.registrationStart < event.registrationEnd,
-        "Event registration start time must be before end time",
+        'Event registration start time must be before end time',
       );
     }
   }
   static canPublish(event: EventDocument) {
-    assert(!event.isBlocked, "Blocked events cannot be published");
-    assert(event.status !== "PUBLISHED", "Event is already published");
-    assert(event.sessions.length > 0, "At least one session is required to publish the event");
-    assert(event.tickets.length > 0, "At least one ticket is required to publish the event");
+    assert(!event.isBlocked, 'Blocked events cannot be published');
+    assert(
+      event.status !== EventStatus.PUBLISHED,
+      'Event is already published',
+    );
+    assert(
+      event.sessions.length > 0,
+      'At least one session is required to publish the event',
+    );
+    assert(
+      event.tickets.length > 0,
+      'At least one ticket is required to publish the event',
+    );
     this.validateSessions(event.sessions);
     this.validateTickets(event.tickets);
     this.validateRegistrationWindow(event);
   }
   static canCancel(event: EventDocument) {
-    assert(!event.isBlocked, "Blocked events cannot be cancelled");
-    assert(event.status === "PUBLISHED", "Only published events can be cancelled");
-    assert(event.status !== EventStatus.COMPLETED, "Completed events cannot be cancelled");
+    assert(!event.isBlocked, 'Blocked events cannot be cancelled');
+    assert(
+      event.status === EventStatus.PUBLISHED,
+      'Only published events can be cancelled',
+    );
+    assert(
+      event.status !== EventStatus.COMPLETED,
+      'Completed events cannot be cancelled',
+    );
   }
   static isRegistrationOpen(event: EventDocument) {
     if (event.isBlocked || event.status !== EventStatus.PUBLISHED) return false;

@@ -145,13 +145,12 @@ const validateTicket = (
   ticket: EventTicket,
   isNew: boolean,
   organization: Organization,
-): true | TicketValidationError[] => {
+): TicketValidationError[] => {
   const errors: TicketValidationError[] = [];
   validateTicketLimits(event, isNew, ticket, errors);
   validateTicketPricingAndCapacity(ticket, organization, errors);
   validateTicketDates(event, ticket, errors);
-  if (errors.length > 0) return errors;
-  return true;
+  return errors;
 };
 
 export default {
