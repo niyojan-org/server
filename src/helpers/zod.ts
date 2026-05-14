@@ -1,15 +1,22 @@
-import { Types } from "mongoose";
-import z from "zod";
+import { Types } from 'mongoose';
+import { custom, preprocess, uuid, z } from 'zod';
 
-export const objectIdSchema = z
-  .instanceof(Types.ObjectId, { message: "Invalid ObjectId" })
-  .or(
-    z.string().refine((val) => Types.ObjectId.isValid(val), {
-      message: "Invalid ObjectId format",
-    }),
-  )
-  .transform((val) => (typeof val === "string" ? new Types.ObjectId(val) : val));
+export const objectIdSchema = preprocess(
+  (value) => {
+    if (typeof value === 'string' && Types.ObjectId.isValid(value)) {
+      return new Types.ObjectId(value);
+    }
 
-export const uuidSchema = z.uuid({ message: "Invalid UUID format" });
+    return value;
+  },
+  custom<Types.ObjectId>((value) => value instanceof Types.ObjectId, {
+    message: 'Invalid ObjectId',
+  }),
+);
+
+export const uuidSchema = uuid({ message: 'Invalid UUID format' });
+
+export const toObjectId = (value?: ObjectId | string) =>
+  value ? objectIdSchema.parse(value) : undefined;
 
 export type ObjectId = z.infer<typeof objectIdSchema>;

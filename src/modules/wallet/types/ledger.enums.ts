@@ -1,0 +1,28 @@
+export enum LedgerEntryType {
+  DEBIT = 'DEBIT',
+  CREDIT = 'CREDIT',
+}
+
+export enum LedgerCategory {
+  EVENT_PAYMENT_HOLD = 'EVENT_PAYMENT_HOLD',
+  EVENT_PAYMENT = 'EVENT_PAYMENT',
+  EVENT_RELEASE = 'EVENT_RELEASE',
+  EVENT_REFUND = 'EVENT_REFUND',
+  REFUND = 'REFUND',
+  PAYOUT = 'PAYOUT',
+  PLATFORM_FEE = 'PLATFORM_FEE',
+  ADJUSTMENT = 'ADJUSTMENT',
+}
+
+export enum LedgerBalanceType {
+  HOLD = 'HOLD',
+  AVAILABLE = 'AVAILABLE',
+  LOCKED = 'LOCKED',
+}
+
+export enum LedgerReferenceType {
+  PAYMENT = 'PAYMENT',
+  REFUND = 'REFUND',
+  PAYOUT = 'PAYOUT',
+  SETTLEMENT = 'SETTLEMENT',
+}

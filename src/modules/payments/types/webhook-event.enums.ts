@@ -1,0 +1,7 @@
+export enum WebhookEventStatus {
+  PENDING = 'PENDING',
+  PROCESSING = 'PROCESSING',
+  PROCESSED = 'PROCESSED',
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED',
+}
