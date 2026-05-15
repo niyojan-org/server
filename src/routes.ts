@@ -6,7 +6,12 @@ import userRouter from '@modules/user/user.routes';
 import notificationRoutes from '@modules/notifications/routes/notification.routes';
 import resourceRotes from '@modules/resource/resource.routes';
 import { Router } from 'express';
-import FakeRoutes from '@modules/wallet/routes.test';
+import paymentRoutes from '@modules/payments/routes/payment.routes';
+import webhookRoutes from '@modules/payments/routes/webhook.routes';
+import feeConfigRoutes from '@modules/payments/routes/payment-fee.routes';
+import walletRoutes from '@modules/wallet/routes';
+import settlementRoutes from '@modules/settlements/routes/settlement.routes';
+import payoutRoutes from '@modules/payouts/routes/payout.routes';
 
 const mainRoutes = Router();
 
@@ -19,6 +24,11 @@ mainRoutes.use('/organizations', organizationRoutes);
 mainRoutes.use('/org', organizationRoutes);
 mainRoutes.use('/notifications', notificationRoutes);
 mainRoutes.use('/resources', resourceRotes);
-mainRoutes.use('/tests', FakeRoutes);
+mainRoutes.use('/payments', paymentRoutes);
+mainRoutes.use('/payments/fees', feeConfigRoutes);
+mainRoutes.use('/webhooks', webhookRoutes);
+mainRoutes.use('/wallets', walletRoutes);
+mainRoutes.use('/settlements', settlementRoutes);
+mainRoutes.use('/payouts', payoutRoutes);
 
 export default mainRoutes;

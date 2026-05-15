@@ -3,8 +3,11 @@ import crypto from "crypto";
 
 const ISSUER = "Orgatick";
 
-export const generateTotpSecret = (userEmail: string, userName?: string): speakeasy.GeneratedSecret => {
-  const label = `${ISSUER}:${userEmail}`;
+export const generateTotpSecret = (
+  userEmail: string,
+  userName?: string,
+): speakeasy.GeneratedSecret => {
+  const label = userName ? `${ISSUER}:${userName}` : `${ISSUER}:${userEmail}`;
   
   return speakeasy.generateSecret({ 
     length: 20, 

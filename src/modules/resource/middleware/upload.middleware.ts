@@ -13,6 +13,18 @@ import {
 import { CLOUDINARY_FOLDERS } from "../resource.constants";
 import { Readable } from "stream";
 
+type CloudinaryUploadResult = {
+  url: string;
+  secure_url: string;
+  public_id: string;
+  format: string;
+  width?: number;
+  height?: number;
+  bytes: number;
+  resource_type: string;
+  folder: string;
+};
+
 // Configure Cloudinary
 const cloudinaryConfig = {
   cloud_name: env.CLOUDINARY_CLOUD_NAME.trim(),
@@ -91,7 +103,7 @@ export const uploadToCloudinary = async (
       category === "image" ? "image" : category === "video" ? "video" : "raw";
 
     // Upload to Cloudinary
-    const result = await new Promise<any>((resolve, reject) => {
+    const result = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
           folder: `orgatick/${folder}`,
@@ -105,9 +117,20 @@ export const uploadToCloudinary = async (
             reject(
               new ApiError(500, "Failed to upload file", "CLOUDINARY_UPLOAD_ERROR", error.message),
             );
-          } else {
-            resolve(result);
+            return;
           }
+          if (!result) {
+            reject(
+              new ApiError(
+                500,
+                "Failed to upload file",
+                "CLOUDINARY_UPLOAD_ERROR",
+                "Cloudinary returned no result",
+              ),
+            );
+            return;
+          }
+          resolve(result as CloudinaryUploadResult);
         },
       );
 

@@ -1,7 +1,7 @@
 import ApiError from "@core/errors/api.error";
 import logger from "@config/logger";
 import { ResourceModel } from "../resource.model";
-import { Resource } from "../resource.types";
+import { Resource, ResourceMetadata } from "../resource.types";
 import { UpdateResourceInput } from "../resource.schema";
 import { invalidateResourceCache, clearResourceCaches } from "../resource.cache";
 import { deleteFromCloudinary } from "../middleware/upload.middleware";
@@ -19,7 +19,7 @@ export async function updateResource(id: string, input: UpdateResourceInput): Pr
     // Update fields
     Object.keys(input).forEach((key) => {
       if (input[key as keyof UpdateResourceInput] !== undefined) {
-        (resource as any)[key] = input[key as keyof UpdateResourceInput];
+        (resource as unknown as Record<string, unknown>)[key] = input[key as keyof UpdateResourceInput];
       }
     });
 
@@ -53,7 +53,7 @@ export async function updateResource(id: string, input: UpdateResourceInput): Pr
 export async function replaceResourceFile(
   id: string,
   newUrl: string,
-  newMetadata: any
+  newMetadata: ResourceMetadata
 ): Promise<Resource> {
   try {
     const resource = await ResourceModel.findById(id);

@@ -18,6 +18,7 @@ const findSessionOrThrow = (eventId: string, sessions: Session[], sessionId: str
 
 export default class EventSessionsService {
   static async getAllEventSessions(eventId: string, _role?: OrganizationRole) {
+    void _role;
     const event = await findEventOrThrow(eventId);
     return event.sessions;
   }

@@ -31,7 +31,7 @@ export interface PushNotificationPayload {
   userId: string;
   title: string;
   body: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   icon?: string;
   badge?: string;
   image?: string;
@@ -79,15 +79,19 @@ export async function sendPushNotification(
       
       await webPush.sendNotification(subscription, notificationPayload);
       sent++;
-    } catch (error: any) {
+    } catch (error: unknown) {
       failed++;
       failedTokens.push(record.token);
+
+      const err = error as { statusCode?: number; message?: string };
       
       // Log specific error
-      if (error.statusCode === 410 || error.statusCode === 404) {
+      if (err.statusCode === 410 || err.statusCode === 404) {
         logger.debug(`Push subscription expired or not found: ${record.id}`);
       } else {
-        logger.debug(`Push notification failed for subscription ${record.id}: ${error.message}`);
+        logger.debug(
+          `Push notification failed for subscription ${record.id}: ${err.message ?? "Unknown error"}`,
+        );
       }
     }
   });

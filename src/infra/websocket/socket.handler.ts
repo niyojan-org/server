@@ -1,4 +1,6 @@
 import { Server, Socket } from "socket.io";
+import type { Server as HttpServer } from "http";
+import type { Server as HttpsServer } from "https";
 import env from "@config/env";
 import logger from "@config/logger";
 import { verifyAccessToken } from "@modules/auth/service/token.service";
@@ -7,7 +9,7 @@ import ApiError from "@core/errors/api.error";
 let io: Server;
 const userSockets = new Map<string, Set<string>>();
 
-export function initializeSocketIO(server: any) {
+export function initializeSocketIO(server: HttpServer | HttpsServer) {
   io = new Server(server, {
     cors: {
       origin: env.FRONTEND_URL || "*",
@@ -61,7 +63,10 @@ export function initializeSocketIO(server: any) {
   return io;
 }
 
-export async function emitNotificationToUser(userId: string, notification: any): Promise<void> {
+export async function emitNotificationToUser(
+  userId: string,
+  notification: Record<string, unknown>,
+): Promise<void> {
   if (!io) {
     logger.warn("Socket.IO not initialized");
     return;

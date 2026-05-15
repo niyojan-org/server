@@ -4,6 +4,7 @@ import EventCouponsService from './event.coupons.services';
 import { AddingCouponSchema, UpdatingCouponSchema } from './event.coupons.schema';
 import { writeEventManagementAudit } from '../shared/event.management.audit';
 import { findEventOrThrow } from '../shared/event.management.repository';
+import { AuthenticatedRequest } from '@core/middlewares/auth.middleware';
 
 const CouponParamsSchema = z.object({
   eventId: z.string().min(1, 'Invalid event ID'),
@@ -11,7 +12,7 @@ const CouponParamsSchema = z.object({
 });
 
 const writeAudit = async (
-  req: any,
+  req: AuthenticatedRequest,
   eventId: string,
   action: string,
   targetId?: string,

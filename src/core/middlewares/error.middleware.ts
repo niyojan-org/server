@@ -4,6 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 
 export function errorMiddleware(err: unknown, _req: Request, res: Response, _next: NextFunction) {
+  void _next;
   if (err instanceof ZodError) {
     const firstError = err.issues[0];
     return res.status(400).json({

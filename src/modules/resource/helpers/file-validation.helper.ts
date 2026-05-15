@@ -5,10 +5,10 @@ import { ALLOWED_MIME_TYPES, FILE_SIZE_LIMITS } from "../resource.constants";
  * Get file category from MIME type
  */
 export function getFileCategory(mimetype: string): "image" | "video" | "audio" | "document" {
-  if (ALLOWED_MIME_TYPES.image.includes(mimetype as any)) return "image";
-  if (ALLOWED_MIME_TYPES.video.includes(mimetype as any)) return "video";
-  if (ALLOWED_MIME_TYPES.audio.includes(mimetype as any)) return "audio";
-  if (ALLOWED_MIME_TYPES.document.includes(mimetype as any)) return "document";
+  if (ALLOWED_MIME_TYPES.image.includes(mimetype)) return "image";
+  if (ALLOWED_MIME_TYPES.video.includes(mimetype)) return "video";
+  if (ALLOWED_MIME_TYPES.audio.includes(mimetype)) return "audio";
+  if (ALLOWED_MIME_TYPES.document.includes(mimetype)) return "document";
   throw new ApiError(400, "Unsupported file type", "UNSUPPORTED_FILE_TYPE", `File type ${mimetype} is not supported`);
 }
 
@@ -38,7 +38,7 @@ export function validateMimeType(mimetype: string): void {
     ...ALLOWED_MIME_TYPES.document,
   ];
 
-  if (!allAllowedTypes.includes(mimetype as any)) {
+  if (!allAllowedTypes.includes(mimetype)) {
     throw new ApiError(
       400,
       "Unsupported file type",

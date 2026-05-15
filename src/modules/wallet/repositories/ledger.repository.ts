@@ -18,6 +18,12 @@ class LedgerRepository {
     const entry = new LedgerEntryModel(data);
     return await entry.save({ session });
   }
+  static async createEntries(
+    data: Partial<ILedgerEntry>[],
+    session?: ClientSession,
+  ): Promise<LedgerEntryDocument[]> {
+    return LedgerEntryModel.insertMany(data, { session });
+  }
   static async findById(
     id: ObjectId | string,
   ): Promise<LedgerEntryDocument | null> {

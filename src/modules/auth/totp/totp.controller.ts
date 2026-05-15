@@ -4,6 +4,7 @@ import * as totpSetupService from "./totp.setup.service";
 import { Request } from "express";
 import { verifyTotp } from "./totp.service";
 import { completeMfaLogin } from "../mfa/mfa.service";
+import ApiError from "@core/errors/api.error";
 
 export const startTotp = asyncHandler(async (req: AuthenticatedRequest, res) => {
   const data = await totpSetupService.startTotpSetup(req.user!);
@@ -12,7 +13,13 @@ export const startTotp = asyncHandler(async (req: AuthenticatedRequest, res) => 
 
 export const confirmTotp = asyncHandler(async (req: AuthenticatedRequest, res) => {
   const { token } = req.body;
-  const { backupCodes } = await totpSetupService.confirmTotpSetup(req.user?._id.toString()!, token);
+  if (!req.user?._id) {
+    throw new ApiError(401, "Unauthorized", "UNAUTHORIZED", "User is not authenticated");
+  }
+  const { backupCodes } = await totpSetupService.confirmTotpSetup(
+    req.user._id.toString(),
+    token,
+  );
   res
     .status(200)
     .json({ success: true, message: "TOTP setup confirmed successfully", data: { backupCodes } });
@@ -21,6 +28,6 @@ export const confirmTotp = asyncHandler(async (req: AuthenticatedRequest, res) =
 export const totpLogin = asyncHandler(async (req: Request, res) => {
   const { userId, token } = req.body;
   await verifyTotp(userId, token);
-  let data = await completeMfaLogin(userId, req);
+  const data = await completeMfaLogin(userId, req);
   res.status(200).json({ success: true, message: "TOTP verified successfully", data });
 });

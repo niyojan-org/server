@@ -2,12 +2,12 @@ import { Types } from "mongoose";
 import ApiError from "@core/errors/api.error";
 import logger from "@config/logger";
 import { ResourceModel } from "../resource.model";
-import { ResourceQueryFilters, ResourceListResponse } from "../resource.types";
+import { Resource, ResourceQueryFilters, ResourceListResponse } from "../resource.types";
 
 /**
  * Build MongoDB query from filters
  */
-function buildQuery(filters: ResourceQueryFilters): any {
+function buildQuery(filters: ResourceQueryFilters): Record<string, unknown> {
   const {
     type,
     status,
@@ -23,7 +23,7 @@ function buildQuery(filters: ResourceQueryFilters): any {
     isPublic,
   } = filters;
 
-  const query: any = {};
+  const query: Record<string, unknown> = {};
 
   if (type) query.type = type;
   if (status) query.status = status;
@@ -40,16 +40,18 @@ function buildQuery(filters: ResourceQueryFilters): any {
 
   // Priority range filter
   if (minPriority !== undefined || maxPriority !== undefined) {
-    query.priority = {};
-    if (minPriority !== undefined) query.priority.$gte = minPriority;
-    if (maxPriority !== undefined) query.priority.$lte = maxPriority;
+    const priority: Record<string, number> = {};
+    if (minPriority !== undefined) priority.$gte = minPriority;
+    if (maxPriority !== undefined) priority.$lte = maxPriority;
+    query.priority = priority;
   }
 
   // Date range filter
   if (createdFrom || createdTo) {
-    query.createdAt = {};
-    if (createdFrom) query.createdAt.$gte = new Date(createdFrom);
-    if (createdTo) query.createdAt.$lte = new Date(createdTo);
+    const createdAt: Record<string, Date> = {};
+    if (createdFrom) createdAt.$gte = new Date(createdFrom);
+    if (createdTo) createdAt.$lte = new Date(createdTo);
+    query.createdAt = createdAt;
   }
 
   // Text search
@@ -63,8 +65,8 @@ function buildQuery(filters: ResourceQueryFilters): any {
 /**
  * Build sort object from sort string
  */
-function buildSort(sort: string): any {
-  const sortObj: any = {};
+function buildSort(sort: string): Record<string, 1 | -1> {
+  const sortObj: Record<string, 1 | -1> = {};
   const sortFields = sort.split(",");
 
   sortFields.forEach((field) => {
@@ -101,7 +103,7 @@ export async function listResources(filters: ResourceQueryFilters): Promise<Reso
     ]);
 
     return {
-      resources: resources as any[],
+      resources: resources as Resource[],
       total,
       page,
       limit,
@@ -177,7 +179,7 @@ export async function listPublicResources(filters: ResourceQueryFilters): Promis
     ]);
 
     return {
-      resources: resources as any[],
+      resources: resources as Resource[],
       total,
       page,
       limit,

@@ -3,7 +3,7 @@ import { MailAttachment } from './mail.attachment';
 import transporter from './mail.config';
 import renderTemplate from './mail.templates';
 
-export interface sendTemplateEmailPayload<T = Record<string, any>> {
+export interface sendTemplateEmailPayload<T = Record<string, unknown>> {
   template: string;
   layout: string;
   to: string;

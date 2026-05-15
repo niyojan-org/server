@@ -29,7 +29,7 @@ const notificationWorker = new Worker(
       notification.priority !== "urgent" && (await preferencesService.isInQuietHours(recipientId));
 
     // 4. Deliver via each channel
-    const deliveryPromises: Promise<any>[] = [];
+    const deliveryPromises: Promise<unknown>[] = [];
 
     // WebSocket (realtime in-app) - always try to deliver if websocket channel is enabled
     // Ignore user preferences for in-app because they control this in the UI

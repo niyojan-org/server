@@ -5,6 +5,7 @@ import { UploadedFileRequest } from "./middleware/upload.middleware";
 import ApiError from "@core/errors/api.error";
 import { Response } from "express";
 import { CreateResourceInput } from "./resource.schema";
+import { ResourceMetadata } from "./resource.types";
 
 /**
  * Create a new resource
@@ -21,7 +22,7 @@ export const createResource = asyncHandler(
       );
     }
 
-    const input: CreateResourceInput & { url: string; metadata: any } = {
+    const input: CreateResourceInput & { url: string; metadata: ResourceMetadata } = {
       ...req.body,
       url: req.fileUpload.secureUrl,
       metadata: {

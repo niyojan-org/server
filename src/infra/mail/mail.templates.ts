@@ -62,7 +62,11 @@ export const initializeTemplates = () => {
   registerHelpers();
 };
 
-export const renderTemplate = (templatePath: string, layoutPath: string, context: any): string => {
+export const renderTemplate = (
+  templatePath: string,
+  layoutPath: string,
+  context: Record<string, unknown>,
+): string => {
   const contentTemplate = loadTemplate(templatePath);
   const contentHtml = contentTemplate(context);
   const layoutTemplate = loadTemplate(`layouts/${layoutPath}`);

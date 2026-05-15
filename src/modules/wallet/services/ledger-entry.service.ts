@@ -54,6 +54,42 @@ class LedgerEntryService {
     );
     return ledgerEntry;
   }
+
+  static async createEntries(
+    entries: CreateLedgerEntryPayload[],
+    session?: CreateLedgerEntryPayload['session'],
+  ) {
+    const prepared = entries.map((entry) => {
+      if (entry.amount <= 0) {
+        throw new Error('Ledger amount must be greater than 0');
+      }
+      if (entry.afterBalance < 0) {
+        throw new Error('Wallet balance cannot go below 0');
+      }
+
+      return {
+        organizationId: objectIdSchema.parse(entry.organizationId),
+        walletId: objectIdSchema.parse(entry.walletId),
+        type: entry.type,
+        category: entry.category,
+        amount: entry.amount,
+        balanceType: entry.balanceType,
+        beforeBalance: entry.beforeBalance,
+        afterBalance: entry.afterBalance,
+        referenceType: entry.referenceType,
+        referenceId: objectIdSchema.parse(entry.referenceId),
+        eventId: toObjectId(entry.eventId),
+        paymentId: toObjectId(entry.paymentId),
+        refundId: toObjectId(entry.refundId),
+        payoutId: toObjectId(entry.payoutId),
+        description: entry.description,
+        metadata: entry.metadata ?? {},
+        createdBy: toObjectId(entry.createdBy),
+      };
+    });
+
+    return LedgerRepository.createEntries(prepared, session);
+  }
 }
 
 export default LedgerEntryService;

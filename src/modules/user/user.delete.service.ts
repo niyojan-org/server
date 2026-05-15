@@ -1,7 +1,7 @@
 import ApiError from "@core/errors/api.error";
 import { UserRepository } from "./user.repository";
 import { sendAuthEmail } from "@infra/mail";
-import { clearRefreshToken } from "@modules/auth/helper/cookies.helper";
+// import { clearRefreshToken } from "@modules/auth/helper/cookies.helper";
 
 export const deleteSelfUser = async (userId: string) => {
   const deletedUser = await UserRepository.deleteById(userId);

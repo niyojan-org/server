@@ -65,6 +65,17 @@ class WalletRepository {
       { new: true, session },
     );
   }
+  static async updateBalances(
+    walletId: ObjectId | string,
+    increments: Record<string, number>,
+    session?: ClientSession,
+  ): Promise<WalletDocument | null> {
+    return WalletModel.findByIdAndUpdate(
+      walletId,
+      { $inc: increments },
+      { new: true, session },
+    );
+  }
   static async transferBalance(
     walletId: ObjectId | string,
     from: WalletBalanceType,

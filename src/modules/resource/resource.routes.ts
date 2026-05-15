@@ -18,7 +18,12 @@ import ApiError from "@core/errors/api.error";
 
 const router = Router();
 
-const handleMulterError = (err: any, req: Request, res: Response, next: NextFunction) => {
+const handleMulterError = (
+  err: unknown,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   if (err instanceof Error) {
     if (err.message.includes("Unexpected end of form")) {
       return next(

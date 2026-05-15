@@ -4,7 +4,6 @@ import { UserDocument } from "@modules/user/user.types";
 import { Request } from "express";
 import {
   clearMfaPending,
-  completeOAuthLogin,
   createSession,
   generateTokens,
   isMfaPending,
@@ -66,6 +65,7 @@ export const completeMfaLogin = async (email: string, req: Request) => {
     sessionId,
   });
   setRefreshToken(req.res!, refreshToken);
-  const { password, ...userWithoutPassword } = user.toJSON();
+  const userWithoutPassword = user.toJSON() as Record<string, unknown>;
+  delete userWithoutPassword.password;
   return { token: accessToken, ...userWithoutPassword };
 };

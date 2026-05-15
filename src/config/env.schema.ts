@@ -62,6 +62,8 @@ export const envSchema = z.object({
 
   PHONEPE_CLIENT_ID: z.string(),
   PHONEPE_CLIENT_SECRET: z.string(),
+  PHONEPE_SALT_INDEX: z.coerce.number().default(1),
+  PHONEPE_BASE_URL: z.string().default('https://api.phonepe.com/apis/hermes'),
 
   //MONITORING
   LOKI_HOST: z.url(),

@@ -25,7 +25,7 @@ export async function getUserNotifications(
       AND nr.is_archived = FALSE
   `;
 
-  const params: any[] = [userId];
+  const params: unknown[] = [userId];
   let paramIndex = 2;
 
   if (unreadOnly) {

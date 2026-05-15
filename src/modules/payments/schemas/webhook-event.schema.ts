@@ -73,8 +73,6 @@ WebhookEventSchema.index(
 );
 WebhookEventSchema.index({ gateway: 1, eventType: 1, gatewayEventId: 1 });
 WebhookEventSchema.index({ status: 1, nextRetryAt: 1 });
-WebhookEventSchema.index({ relatedPaymentId: 1 });
-WebhookEventSchema.index({ relatedPaymentOrderId: 1 });
 WebhookEventSchema.index({ createdAt: -1 });
 
 export const WebhookEventModel = model<IWebhookEvent>(

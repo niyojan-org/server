@@ -2,9 +2,9 @@
 class ApiError extends Error {
   status: number;
   code: string;
-  details: any;
+  details: unknown;
 
-  constructor(status: number, message: string, code: string, details: any = null) {
+  constructor(status: number, message: string, code: string, details: unknown = null) {
     super(message);
     this.status = status;
     this.code = code;

@@ -1,7 +1,7 @@
-import mongoose, { Schema, Types, Model, PaginateModel } from "mongoose";
-import * as OrganizationEnums from "../types/organization.enums";
-import * as OrgTypes from "../types";
-import mongoosePaginate from "mongoose-paginate-v2";
+import mongoose, { Schema, Types, Model, PaginateModel } from 'mongoose';
+import * as OrganizationEnums from '../types/organization.enums';
+import * as OrgTypes from '../types';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const AddressSchema = new Schema<OrgTypes.OrganizationAddress>(
   {
@@ -45,10 +45,10 @@ const DocumentSchema = new Schema<OrgTypes.OrganizationDocument>({
   verified: { type: Boolean, default: false },
   verifiedAt: Date,
   rejected: { type: Boolean, default: false },
-  verifiedBy: { type: Types.ObjectId, ref: "User" },
+  verifiedBy: { type: Types.ObjectId, ref: 'User' },
   rejectionReason: String,
 
-  checkedBy: { type: Types.ObjectId, ref: "User" },
+  checkedBy: { type: Types.ObjectId, ref: 'User' },
 });
 
 const BankDetailsSchema = new Schema<OrgTypes.OrganizationBank>(
@@ -61,7 +61,7 @@ const BankDetailsSchema = new Schema<OrgTypes.OrganizationBank>(
     upiId: String,
     verified: { type: Boolean, default: false },
     verifiedAt: Date,
-    verifiedBy: { type: Types.ObjectId, ref: "User" },
+    verifiedBy: { type: Types.ObjectId, ref: 'User' },
     reqForVerification: { type: Boolean, default: false },
     rejectionReason: String,
   },
@@ -84,18 +84,18 @@ const FraudFlagSchema = new Schema<OrgTypes.FraudFlag>({
     enum: Object.values(OrganizationEnums.Severity),
     default: OrganizationEnums.Severity.MINOR,
   },
-  flaggedBy: { type: Types.ObjectId, ref: "User" },
+  flaggedBy: { type: Types.ObjectId, ref: 'User' },
   flaggedAt: { type: Date, default: Date.now },
   resolvedFeedback: String,
   resolved: { type: Boolean, default: false },
-  resolvedBy: { type: Types.ObjectId, ref: "User" },
+  resolvedBy: { type: Types.ObjectId, ref: 'User' },
   resolvedAt: Date,
 });
 
 const WarningSchema = new Schema<OrgTypes.Warning>(
   {
     message: String,
-    issuedBy: { type: Types.ObjectId, ref: "User" },
+    issuedBy: { type: Types.ObjectId, ref: 'User' },
     issuedAt: { type: Date, default: Date.now },
     acknowledged: { type: Boolean, default: false },
   },
@@ -142,7 +142,7 @@ const OrganizationSchema = new Schema<OrganizationDocument>(
     /* ---------- Ownership ---------- */
     owner: {
       type: Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
       index: true,
     },
@@ -150,7 +150,7 @@ const OrganizationSchema = new Schema<OrganizationDocument>(
     /* ---------- Verification (SYSTEM) ---------- */
     verified: { type: Boolean, default: false },
     verifiedAt: Date,
-    verifiedBy: { type: Types.ObjectId, ref: "User" },
+    verifiedBy: { type: Types.ObjectId, ref: 'User' },
     reqForVerification: { type: Boolean, default: false },
     rejectionReason: String,
 
@@ -160,13 +160,16 @@ const OrganizationSchema = new Schema<OrganizationDocument>(
     fraudFlags: {
       type: [FraudFlagSchema],
       default: [],
-      validate: [(v: any[]) => v.length <= 20, "Max 20 fraud flags"],
+      validate: [
+        (v: OrgTypes.FraudFlag[]) => v.length <= 20,
+        'Max 20 fraud flags',
+      ],
     },
 
     warnings: {
       type: [WarningSchema],
       default: [],
-      validate: [(v: any[]) => v.length <= 50, "Max 50 warnings"],
+      validate: [(v: OrgTypes.Warning[]) => v.length <= 50, 'Max 50 warnings'],
     },
 
     /* ---------- Platform Controls ---------- */
@@ -176,7 +179,7 @@ const OrganizationSchema = new Schema<OrganizationDocument>(
       type: String,
       enum: Object.values(OrganizationEnums.BlockType),
     },
-    blockedBy: { type: Types.ObjectId, ref: "User" },
+    blockedBy: { type: Types.ObjectId, ref: 'User' },
     blockedAt: Date,
 
     /* ---------- Event Creation Controls ---------- */
@@ -193,7 +196,10 @@ const OrganizationSchema = new Schema<OrganizationDocument>(
     documents: {
       type: [DocumentSchema],
       default: [],
-      validate: [(v: any[]) => v.length <= 20, "Max 20 documents"],
+      validate: [
+        (v: OrgTypes.OrganizationDocument[]) => v.length <= 20,
+        'Max 20 documents',
+      ],
     },
 
     /* ---------- Analytics ---------- */
@@ -208,23 +214,24 @@ const OrganizationSchema = new Schema<OrganizationDocument>(
   },
 );
 
-OrganizationSchema.index({ name: "text", description: "text" });
+OrganizationSchema.index({ name: 'text', description: 'text' });
 OrganizationSchema.index({ verified: 1, active: 1 });
 OrganizationSchema.index({ category: 1, verified: 1 });
 OrganizationSchema.plugin(mongoosePaginate);
 
-OrganizationSchema.pre("validate", async function () {
-  if (!this.slug || this.isModified("name")) {
+OrganizationSchema.pre('validate', async function () {
+  if (!this.slug || this.isModified('name')) {
     const baseSlug = this.name
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)+/g, "");
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)+/g, '');
 
     let slug = baseSlug;
     let count = 1;
-    const Organization =
-      mongoose.models.Organization || mongoose.model("Organization", OrganizationSchema);
-    while (await Organization.findOne({ slug } as any)) {
+    const Organization: Model<OrganizationDocument> =
+      mongoose.models.Organization ||
+      mongoose.model('Organization', OrganizationSchema);
+    while (await Organization.findOne({ slug })) {
       slug = `${baseSlug}-${count++}`;
     }
 
@@ -235,7 +242,7 @@ OrganizationSchema.pre("validate", async function () {
 const OrganizationModel: PaginateModel<OrganizationDocument> =
   (mongoose.models.Organization as PaginateModel<OrganizationDocument>) ||
   mongoose.model<OrganizationDocument, PaginateModel<OrganizationDocument>>(
-    "Organization",
+    'Organization',
     OrganizationSchema,
   );
 

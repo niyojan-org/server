@@ -1,3 +1,6 @@
 
+export const logout = () => {
+	return undefined;
+};
 
-const logout = a
+export default logout;

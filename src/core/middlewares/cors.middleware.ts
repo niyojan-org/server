@@ -1,5 +1,4 @@
 import env from '@config/env';
-import logger from '@config/logger';
 import ApiError from '@core/errors/api.error';
 import { validateDomainPurpose } from '@modules/domain';
 import cors from 'cors';

@@ -1,0 +1,7 @@
+export enum PayoutStatus {
+  CREATED = 'CREATED',
+  LOCKED = 'LOCKED',
+  PROCESSING = 'PROCESSING',
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED',
+}

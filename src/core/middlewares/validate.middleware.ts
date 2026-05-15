@@ -1,16 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
-import type { ZodObject, ZodType } from "zod";
+import type { ZodObject, ZodTypeAny } from "zod";
 import ApiError from "@core/errors/api.error";
 
-/**
- * What parts of the request can be validated
- */
-type ValidationTarget = "body" | "query" | "params";
-
 interface ValidateOptions {
-  body?: ZodObject<any> | ZodType<any>;
-  query?: ZodObject<any> | ZodType<any>;
-  params?: ZodObject<any> | ZodType<any>;
+  body?: ZodObject<ZodTypeAny> | ZodTypeAny;
+  query?: ZodObject<ZodTypeAny> | ZodTypeAny;
+  params?: ZodObject<ZodTypeAny> | ZodTypeAny;
 }
 
 /**
@@ -30,8 +25,9 @@ export const validate =
       if (schemas.query) {
         // Validate query but assign to req.query by copying properties
         const validated = schemas.query.parse(req.query);
+        const queryTarget = req.query as Record<string, unknown>;
         Object.keys(validated).forEach((key) => {
-          (req.query as any)[key] = validated[key];
+          queryTarget[key] = validated[key as keyof typeof validated];
         });
       }
 
@@ -45,7 +41,12 @@ export const validate =
     }
   };
 
-export const jsonValidation = (err: any, req: Request, _res: Response, next: NextFunction) => {
+export const jsonValidation = (
+  err: unknown,
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
   if (err instanceof SyntaxError && 'body' in err && err.message.includes('JSON')) {
     throw new ApiError(
       400,

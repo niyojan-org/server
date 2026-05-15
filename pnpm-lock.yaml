@@ -72,6 +72,9 @@ importers:
       socket.io:
         specifier: ^4.8.3
         version: 4.8.3
+      sonar-scanner:
+        specifier: ^3.1.0
+        version: 3.1.0
       speakeasy:
         specifier: ^2.0.0
         version: 2.0.0
@@ -1828,6 +1831,10 @@ packages:
   socket.io@4.8.3:
     resolution: {integrity: sha512-2Dd78bqzzjE6KPkD5fHZmDAKRNe3J15q+YHDrIsy9WEkqttc7GY+kT9OBLSMaPbQaEd0x1BjcmtMtXkfpc+T5A==}
     engines: {node: '>=10.2.0'}
+
+  sonar-scanner@3.1.0:
+    resolution: {integrity: sha512-KD7W3wHCKJKAakhn8ckxNYTxkdb1cnJa3ot0NVvO8CCeJjb0yvF0fW2yGdI09zMHsqxCRsl4dLtyCL2SUv47WA==}
+    hasBin: true
 
   source-map@0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
@@ -3767,6 +3774,8 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  sonar-scanner@3.1.0: {}
 
   source-map@0.6.1: {}
 

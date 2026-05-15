@@ -16,7 +16,13 @@ app.set('trust proxy', true);
 //MIDDLEWARES
 app.use(helmetMiddleware);
 app.use(corsMiddleware);
-app.use(express.json());
+app.use(
+  express.json({
+    verify: (req, _res, buf) => {
+      (req as { rawBody?: string }).rawBody = buf.toString('utf8');
+    },
+  }),
+);
 app.use(jsonValidation);
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));

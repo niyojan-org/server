@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 import ApiError from "@core/errors/api.error";
 import logger from "@config/logger";
 import { ResourceModel } from "../resource.model";
-import { Resource } from "../resource.types";
+import { Resource, ResourceMetadata } from "../resource.types";
 import { CreateResourceInput } from "../resource.schema";
 import { cacheResource, clearResourceCaches } from "../resource.cache";
 
@@ -10,7 +10,7 @@ import { cacheResource, clearResourceCaches } from "../resource.cache";
  * Create a new resource
  */
 export async function createResource(
-  input: CreateResourceInput & { url: string; metadata: any },
+  input: CreateResourceInput & { url: string; metadata: ResourceMetadata },
   userId: Types.ObjectId
 ): Promise<Resource> {
   try {

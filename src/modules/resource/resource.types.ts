@@ -12,7 +12,7 @@ export interface ResourceMetadata {
   height?: number;
   bytes?: number;
   resourceType?: "image" | "video" | "raw";
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface Resource {

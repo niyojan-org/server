@@ -1,8 +1,9 @@
-import logger from '@config/logger';
 import redis from '@config/redis';
 import {
   UserPreferences,
   ChannelPreferences,
+  UserNotificationPreferences,
+  UpdatePreferencesPayload,
 } from '../types/preferences.types';
 import * as preferencesRepository from '../persistence/preferences.repository';
 
@@ -35,8 +36,8 @@ export async function checkUserPreferences(
 }
 
 function extractChannelPreferences(
-  prefs: any,
-  notificationType: string
+  prefs: UserNotificationPreferences,
+  notificationType: string,
 ): UserPreferences {
   const categoryPrefs: ChannelPreferences =
     prefs.preferences?.[notificationType] || {};
@@ -53,7 +54,7 @@ export async function getUserPreferences(userId: string) {
 
 export async function updateUserPreferences(
   userId: string,
-  payload: any
+  payload: UpdatePreferencesPayload,
 ) {
   const updated = await preferencesRepository.updateUserPreferences(
     userId,

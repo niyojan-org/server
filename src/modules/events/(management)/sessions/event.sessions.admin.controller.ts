@@ -7,6 +7,7 @@ import {
 import EventSessionsService from './event.sessions.services';
 import { writeEventManagementAudit } from '../shared/event.management.audit';
 import { findEventOrThrow } from '../shared/event.management.repository';
+import { AuthenticatedRequest } from '@core/middlewares/auth.middleware';
 
 const SessionParamsSchema = z.object({
   eventId: z.string().min(1, 'Invalid event ID'),
@@ -14,7 +15,7 @@ const SessionParamsSchema = z.object({
 });
 
 const writeAudit = async (
-  req: any,
+  req: AuthenticatedRequest,
   eventId: string,
   action: string,
   targetId?: string,

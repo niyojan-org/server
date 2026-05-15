@@ -49,7 +49,7 @@ export async function updateUserPreferences(
   payload: UpdatePreferencesPayload
 ): Promise<UserNotificationPreferences> {
   const updates: string[] = [];
-  const values: any[] = [userId];
+  const values: unknown[] = [userId];
   let paramIndex = 2;
 
   if (payload.push_enabled !== undefined) {
@@ -91,7 +91,6 @@ export async function updateUserPreferences(
   if (payload.timezone !== undefined) {
     updates.push(`timezone = $${paramIndex}`);
     values.push(payload.timezone);
-    paramIndex++;
   }
 
   if (updates.length === 0) {
