@@ -4,6 +4,7 @@ import { TicketRegistrationValidationService } from '@modules/ticket/services/ti
 import ApiError from '@core/errors/api.error';
 import { FreeRegistrationWorkflow } from '../workflows/free-registration.workflow';
 import logger from '@config/logger';
+import ParticipantValidation from '@modules/participant/validation/participant.validation';
 
 export const createRegistration = asyncHandler(async (req, res) => {
   const payload = createRegistrationSchema.parse(req.body);
@@ -14,8 +15,16 @@ export const createRegistration = asyncHandler(async (req, res) => {
     payload.ticketId,
     payload.participants.length,
   );
-  if (!ticket.valid || !ticket.ticket)
+  if (!ticket.valid || !ticket.ticket || !ticket.ticket.eventId)
     throw new ApiError(400, ticket.message!, ticket.code!);
+  const validateParticipants = await ParticipantValidation.validate(
+    ticket.ticket.eventId,
+    payload.participants.map((p) => p.email),
+  );
+  if (!validateParticipants.valid)
+    throw new ApiError(400, validateParticipants.message!, validateParticipants.code!, {
+      emails: validateParticipants.emails,
+    });
   if (ticket.ticket.price > 0) {
     // Handle paid registration logic
     logger.info('Inplement Padid Ticket');

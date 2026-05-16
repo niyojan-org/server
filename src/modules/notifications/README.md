@@ -81,11 +81,7 @@ import {
 } from '@modules/notifications';
 
 // Organization verified
-await notifyOrganizationVerified(
-  organizationId,
-  'Acme Corp',
-  adminUserId
-);
+await notifyOrganizationVerified(organizationId, 'Acme Corp', adminUserId);
 
 // Event reminder
 await notifyEventReminder(
@@ -93,7 +89,7 @@ await notifyEventReminder(
   'Annual Conference',
   new Date('2026-03-15'),
   attendeeIds,
-  'day_before'
+  'day_before',
 );
 
 // Event update
@@ -101,7 +97,7 @@ await notifyEventUpdate(
   eventId,
   'Annual Conference',
   'Venue has been changed to Hall B',
-  attendeeIds
+  attendeeIds,
 );
 ```
 
@@ -143,6 +139,7 @@ GET /notifications
 ```
 
 Query parameters:
+
 - `limit` (default: 20) - Number of notifications to return
 - `offset` (default: 0) - Pagination offset
 - `unreadOnly` (boolean) - Filter unread notifications only
@@ -150,6 +147,7 @@ Query parameters:
 - `type` - Filter by notification type
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -168,6 +166,7 @@ GET /notifications/stats
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -278,15 +277,15 @@ const socket = io('http://localhost:5050', {
 
 socket.on('notification', (notification) => {
   console.log('New notification:', notification);
-  
+
   // Show toast
   toast.info(notification.title);
-  
+
   // Update notification count
-  setUnreadCount(prev => prev + 1);
-  
+  setUnreadCount((prev) => prev + 1);
+
   // Add to notifications list
-  setNotifications(prev => [notification, ...prev]);
+  setNotifications((prev) => [notification, ...prev]);
 });
 
 socket.on('connect_error', (error) => {
@@ -302,7 +301,7 @@ First, create a service worker (`public/sw.js`):
 // public/sw.js
 self.addEventListener('push', (event) => {
   const data = event.data.json();
-  
+
   const options = {
     body: data.body,
     icon: data.icon || '/logo.png',
@@ -312,10 +311,8 @@ self.addEventListener('push', (event) => {
     vibrate: [200, 100, 200],
     tag: data.data?.notificationId || 'notification',
   };
-  
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
+
+  event.waitUntil(self.registration.showNotification(data.title, options));
 });
 
 self.addEventListener('notificationclick', (event) => {
@@ -331,20 +328,20 @@ Then subscribe in your React app:
 async function subscribeToPush() {
   const permission = await Notification.requestPermission();
   if (permission !== 'granted') return;
-  
+
   const registration = await navigator.serviceWorker.register('/sw.js');
   await navigator.serviceWorker.ready;
-  
+
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
   });
-  
+
   await fetch('/api/notifications/push-tokens', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       token: JSON.stringify(subscription),
@@ -355,7 +352,7 @@ async function subscribeToPush() {
 }
 
 function urlBase64ToUint8Array(base64String: string) {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
   const base64 = (base64String + padding).replace(/\\-/g, '+').replace(/_/g, '/');
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
@@ -375,7 +372,7 @@ const fetchNotifications = async () => {
       Authorization: `Bearer ${token}`,
     },
   });
-  
+
   const { data } = await response.json();
   setNotifications(data.notifications);
   setUnreadCount(data.unreadCount);
@@ -394,12 +391,10 @@ const markAsRead = async (notificationIds: string[]) => {
     },
     body: JSON.stringify({ notificationIds }),
   });
-  
+
   // Update local state
-  setNotifications(prev =>
-    prev.map(n =>
-      notificationIds.includes(n.id) ? { ...n, is_read: true } : n
-    )
+  setNotifications((prev) =>
+    prev.map((n) => (notificationIds.includes(n.id) ? { ...n, is_read: true } : n)),
   );
 };
 ```
@@ -433,6 +428,7 @@ User Action → Create Notification → Save to DB → Queue Jobs
 ### Cleanup Old Notifications
 
 A cleanup job should run daily to:
+
 - Delete expired notifications
 - Archive old read notifications (30+ days)
 - Clean up inactive push tokens (60+ days)

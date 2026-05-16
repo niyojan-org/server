@@ -12,15 +12,14 @@ export class FreeRegistrationWorkflow {
     const session = await mongoose.startSession();
     try {
       await session.withTransaction(async () => {
-        const pricing =
-          RegistrationPricingService.calculateFreeRegistrationPricing();
+        const pricing = RegistrationPricingService.calculateFreeRegistrationPricing();
         // create registration
         const registration = await RegistrationRepository.createRegistration(
           payload,
           pricing,
           session,
         );
-        const rawParticipants : CreateParticipantDto[] = payload.participants.map((participant) => ({
+        const rawParticipants: CreateParticipantDto[] = payload.participants.map((participant) => ({
           registrationId: registration._id,
           eventId: registration.eventId,
           ticketId: registration.ticketId,
@@ -29,24 +28,24 @@ export class FreeRegistrationWorkflow {
           phone: participant.phone,
           dynamicFields: participant.dynamicFields,
         }));
-        const participants = await ParticipantRepository.addParticipants(
-          rawParticipants,
-          session,
-        );
+        const participants = await ParticipantRepository.addParticipants(rawParticipants, session);
 
         // link participants
-        registration.participantIds = participants.map(
-          (participant) => participant._id,
-        );
+        registration.participantIds = participants.map((participant) => participant._id);
 
         // confirm registration
         registration.status = RegistrationStatus.CONFIRMED;
         await registration.save({ session });
-        return {registration, participants}
+        return { registration, participants };
       });
-    } catch (error) {
-      console.error('Error in free registration workflow:', error);
-      throw new ApiError(500, 'Failed to complete free registration workflow', 'FREE_REGISTRATION_WORKFLOW_ERROR', 'An error occurred while processing the free registration workflow. Please try again later.');
+    } catch {
+      session.abortTransaction();
+      throw new ApiError(
+        500,
+        'Failed to complete free registration workflow',
+        'FREE_REGISTRATION_WORKFLOW_ERROR',
+        'An error occurred while processing the free registration workflow. Please try again later.',
+      );
     } finally {
       await session.endSession();
     }

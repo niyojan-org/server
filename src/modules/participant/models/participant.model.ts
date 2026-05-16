@@ -4,27 +4,12 @@ import { ParticipantStatus } from '../constants/participant.constants';
 
 const participantSessionCheckInSchema = new Schema(
   {
-    sessionId: {
-      type: Schema.Types.ObjectId,
-      required: true,
-    },
-    checkedIn: {
-      type: Boolean,
-      default: false,
-    },
-
-    checkedInAt: {
-      type: Date,
-    },
-
-    checkedInBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
+    sessionId: { type: Schema.Types.ObjectId, required: true },
+    checkedIn: { type: Boolean, default: false },
+    checkedInAt: { type: Date },
+    checkedInBy: { type: Schema.Types.ObjectId, ref: 'User' },
   },
-  {
-    _id: false,
-  },
+  { _id: false, timestamps: true },
 );
 
 const participantSchema = new Schema(
@@ -46,11 +31,7 @@ const participantSchema = new Schema(
       ref: 'EventTicket',
       required: true,
     },
-    name: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    name: { type: String, required: true, trim: true },
     email: {
       type: String,
       required: true,
@@ -58,19 +39,9 @@ const participantSchema = new Schema(
       trim: true,
       index: true,
     },
-    phone: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    dynamicFields: {
-      type: Map,
-      of: Schema.Types.Mixed,
-      default: {},
-    },
-    qrCode: {
-      type: String,
-    },
+    phone: { type: String, required: true, trim: true },
+    dynamicFields: { type: Map, of: Schema.Types.Mixed, default: {} },
+    qrCode: { type: String },
     sessionCheckIns: [participantSessionCheckInSchema],
     status: {
       type: String,
@@ -78,24 +49,15 @@ const participantSchema = new Schema(
       default: ParticipantStatus.REGISTERED,
     },
     notifications: {
-      emailSent: {
-        type: Boolean,
-        default: false,
-      },
-      whatsAppSent: {
-        type: Boolean,
-        default: false,
-      },
+      emailSent: { type: Boolean, default: false },
+      whatsAppSent: { type: Boolean, default: false },
     },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
+
+participantSchema.index({ eventId: 1, email: 1 }, { unique: true });
 
 export type ParticipantDocument = mongoose.Document & Participant;
 
-export const ParticipantModel = mongoose.model(
-  'Participant',
-  participantSchema,
-);
+export const ParticipantModel = mongoose.model('Participant', participantSchema);

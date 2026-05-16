@@ -3,3 +3,8 @@ export enum ParticipantStatus {
   CHECKED_IN = 'CHECKED_IN',
   CANCELLED = 'CANCELLED',
 }
+
+export enum ParticipantValidationErrorCode {
+  DUPLICATE_PARTICIPANTS = 'DUPLICATE_PARTICIPANTS',
+  PARTICIPANT_NOT_FOUND = 'PARTICIPANT_NOT_FOUND',
+}
