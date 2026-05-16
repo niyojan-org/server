@@ -17,13 +17,13 @@ const writeAudit = async (
   action: string,
   targetId?: string,
 ) => {
-  const organizationId =
-    req.user.organization?.id ??
-    (await findEventOrThrow(eventId)).organizationId.toString();
+  const organizationId = (
+    req.user.organization?.id ?? (await findEventOrThrow(eventId)).organizationId
+  ).toString();
   writeEventManagementAudit({
     eventId,
     organizationId,
-    actorUserId: req.user.id,
+    actorUserId: req.user._id.toString(),
     actorRole: req.user.organization?.role ?? req.user.role,
     module: 'coupon',
     action,

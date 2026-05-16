@@ -40,7 +40,7 @@ function extractChannelPreferences(
   notificationType: string,
 ): UserPreferences {
   const categoryPrefs: ChannelPreferences =
-    prefs.preferences?.[notificationType] || {};
+    prefs.preferences?.[notificationType] ?? { push: true, in_app: true };
 
   return {
     push: prefs.push_enabled && (categoryPrefs.push ?? true),

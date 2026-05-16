@@ -65,7 +65,7 @@ export const completeMfaLogin = async (email: string, req: Request) => {
     sessionId,
   });
   setRefreshToken(req.res!, refreshToken);
-  const userWithoutPassword = user.toJSON() as Record<string, unknown>;
+  const userWithoutPassword = user.toJSON() as unknown as Record<string, unknown>;
   delete userWithoutPassword.password;
   return { token: accessToken, ...userWithoutPassword };
 };

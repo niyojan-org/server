@@ -1,10 +1,10 @@
 // data validation helpers for verification
 
 export const checkOrgDataValidity = (
-  org: Record<string, unknown>,
+  org: unknown,
 ): { valid: boolean; missing: string[] } => {
   const missing: string[] = [];
-  const orgData = org as Record<string, unknown>;
+  const orgData = (org ?? {}) as Record<string, unknown>;
   const address = orgData.address as Record<string, unknown> | undefined;
   const supportContact = orgData.supportContact as
     | Record<string, unknown>

@@ -2,6 +2,7 @@ import { Types } from 'mongoose';
 import { EventModel } from './event.model';
 import { EventStatus } from '../core/event.enums';
 import { Event, EventDocument } from '../core/event.types';
+import { isObjectId } from '@helpers/zod';
 
 export class EventRepository {
   static async create(event: Event): Promise<EventDocument> {
@@ -9,7 +10,9 @@ export class EventRepository {
     return doc.save();
   }
 
-  static async find(input: string | Types.ObjectId) {
+  static async find(
+    input: string | Types.ObjectId,
+  ): Promise<EventDocument | null> {
     if (input instanceof Types.ObjectId || Types.ObjectId.isValid(input)) {
       return EventModel.findById(input).lean();
     }
@@ -109,5 +112,27 @@ export class EventRepository {
 
   static async incrementView(slug: string) {
     return EventModel.updateOne({ slug }, { $inc: { 'metrics.view': 1 } });
+  }
+
+  static async getTicketByIdOrType(
+    eventIdOrSlug: string,
+    ticketIdOrType: string,
+  ) {
+    const isEventIdObjectId = isObjectId(eventIdOrSlug);
+    const IsTicketIdObjectId = isObjectId(ticketIdOrType);
+    const query: Record<string, unknown> = {};
+
+    if (isEventIdObjectId) {
+      query._id = new Types.ObjectId(eventIdOrSlug);
+    } else {
+      query.slug = eventIdOrSlug;
+    }
+    if (IsTicketIdObjectId) {
+      query['tickets._id'] = new Types.ObjectId(ticketIdOrType);
+    } else {
+      query['tickets.type'] = ticketIdOrType;
+    }
+    const event = await EventModel.findOne(query, { 'tickets.$': 1 }).lean();
+    return event?.tickets?.[0] || null;
   }
 }

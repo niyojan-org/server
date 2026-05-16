@@ -1,14 +1,19 @@
 import ApiError from "@core/errors/api.error";
 import { ALLOWED_MIME_TYPES, FILE_SIZE_LIMITS } from "../resource.constants";
 
+const isAllowedMimeType = <T extends readonly string[]>(
+  list: T,
+  value: string,
+): value is T[number] => list.includes(value as T[number]);
+
 /**
  * Get file category from MIME type
  */
 export function getFileCategory(mimetype: string): "image" | "video" | "audio" | "document" {
-  if (ALLOWED_MIME_TYPES.image.includes(mimetype)) return "image";
-  if (ALLOWED_MIME_TYPES.video.includes(mimetype)) return "video";
-  if (ALLOWED_MIME_TYPES.audio.includes(mimetype)) return "audio";
-  if (ALLOWED_MIME_TYPES.document.includes(mimetype)) return "document";
+  if (isAllowedMimeType(ALLOWED_MIME_TYPES.image, mimetype)) return "image";
+  if (isAllowedMimeType(ALLOWED_MIME_TYPES.video, mimetype)) return "video";
+  if (isAllowedMimeType(ALLOWED_MIME_TYPES.audio, mimetype)) return "audio";
+  if (isAllowedMimeType(ALLOWED_MIME_TYPES.document, mimetype)) return "document";
   throw new ApiError(400, "Unsupported file type", "UNSUPPORTED_FILE_TYPE", `File type ${mimetype} is not supported`);
 }
 
@@ -36,9 +41,9 @@ export function validateMimeType(mimetype: string): void {
     ...ALLOWED_MIME_TYPES.video,
     ...ALLOWED_MIME_TYPES.audio,
     ...ALLOWED_MIME_TYPES.document,
-  ];
+  ] as const;
 
-  if (!allAllowedTypes.includes(mimetype)) {
+  if (!isAllowedMimeType(allAllowedTypes, mimetype)) {
     throw new ApiError(
       400,
       "Unsupported file type",

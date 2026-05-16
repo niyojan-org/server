@@ -20,3 +20,7 @@ export const toObjectId = (value?: ObjectId | string) =>
   value ? objectIdSchema.parse(value) : undefined;
 
 export type ObjectId = z.infer<typeof objectIdSchema>;
+
+export const isObjectId = (value: string): boolean => {
+  return Types.ObjectId.isValid(value);
+};

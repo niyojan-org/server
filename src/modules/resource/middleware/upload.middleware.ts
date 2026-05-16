@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import multer, { FileFilterCallback } from "multer";
 import { v2 as cloudinary } from "cloudinary";
+import type { UploadApiResponse } from "cloudinary";
 import ApiError from "@core/errors/api.error";
 import logger from "@config/logger";
 import env from "@config/env";
@@ -21,7 +22,7 @@ type CloudinaryUploadResult = {
   width?: number;
   height?: number;
   bytes: number;
-  resource_type: string;
+  resource_type: "image" | "video" | "raw";
   folder: string;
 };
 
@@ -61,7 +62,7 @@ export interface UploadedFileRequest extends Request {
     width?: number;
     height?: number;
     bytes: number;
-    resourceType: string;
+    resourceType: "image" | "video" | "raw";
     folder: string;
   };
 }
@@ -99,7 +100,7 @@ export const uploadToCloudinary = async (
     );
 
     // Determine Cloudinary resource type
-    const cloudinaryResourceType =
+    const cloudinaryResourceType: "image" | "video" | "raw" =
       category === "image" ? "image" : category === "video" ? "video" : "raw";
 
     // Upload to Cloudinary
@@ -130,7 +131,24 @@ export const uploadToCloudinary = async (
             );
             return;
           }
-          resolve(result as CloudinaryUploadResult);
+          const uploadResult = result as UploadApiResponse;
+          const safeResourceType =
+            uploadResult.resource_type === "image" ||
+            uploadResult.resource_type === "video" ||
+            uploadResult.resource_type === "raw"
+              ? uploadResult.resource_type
+              : "raw";
+          resolve({
+            url: uploadResult.url,
+            secure_url: uploadResult.secure_url,
+            public_id: uploadResult.public_id,
+            format: uploadResult.format,
+            width: uploadResult.width,
+            height: uploadResult.height,
+            bytes: uploadResult.bytes,
+            resource_type: safeResourceType,
+            folder: uploadResult.folder ?? `orgatick/${folder}`,
+          });
         },
       );
 

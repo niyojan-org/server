@@ -1,6 +1,7 @@
 import mongoose, { Schema, Types, Model } from 'mongoose';
 import * as EventEnums from '../core/event.enums';
 import { EventDocument } from '../core/event.types';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 /* -------------------- Sub Schemas -------------------- */
 
@@ -192,6 +193,37 @@ const EventSchema = new Schema<EventDocument>(
 
 EventSchema.index({ organizationId: 1, status: 1 });
 EventSchema.index({ createdAt: -1 });
+EventSchema.index({
+  isPublished: 1,
+  isBlocked: 1,
+  isPrivate: 1,
+  visibility: 1,
+  status: 1,
+  createdAt: -1,
+});
+EventSchema.index({
+  isPublished: 1,
+  isBlocked: 1,
+  isPrivate: 1,
+  visibility: 1,
+  publishedAt: -1,
+});
+EventSchema.index({
+  isPublished: 1,
+  visibility: 1,
+  category: 1,
+  createdAt: -1,
+});
+EventSchema.index({ isPublished: 1, visibility: 1, mode: 1, createdAt: -1 });
+EventSchema.index({
+  isPublished: 1,
+  visibility: 1,
+  isRegistrationOpen: 1,
+  registrationStart: 1,
+});
+EventSchema.index({ tags: 1, createdAt: -1 });
+
+EventSchema.plugin(mongoosePaginate);
 
 export const EventModel: Model<EventDocument> =
   mongoose.models.Event || mongoose.model<EventDocument>('Event', EventSchema);

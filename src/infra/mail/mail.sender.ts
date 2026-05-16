@@ -3,7 +3,7 @@ import { MailAttachment } from './mail.attachment';
 import transporter from './mail.config';
 import renderTemplate from './mail.templates';
 
-export interface sendTemplateEmailPayload<T = Record<string, unknown>> {
+export interface sendTemplateEmailPayload<T extends Record<string, unknown> = Record<string, unknown>> {
   template: string;
   layout: string;
   to: string;
@@ -16,7 +16,7 @@ export interface sendTemplateEmailPayload<T = Record<string, unknown>> {
   replyTo?: string;
 }
 
-export const sendTemplateEmail = async <T>(
+export const sendTemplateEmail = async <T extends Record<string, unknown>>(
   payload: sendTemplateEmailPayload<T>,
 ) => {
   try {
