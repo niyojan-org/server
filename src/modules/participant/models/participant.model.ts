@@ -1,4 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
+import { Participant } from '../types/participant.types';
+import { ParticipantStatus } from '../constants/participant.constants';
 
 const participantSessionCheckInSchema = new Schema(
   {
@@ -33,14 +35,12 @@ const participantSchema = new Schema(
       required: true,
       index: true,
     },
-
     eventId: {
       type: Schema.Types.ObjectId,
       ref: 'Event',
       required: true,
       index: true,
     },
-
     ticketId: {
       type: Schema.Types.ObjectId,
       ref: 'EventTicket',
@@ -68,16 +68,14 @@ const participantSchema = new Schema(
       of: Schema.Types.Mixed,
       default: {},
     },
-
     qrCode: {
       type: String,
     },
-
     sessionCheckIns: [participantSessionCheckInSchema],
     status: {
       type: String,
-      enum: ['REGISTERED', 'CHECKED_IN', 'CANCELLED'],
-      default: 'REGISTERED',
+      enum: Object.values(ParticipantStatus),
+      default: ParticipantStatus.REGISTERED,
     },
     notifications: {
       emailSent: {
@@ -95,14 +93,7 @@ const participantSchema = new Schema(
   },
 );
 
-participantSchema.index({
-  registrationId: 1,
-  email: 1,
-});
-
-participantSchema.index({
-  eventId: 1,
-});
+export type ParticipantDocument = mongoose.Document & Participant;
 
 export const ParticipantModel = mongoose.model(
   'Participant',

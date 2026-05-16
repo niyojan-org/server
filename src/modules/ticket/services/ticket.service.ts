@@ -3,10 +3,13 @@ import { EventTicket } from '@modules/events/types';
 import { TicketErrorCode } from '../constants/ticket.constants';
 
 import { TicketValidationResult } from '../interfaces/ticket-validation.interface';
-import { EventRepository } from '@modules/events/persistence/event.repository';
+import mongoose from 'mongoose';
+import TicketRepository from '../repository/ticket.repository';
 
 interface GetTicketResult extends TicketValidationResult {
-  ticket?: EventTicket;
+  ticket?: EventTicket & {
+    eventId: mongoose.Types.ObjectId;
+  };
 }
 
 export class TicketService {
@@ -14,7 +17,10 @@ export class TicketService {
     ticketId: string,
     eventId: string,
   ): Promise<GetTicketResult> {
-    const ticket = await EventRepository.getTicketByIdOrType(eventId, ticketId);
+    const ticket = await TicketRepository.getTicketByIdOrType(
+      eventId,
+      ticketId,
+    );
     if (!ticket) {
       return {
         valid: false,

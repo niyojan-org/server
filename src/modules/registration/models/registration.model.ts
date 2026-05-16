@@ -1,6 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 
-import { RegistrationStatus } from '../constants/registration.constants';
+import {
+  RegistrationStatus,
+  RegistrationType,
+} from '../constants/registration.constants';
 
 const registrationPricingSchema = new Schema(
   {
@@ -91,6 +94,11 @@ const registrationSchema = new Schema(
       default: RegistrationStatus.DRAFT,
       index: true,
     },
+    registrationType: {
+      type: String,
+      enum: Object.values(RegistrationType),
+      index: true,
+    },
     pricing: {
       type: registrationPricingSchema,
       required: true,
@@ -119,6 +127,13 @@ registrationSchema.index({
 registrationSchema.index({
   ticketId: 1,
 });
+
+export type RegistrationDocument =
+  mongoose.HydratedDocument<RegistrationSchema>;
+
+export type RegistrationSchema = mongoose.InferSchemaType<
+  typeof registrationSchema
+>;
 
 export const RegistrationModel = mongoose.model(
   'Registration',

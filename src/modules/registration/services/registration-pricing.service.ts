@@ -1,5 +1,7 @@
+import { RegistrationPricing } from '../interfaces/registration.interface';
+
 export class RegistrationPricingService {
-  static calculateFreeRegistrationPricing() {
+  static calculateFreeRegistrationPricing(): RegistrationPricing {
     return {
       subtotal: 0,
       discount: 0,

@@ -12,7 +12,7 @@ import feeConfigRoutes from '@modules/payments/routes/payment-fee.routes';
 import walletRoutes from '@modules/wallet/routes';
 import settlementRoutes from '@modules/settlements/routes/settlement.routes';
 import payoutRoutes from '@modules/payouts/routes/payout.routes';
-// import RegistrationRoutes from '@modules/registrations/routes';
+import registrationRoutes from '@modules/registration/routes/registration.routes';
 
 const mainRoutes = Router();
 
@@ -31,6 +31,6 @@ mainRoutes.use('/webhooks', webhookRoutes);
 mainRoutes.use('/wallets', walletRoutes);
 mainRoutes.use('/settlements', settlementRoutes);
 mainRoutes.use('/payouts', payoutRoutes);
-// mainRoutes.use('/registrations', RegistrationRoutes);
+mainRoutes.use('/registrations', registrationRoutes);
 
 export default mainRoutes;

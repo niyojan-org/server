@@ -1,4 +1,4 @@
-import { RegistrationStatus } from '../constants/registration.constants';
+import { RegistrationStatus, RegistrationType } from '../constants/registration.constants';
 
 export interface RegistrationPricing {
   subtotal: number;
@@ -27,4 +27,5 @@ export interface RegistrationBase {
   coupon?: RegistrationCoupon;
   groupInfo?: RegistrationGroupInfo;
   paymentId?: string;
+  registrationType?: RegistrationType;
 }

@@ -119,6 +119,12 @@ class TicketRuleService {
           message: 'Participant count is outside the allowed group size.',
         };
       }
+    } else if (participants > 1) {
+      return {
+        valid: false,
+        code: TicketErrorCode.INVALID_PARTICIPANT_COUNT,
+        message: 'Multiple participants are not allowed for non-group tickets.',
+      };
     }
 
     if (!this.isTicketAvailable(ticket.capacity, ticket.sold)) {
