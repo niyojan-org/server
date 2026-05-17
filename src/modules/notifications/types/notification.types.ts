@@ -1,47 +1,47 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Enums
 export enum NotificationType {
   // Organization notifications
-  ORGANIZATION_VERIFIED = "organization_verified",
-  ORGANIZATION_REJECTED = "organization_rejected",
-  ORGANIZATION_UPDATED = "organization_updated",
+  ORGANIZATION_VERIFIED = 'organization_verified',
+  ORGANIZATION_REJECTED = 'organization_rejected',
+  ORGANIZATION_UPDATED = 'organization_updated',
 
   // Task notifications
-  TASK_ASSIGNED = "task_assigned",
-  TASK_COMMENT = "task_comment",
-  TASK_STATUS_CHANGED = "task_status_changed",
+  TASK_ASSIGNED = 'task_assigned',
+  TASK_COMMENT = 'task_comment',
+  TASK_STATUS_CHANGED = 'task_status_changed',
 
   // Event notifications
-  EVENT_CREATED = "event_created",
-  EVENT_UPDATED = "event_updated",
-  EVENT_CANCELLED = "event_cancelled",
-  EVENT_REMINDER = "event_reminder",
-  EVENT_REGISTRATION_CONFIRMED = "event_registration",
-  EVENT_REGISTRATION_CANCELLED = "event_registration_cancelled",
+  EVENT_CREATED = 'event_created',
+  EVENT_UPDATED = 'event_updated',
+  EVENT_CANCELLED = 'event_cancelled',
+  EVENT_REMINDER = 'event_reminder',
+  EVENT_REGISTRATION_CONFIRMED = 'event_registration',
+  EVENT_REGISTRATION_CANCELLED = 'event_registration_cancelled',
 
   // Social notifications
-  MENTION = "mention",
-  COMMENT_REPLY = "comment_reply",
+  MENTION = 'mention',
+  COMMENT_REPLY = 'comment_reply',
 
   // System notifications
-  SYSTEM_ANNOUNCEMENT = "system_announcement",
-  SYSTEM_MAINTENANCE = "system_maintenance",
+  SYSTEM_ANNOUNCEMENT = 'system_announcement',
+  SYSTEM_MAINTENANCE = 'system_maintenance',
 }
 
 export enum NotificationPriority {
-  LOW = "low",
-  NORMAL = "normal",
-  HIGH = "high",
-  URGENT = "urgent",
+  LOW = 'low',
+  NORMAL = 'normal',
+  HIGH = 'high',
+  URGENT = 'urgent',
 }
 
 export enum NotificationCategory {
-  SYSTEM = "system",
-  SOCIAL = "social",
-  UPDATES = "updates",
-  ALERTS = "alerts",
-  EVENTS = "events",
+  SYSTEM = 'system',
+  SOCIAL = 'social',
+  UPDATES = 'updates',
+  ALERTS = 'alerts',
+  EVENTS = 'events',
 }
 
 // Zod Schemas
@@ -60,7 +60,7 @@ export const notificationPayloadSchema = z.object({
 
   // Actor info
   actorId: z.string().optional(),
-  actorType: z.enum(["user", "system", "organization"]).optional(),
+  actorType: z.enum(['user', 'system', 'organization']).optional(),
 
   // Channel overrides
   channels: z
@@ -78,7 +78,7 @@ export const notificationDeliveryJobSchema = z.object({
   notificationId: z.string(),
   recipientId: z.string(),
   type: z.string(),
-  channels: z.array(z.enum(["push", "websocket"])),
+  channels: z.array(z.enum(['push', 'websocket'])),
 });
 
 export const notificationSchema = z.object({

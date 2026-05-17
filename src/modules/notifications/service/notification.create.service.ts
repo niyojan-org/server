@@ -1,12 +1,12 @@
-import logger from "@config/logger";
-import { EventEmitter } from "events";
+import logger from '@config/logger';
+import { EventEmitter } from 'events';
 import {
   NotificationPayload,
   NotificationDeliveryJob,
   CreateNotificationResult,
-} from "../types/notification.types";
-import * as notificationRepository from "../persistence/notification.repository";
-import notificationQueue from "@queues/notification.queue";
+} from '../types/notification.types';
+import * as notificationRepository from '../persistence/notification.repository';
+import notificationQueue from '@queues/notification.queue';
 
 export const notificationEmitter = new EventEmitter();
 
@@ -28,7 +28,7 @@ export async function createNotification(
     }
 
     // 3. Emit event for realtime listeners
-    notificationEmitter.emit("notification:created", {
+      notificationEmitter.emit('notification:created', {
       notification: result.notification,
       recipientIds: payload.recipientIds,
     });
@@ -39,35 +39,35 @@ export async function createNotification(
 
     return result;
   } catch (error) {
-    logger.error("Failed to create notification:", error);
+    logger.error('Failed to create notification:', error);
     throw error;
   }
 }
 
-function determineChannels(payload: NotificationPayload): ("push" | "websocket")[] {
-  const channels: ("push" | "websocket")[] = [];
+function determineChannels(payload: NotificationPayload): ('push' | 'websocket')[] {
+  const channels: ('push' | 'websocket')[] = [];
 
   // Always send websocket for in-app notifications
   if (payload.channels?.inApp !== false) {
-    channels.push("websocket");
+    channels.push('websocket');
   }
 
   // Push notifications
   if (payload.channels?.push !== false) {
-    channels.push("push");
+    channels.push('push');
   }
 
   return channels;
 }
 
 async function queueNotificationDelivery(job: NotificationDeliveryJob) {
-  await notificationQueue.add("deliver", job, {
+  await notificationQueue.add('deliver', job, {
     jobId: `${job.notificationId}-${job.recipientId}`, // Prevents duplicate processing
     removeOnComplete: true,
     removeOnFail: false,
     attempts: 3,
     backoff: {
-      type: "exponential",
+      type: 'exponential',
       delay: 2000,
     },
   });

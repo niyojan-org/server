@@ -1,4 +1,4 @@
-import z from "zod";
+import z from 'zod';
 
 /**
  * Event Email Schemas
@@ -124,6 +124,7 @@ export const eventAnnouncementSchema = z.object({
   agendaUpdate: z.string().optional(),
   venueMap: z.string().optional(),
   parkingInfo: z.string().optional(),
+  registrationId: z.string().optional(),
 });
 
 // Join Link Schema (Virtual Events)

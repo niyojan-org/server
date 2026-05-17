@@ -28,6 +28,9 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(metricsMiddleware);
 
+//BOOTSTRAP
+import('./bootstrap');
+
 app.get('/', (_req: Request, res: Response) => {
   res.status(200).json({ message: 'Welcome to Orgatick Server' });
 });

@@ -3,27 +3,19 @@ import { ParticipantModel } from '../models/participant.model';
 import { CreateParticipantDto, Participant } from '../types/participant.types';
 
 class ParticipantRepository {
-  static async addParticipant(
-    payload: CreateParticipantDto,
-    session?: mongoose.ClientSession,
-  ) {
+  static async addParticipant(payload: CreateParticipantDto, session?: mongoose.ClientSession) {
     const participant = new ParticipantModel(payload);
     await participant.save({ session });
     return participant;
   }
-  static async addParticipants(
-    payload: CreateParticipantDto[],
-    session?: mongoose.ClientSession,
-  ) {
+  static async addParticipants(payload: CreateParticipantDto[], session?: mongoose.ClientSession) {
     const participants = await ParticipantModel.insertMany(payload, {
       session,
     });
     return participants;
   }
 
-  static async getParticipantsByRegistrationId(
-    registrationId: mongoose.Types.ObjectId,
-  ) {
+  static async getParticipantsByRegistrationId(registrationId: mongoose.Types.ObjectId) {
     return ParticipantModel.find({ registrationId }).exec();
   }
 

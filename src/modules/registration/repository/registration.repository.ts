@@ -1,11 +1,9 @@
 import mongoose from 'mongoose';
 import { CreateRegistrationDto } from '../dto/create-registration.dto';
-import {
-  RegistrationDocument,
-  RegistrationModel,
-} from '../models/registration.model';
+import { RegistrationDocument, RegistrationModel } from '../models/registration.model';
 import { RegistrationPricing } from '../interfaces/registration.interface';
 import { RegistrationStatus } from '../constants/registration.constants';
+import { ObjectId } from '@helpers/zod';
 
 class RegistrationRepository {
   static async createRegistration(
@@ -28,6 +26,9 @@ class RegistrationRepository {
     });
     const registration = await data.save({ session });
     return registration;
+  }
+  static async findById(id: ObjectId): Promise<RegistrationDocument | null> {
+    return RegistrationModel.findById(id).exec();
   }
 }
 

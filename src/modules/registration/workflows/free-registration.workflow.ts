@@ -6,6 +6,8 @@ import mongoose from 'mongoose';
 import ParticipantRepository from '@modules/participant/repository/participant.repository';
 import { CreateParticipantDto } from '@modules/participant/types/participant.types';
 import ApiError from '@core/errors/api.error';
+import { EventDispatcher } from '@core/events/utils/event-dispatcher';
+import { RegistrationEvents } from '@core/events';
 
 export class FreeRegistrationWorkflow {
   static async execute(payload: CreateRegistrationDto) {
@@ -36,6 +38,11 @@ export class FreeRegistrationWorkflow {
         // confirm registration
         registration.status = RegistrationStatus.CONFIRMED;
         await registration.save({ session });
+        // Emit event for notifications and other post-confirmation processes
+        EventDispatcher.emit(RegistrationEvents.REGISTRATION_CONFIRMED, {
+          registration: registration._id,
+          participants: participants.map((p) => p._id),
+        });
         return { registration, participants };
       });
     } catch {
