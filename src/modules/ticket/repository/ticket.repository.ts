@@ -9,11 +9,11 @@ type GetTicketResult = EventTicket & {
 
 class TicketRepository {
   static async getTicketByIdOrType(
-    eventIdOrSlug: string,
-    ticketIdOrType: string,
+    eventIdOrSlug: string | mongoose.Types.ObjectId,
+    ticketIdOrType: string | mongoose.Types.ObjectId,
   ): Promise<GetTicketResult | null> {
-    const isEventIdObjectId = isObjectId(eventIdOrSlug);
-    const IsTicketIdObjectId = isObjectId(ticketIdOrType);
+    const isEventIdObjectId = isObjectId(eventIdOrSlug.toString());
+    const IsTicketIdObjectId = isObjectId(ticketIdOrType.toString());
     const query: Record<string, unknown> = {};
     if (isEventIdObjectId) {
       query._id = new Types.ObjectId(eventIdOrSlug);

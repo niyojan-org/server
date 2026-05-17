@@ -13,6 +13,7 @@ import walletRoutes from '@modules/wallet/routes';
 import settlementRoutes from '@modules/settlements/routes/settlement.routes';
 import payoutRoutes from '@modules/payouts/routes/payout.routes';
 import registrationRoutes from '@modules/registration/routes/registration.routes';
+import designTemplateRoutes from '@modules/design-template/routes/design-template.routes';
 
 const mainRoutes = Router();
 
@@ -32,5 +33,6 @@ mainRoutes.use('/wallets', walletRoutes);
 mainRoutes.use('/settlements', settlementRoutes);
 mainRoutes.use('/payouts', payoutRoutes);
 mainRoutes.use('/registrations', registrationRoutes);
+mainRoutes.use('/design-templates', designTemplateRoutes);
 
 export default mainRoutes;

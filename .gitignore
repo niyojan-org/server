@@ -4,3 +4,5 @@ node_modules
 dist
 docker-compose.yml
 prometheus.yml
+uploads
+test.ts

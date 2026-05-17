@@ -2,6 +2,7 @@ allowBuilds:
   esbuild: true
   msgpackr-extract: true
   protobufjs: true
+  sharp: true
   sonar-scanner: true
 overrides:
   nodemailer@<8.0.4: '>=8.0.4'

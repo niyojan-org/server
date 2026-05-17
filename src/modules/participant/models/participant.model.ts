@@ -58,6 +58,7 @@ const participantSchema = new Schema(
 
 participantSchema.index({ eventId: 1, email: 1 }, { unique: true });
 
-export type ParticipantDocument = mongoose.Document & Participant;
+export type ParticipantDocument = mongoose.HydratedDocument<ParticipantSchema>;
+export type ParticipantSchema = mongoose.InferSchemaType<typeof participantSchema>;
 
 export const ParticipantModel = mongoose.model('Participant', participantSchema);
