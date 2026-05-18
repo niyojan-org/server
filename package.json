@@ -38,6 +38,7 @@
     "handlebars": "^4.7.9",
     "helmet": "^8.1.0",
     "ioredis": "^5.10.1",
+    "jsbarcode": "^3.12.3",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.1",
     "mongoose-paginate-v2": "^1.9.4",

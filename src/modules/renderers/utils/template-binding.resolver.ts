@@ -33,14 +33,15 @@ export class TemplateBindingResolver {
     const root = paths.shift();
     if (!root || !sources[root as keyof BindingSources]) return undefined;
     // nested traversal
-    let current = sources[root as keyof BindingSources];
+    let current: unknown = sources[root as keyof BindingSources];
     for (const path of paths) {
       if (current === undefined || current === null) return undefined;
       if (current instanceof Map) {
         current = current.get(path);
         continue;
       }
-      current = (current as Record<string, any>)[path];
+      if (typeof current !== 'object') return undefined;
+      current = (current as Record<string, unknown>)[path];
     }
     return current;
   }

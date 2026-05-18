@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { ParticipantModel } from '../models/participant.model';
+import { ParticipantDocument, ParticipantModel } from '../models/participant.model';
 import { CreateParticipantDto, Participant } from '../types/participant.types';
 
 class ParticipantRepository {
@@ -23,7 +23,9 @@ class ParticipantRepository {
     return ParticipantModel.find({ eventId }).exec();
   }
 
-  static async getParticipantById(participantId: mongoose.Types.ObjectId) {
+  static async getParticipantById(
+    participantId: mongoose.Types.ObjectId,
+  ): Promise<ParticipantDocument | null> {
     return ParticipantModel.findById(participantId).exec();
   }
 

@@ -1,5 +1,4 @@
 import mongoose, { Schema } from 'mongoose';
-import { Participant } from '../types/participant.types';
 import { ParticipantStatus } from '../constants/participant.constants';
 
 const participantSessionCheckInSchema = new Schema(

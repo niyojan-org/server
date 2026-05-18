@@ -1,9 +1,11 @@
 import type { RequestHandler } from "express";
 import ApiError from "@core/errors/api.error";
+import type { AuthenticatedRequest } from "@core/middlewares/auth.middleware";
 
 export const isTaskMaster = (): RequestHandler => {
   return async (req, _res, next) => {
-    if (!req.user) {
+    const authReq = req as AuthenticatedRequest;
+    if (!authReq.user) {
       throw new ApiError(
         401,
         "Unauthorized: No user logged in",
@@ -11,7 +13,7 @@ export const isTaskMaster = (): RequestHandler => {
         "User must be logged in to access this resource",
       );
     }
-    if (req.user.role !== "taskmaster") {
+    if (authReq.user.role !== "taskmaster") {
       throw new ApiError(
         403,
         "Forbidden: Insufficient role",

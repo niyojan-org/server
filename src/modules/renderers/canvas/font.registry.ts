@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import { GlobalFonts } from '@napi-rs/canvas';
 import { AvailableFont } from '../constants/config.constants';
-import logger from '@config/logger';
 
 export class FontRegistry {
   private static initialized = false;
@@ -26,7 +25,6 @@ export class FontRegistry {
       );
       if (!registered) throw Error(`Failed to register font: ${font.family}`);
     }
-    logger.info('Font Registered Successfuly..!!');
     this.initialized = true;
   }
 }

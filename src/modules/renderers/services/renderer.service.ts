@@ -1,8 +1,7 @@
-import path from 'path';
 import { createCanvas, loadImage, SKRSContext2D } from '@napi-rs/canvas';
 import QRCode from 'qrcode';
 import { TemplateConfig, TemplateElement } from '../template-config.schema';
-
+import JsBarcode from 'jsbarcode';
 type RenderPayload = Record<string, unknown>;
 
 export class CanvasRenderService {
@@ -39,6 +38,7 @@ export class CanvasRenderService {
           await this.renderBarCode(ctx, element, String(value));
           break;
         case 'image':
+          await this.renderImage(ctx, element, String(value));
           break;
       }
     }
@@ -58,11 +58,9 @@ export class CanvasRenderService {
     if (style.maxLength && text.length > style.maxLength) {
       text = `${text.slice(0, style.maxLength)}...`;
     }
-    ctx.font = `
-      ${style.fontWeight ?? 'normal'}
-      ${style.fontSize ?? 20}px
-      ${style.fontFamily ?? 'sans-serif'}
-    `;
+    ctx.font = `${style.fontWeight ?? 'normal'} ${style.fontSize ?? 20}px ${
+      style.fontFamily ?? 'sans-serif'
+    }`;
     ctx.fillStyle = style.color ?? '#000000';
     switch (style.align) {
       case 'center':
@@ -84,8 +82,8 @@ export class CanvasRenderService {
     }
     ctx.fillText(text, drawX, element.y + element.height);
   }
-  // render qr
 
+  // render qr
   private static async renderQrCode(
     ctx: SKRSContext2D,
     element: Extract<TemplateElement, { type: 'qr' }>,
@@ -99,11 +97,28 @@ export class CanvasRenderService {
     ctx.drawImage(qrImage, element.x, element.y, element.width, element.height);
   }
 
+  // render barcode
   private static async renderBarCode(
     ctx: SKRSContext2D,
     element: Extract<TemplateElement, { type: 'barcode' }>,
     value: string,
   ) {
-    //TODO add barcode
+    const barcodeCanvas = createCanvas(element.width, element.height);
+    JsBarcode(barcodeCanvas, value, { format: 'CODE128' });
+    ctx.drawImage(barcodeCanvas, element.x, element.y);
+  }
+
+  // render image - for future use
+  private static async renderImage(
+    ctx: SKRSContext2D,
+    element: Extract<TemplateElement, { type: 'image' }>,
+    value: string,
+  ) {
+    try {
+      const image = await loadImage(value);
+      ctx.drawImage(image, element.x, element.y, element.width, element.height);
+    } catch {
+      // optional fallback or error handling
+    }
   }
 }

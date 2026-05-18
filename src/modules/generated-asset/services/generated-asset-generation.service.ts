@@ -11,10 +11,13 @@ import { EventDocument, Ticket } from '@modules/events/core/event.types';
 import { DesignTemplateDocument } from '@modules/design-template/persistence/design-template.model';
 import { TemplateBindingResolver } from '@modules/renderers/utils/template-binding.resolver';
 import { CanvasRenderService } from '@modules/renderers/services/renderer.service';
-import GeneratedAssetStorageService from './generated-asset-storage.service';
 
 export class GeneratedAssetGenerationService {
-  static async generateTicket(registrationId: Types.ObjectId, traceId?: string) {
+  static async generateTicket(
+    registrationId: Types.ObjectId,
+    participantId?: Types.ObjectId,
+    traceId?: string,
+  ): Promise<Buffer | void> {
     const registration = await RegistrationRepository.findById(registrationId);
     if (!registration)
       throw new Error(
@@ -38,21 +41,19 @@ export class GeneratedAssetGenerationService {
       );
       return;
     }
-    const participants = await ParticipantRepository.getParticipantsByRegistrationId(
-      registration._id,
-    );
+    const participant = await ParticipantRepository.getParticipantById(participantId!);
+    if (!participant) return;
     const event = await EventRepository.findById(registration.eventId);
     if (!event) return;
-    for (const participant of participants) {
-      await this.generateTicketForParticipant({
-        traceId,
-        registration,
-        participant,
-        event,
-        ticket,
-        template,
-      });
-    }
+    const ticketBuffer = await this.generateTicketForParticipant({
+      traceId,
+      registration,
+      participant,
+      event,
+      ticket,
+      template,
+    });
+    return ticketBuffer;
   }
 
   private static async generateTicketForParticipant(input: {
@@ -64,10 +65,6 @@ export class GeneratedAssetGenerationService {
     template: DesignTemplateDocument;
   }) {
     try {
-      // console.log('Participant:- ', input.participant);
-      // console.log('Template:- ', input.template.config);
-      // console.log('Event:- ', { title: input.event.title });
-      // console.log('Registration:- ', input.registration);
       const resolvedPayload = TemplateBindingResolver.resolveElements(
         input.template.config.elements,
         {
@@ -77,12 +74,11 @@ export class GeneratedAssetGenerationService {
           ticket: input.ticket,
         },
       );
-      console.log('Resolved Path:- ', resolvedPayload);
       const buffer = await CanvasRenderService.renderTemplate(
         input.template.config,
         resolvedPayload,
       );
-      await GeneratedAssetStorageService.localUpload(buffer, 'test-ticket', 'ticket');
+      return buffer;
     } catch (error) {
       // const message = error instanceof Error ? error.message : 'Unknown asset generation failure';
       // await GeneratedAssetRepository.markFailed(created._id!, message);
