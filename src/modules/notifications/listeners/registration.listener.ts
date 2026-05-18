@@ -4,8 +4,10 @@ import appEventEmitter from '@core/events/emitter/app-event.emitter';
 import { ObjectId } from '@helpers/zod';
 import { sendEventEmail } from '@infra/mail';
 import { EventRepository } from '@modules/events/persistence/event.repository';
+import { GeneratedAssetGenerationService } from '@modules/generated-asset';
 import ParticipantRepository from '@modules/participant/repository/participant.repository';
 import RegistrationRepository from '@modules/registration/repository/registration.repository';
+import WhatsappService from '../service/whatsapp.service';
 
 appEventEmitter.onEvent<{
   registration: ObjectId;
@@ -35,5 +37,28 @@ appEventEmitter.onEvent<{
       registrationId: registration._id.toString(),
     };
     await sendEventEmail.registrationConfirmed(participant.email, emailPayload);
+    participant.notifications = {
+      emailSent: true,
+      whatsAppSent: participant.notifications?.whatsAppSent ?? false,
+    };
+    await participant.save();
+    const ticketBuffer = await GeneratedAssetGenerationService.generateTicket(
+      registration._id,
+      participant._id,
+      traceId,
+    );
+    if (ticketBuffer) {
+      const base64Url = `data:image/png;base64,${ticketBuffer.toString('base64')}`;
+      await WhatsappService.sendMediaMessage(
+        participant.phone,
+        base64Url,
+        `Your ticket for ${event?.title}`,
+      );
+      participant.notifications = {
+        emailSent: participant.notifications?.emailSent ?? true,
+        whatsAppSent: true,
+      };
+      await participant.save();
+    }
   }
 });

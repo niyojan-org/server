@@ -2,9 +2,7 @@ import z from 'zod';
 // import { REDIS_KEYS } from './redis.keys';
 
 export const envSchema = z.object({
-  NODE_ENV: z
-    .enum(['development', 'production', 'test'])
-    .default('development'),
+  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().default(5050),
   MONGO_URI: z.string(),
   PSQL_URI: z.string(),
@@ -54,6 +52,7 @@ export const envSchema = z.object({
   //WHATSAPP API
   WHATSAPP_API_URL: z.string(),
   WHATSAPP_API_KEY: z.string(),
+  WHATSAPP_SESSION: z.string(),
 
   //PAYMENT GATEWAY
   RAZORPAY_KEY_ID: z.string(),
