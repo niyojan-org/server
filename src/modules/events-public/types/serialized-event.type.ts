@@ -21,6 +21,7 @@ export type PublicEventSession = {
 
 export type PublicEventTicket = {
   id?: string;
+  _id?: string;
   type?: string;
   price?: number;
   capacity?: number;

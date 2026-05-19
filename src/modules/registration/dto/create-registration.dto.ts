@@ -24,15 +24,13 @@ export const createRegistrationSchema = object({
     .max(50, 'Event ID or slug is too long'),
   ticketId: string({ message: 'Ticket ID is required' })
     .min(1, 'Ticket ID cannot be empty')
-    .max(20, 'Ticket ID is too long'),
+    .max(24, 'Ticket ID is too long'),
   participants: array(
     object({
       name: string({ message: 'Participant name is required' })
         .min(1, 'Participant name cannot be empty')
         .max(100, 'Participant name is too long'),
-      email: email({ message: 'Invalid email address' })
-        .min(1, 'Email is required')
-        .max(100, 'Email is too long'),
+      email: email({ message: 'Invalid email address' }).min(1, 'Email is required').max(100, 'Email is too long'),
       phone: string({ message: 'Phone number is required' })
         .min(10, 'Phone number cannot be empty')
         .max(15, 'Phone number is too long'),

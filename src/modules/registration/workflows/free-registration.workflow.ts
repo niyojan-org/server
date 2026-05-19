@@ -13,14 +13,11 @@ export class FreeRegistrationWorkflow {
   static async execute(payload: CreateRegistrationDto) {
     const session = await mongoose.startSession();
     try {
+      let result;
       await session.withTransaction(async () => {
         const pricing = RegistrationPricingService.calculateFreeRegistrationPricing();
         // create registration
-        const registration = await RegistrationRepository.createRegistration(
-          payload,
-          pricing,
-          session,
-        );
+        const registration = await RegistrationRepository.createRegistration(payload, pricing, session);
         const rawParticipants: CreateParticipantDto[] = payload.participants.map((participant) => ({
           registrationId: registration._id,
           eventId: registration.eventId,
@@ -43,8 +40,9 @@ export class FreeRegistrationWorkflow {
           registration: registration._id,
           participants: participants.map((p) => p._id),
         });
-        return { registration, participants };
+        result = { registration, participants };
       });
+      return result;
     } catch {
       session.abortTransaction();
       throw new ApiError(

@@ -1,20 +1,11 @@
-import {
-  EventDocument,
-  Session,
-  Ticket,
-} from '@modules/events/core/event.types';
-import {
-  PublicEventPayload,
-  PublicEventSession,
-  PublicEventTicket,
-} from '../types/serialized-event.type';
+import { EventDocument, Session, Ticket } from '@modules/events/core/event.types';
+import { PublicEventPayload, PublicEventSession, PublicEventTicket } from '../types/serialized-event.type';
 
 const toSession = (session: Session): PublicEventSession | null => {
   return {
     id: typeof session._id === 'string' ? session._id : undefined,
     title: typeof session.title === 'string' ? session.title : undefined,
-    description:
-      typeof session.description === 'string' ? session.description : undefined,
+    description: typeof session.description === 'string' ? session.description : undefined,
     startTime: session.startTime as Date | string | undefined,
     endTime: session.endTime as Date | string | undefined,
     venue: session.venue,
@@ -30,6 +21,7 @@ const toTicket = (ticket: Ticket): PublicEventTicket | null => {
   if (!ticket) return null;
   return {
     id: ticket._id?.toString(),
+    _id: ticket._id?.toString(),
     type: ticket.type,
     price: ticket.price,
     capacity: ticket.capacity,
@@ -41,15 +33,9 @@ const toTicket = (ticket: Ticket): PublicEventTicket | null => {
   };
 };
 
-export const serializePublicEvent = (
-  event: EventDocument,
-): PublicEventPayload => {
-  const sessions = Array.isArray(event.sessions)
-    ? event.sessions.map(toSession).filter(Boolean)
-    : undefined;
-  const tickets = Array.isArray(event.tickets)
-    ? event.tickets.map(toTicket).filter(Boolean)
-    : undefined;
+export const serializePublicEvent = (event: EventDocument): PublicEventPayload => {
+  const sessions = Array.isArray(event.sessions) ? event.sessions.map(toSession).filter(Boolean) : undefined;
+  const tickets = Array.isArray(event.tickets) ? event.tickets.map(toTicket).filter(Boolean) : undefined;
 
   return {
     id: event._id?.toString(),
@@ -75,6 +61,5 @@ export const serializePublicEvent = (
   };
 };
 
-export const serializePublicEvents = (
-  events: EventDocument[],
-): PublicEventPayload[] => events.map(serializePublicEvent);
+export const serializePublicEvents = (events: EventDocument[]): PublicEventPayload[] =>
+  events.map(serializePublicEvent);

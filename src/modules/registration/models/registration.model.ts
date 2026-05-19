@@ -63,27 +63,10 @@ const registrationGroupInfoSchema = new Schema(
 
 const registrationSchema = new Schema(
   {
-    eventId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Event',
-      required: true,
-      index: true,
-    },
-    ticketId: {
-      type: Schema.Types.ObjectId,
-      ref: 'EventTicket',
-      required: true,
-    },
-    participantIds: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Participant',
-      },
-    ],
-    participantsCount: {
-      type: Number,
-      required: true,
-    },
+    eventId: { type: Schema.Types.ObjectId, ref: 'Event', required: true, index: true },
+    ticketId: { type: Schema.Types.ObjectId, ref: 'EventTicket', required: true },
+    participantIds: [{ type: Schema.Types.ObjectId, ref: 'Participant' }],
+    participantsCount: { type: Number, required: true },
     status: {
       type: String,
       enum: Object.values(RegistrationStatus),
@@ -91,15 +74,9 @@ const registrationSchema = new Schema(
       default: RegistrationStatus.DRAFT,
       index: true,
     },
-    registrationType: {
-      type: String,
-      enum: Object.values(RegistrationType),
-      index: true,
-    },
+    registrationType: { type: String, enum: Object.values(RegistrationType), index: true },
     pricing: {
-      type: registrationPricingSchema,
-      required: true,
-    },
+      type: registrationPricingSchema,required: true},
     coupon: {
       type: registrationCouponSchema,
     },

@@ -1,6 +1,6 @@
-import z from "zod";
-import * as Schema from "./event.zod";
-import mongoose from "mongoose";
+import z from 'zod';
+import * as Schema from './event.zod';
+import mongoose from 'mongoose';
 
 export type Event = z.infer<typeof Schema.EventSchema>;
 export type EventBase = z.infer<typeof Schema.EventBaseSchema>;
