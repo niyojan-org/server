@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    tools {
+          nodejs 'node20'
+    }
     environment {
         DOCKER_IMAGE = 'server'
         DOCKERHUB_CREDENTIALS = 'orgatick'
