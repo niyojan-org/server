@@ -1,5 +1,6 @@
 .env
 .vscode
+.scannerwork
 node_modules
 dist
 docker-compose.yml
