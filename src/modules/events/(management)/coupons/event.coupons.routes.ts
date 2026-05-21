@@ -13,46 +13,23 @@ const tmRouter = express.Router({ mergeParams: true });
 publicRouter.post('/validate', publicController.validateCoupon);
 
 adminRouter.use(authenticate);
-adminRouter.get(
-  '/',
-  organizationRole('owner', 'admin', 'manager'),
-  adminController.getAllEventCoupons,
-);
-adminRouter.get(
-  '/:couponId',
-  organizationRole('owner', 'admin', 'manager'),
-  adminController.getSingleEventCoupon,
-);
-adminRouter.post(
-  '/',
-  organizationRole('owner', 'admin', 'manager'),
-  adminController.addEventCoupon,
-);
-adminRouter.put(
-  '/:couponId',
-  organizationRole('owner', 'admin', 'manager'),
-  adminController.updateEventCoupon,
-);
+adminRouter.get('/', organizationRole('owner', 'admin', 'manager'), adminController.getAllEventCoupons);
+adminRouter.get('/:couponId', organizationRole('owner', 'admin', 'manager'), adminController.getSingleEventCoupon);
+adminRouter.post('/', organizationRole('owner', 'admin', 'manager'), adminController.addEventCoupon);
+adminRouter.put('/:couponId', organizationRole('owner', 'admin', 'manager'), adminController.updateEventCoupon);
 adminRouter.patch(
   '/:couponId/toggle-status',
   organizationRole('owner', 'admin', 'manager'),
   adminController.toggleEventCouponStatus,
 );
-adminRouter.delete(
-  '/:couponId',
-  organizationRole('owner', 'admin'),
-  adminController.deleteEventCoupon,
-);
+adminRouter.delete('/:couponId', organizationRole('owner', 'admin'), adminController.deleteEventCoupon);
 
 tmRouter.use(authenticate, isTaskMaster());
 tmRouter.get('/', adminController.getAllEventCoupons);
 tmRouter.get('/:couponId', adminController.getSingleEventCoupon);
 tmRouter.post('/', adminController.addEventCoupon);
 tmRouter.put('/:couponId', adminController.updateEventCoupon);
-tmRouter.patch(
-  '/:couponId/toggle-status',
-  adminController.toggleEventCouponStatus,
-);
+tmRouter.patch('/:couponId/toggle-status', adminController.toggleEventCouponStatus);
 tmRouter.delete('/:couponId', adminController.deleteEventCoupon);
 
 eventCouponsRouter.use('/:eventId/admin', adminRouter);

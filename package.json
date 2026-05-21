@@ -22,7 +22,11 @@
     "build": "pnpm run build:ts && pnpm run build:alias && pnpm run build:assets",
     "start": "node dist/server.js",
     "generate-vapid-keys": "tsx scripts/generate-vapid-keys.ts",
-    "lint": "eslint . --max-warnings=0"
+    "lint": "eslint . --max-warnings=0",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@napi-rs/canvas": "^1.0.0",
@@ -69,12 +73,15 @@
     "@types/qrcode": "^1.5.6",
     "@types/speakeasy": "^2.0.10",
     "@types/web-push": "^3.6.4",
+    "@vitest/coverage-v8": "^4.1.7",
+    "@vitest/ui": "^4.1.7",
     "eslint": "^10.3.0",
     "globals": "^17.6.0",
     "jiti": "^2.6.1",
     "tsc-alias": "^1.8.17",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.59.1"
+    "typescript-eslint": "^8.59.1",
+    "vitest": "^4.1.7"
   }
 }
