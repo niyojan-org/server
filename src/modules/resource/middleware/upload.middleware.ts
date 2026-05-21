@@ -1,18 +1,18 @@
-import { Request, Response, NextFunction } from "express";
-import multer, { FileFilterCallback } from "multer";
-import { v2 as cloudinary } from "cloudinary";
-import type { UploadApiResponse } from "cloudinary";
-import ApiError from "@core/errors/api.error";
-import logger from "@config/logger";
-import env from "@config/env";
+import { Request, Response, NextFunction } from 'express';
+import multer, { FileFilterCallback } from 'multer';
+import { v2 as cloudinary } from 'cloudinary';
+import type { UploadApiResponse } from 'cloudinary';
+import ApiError from '@core/errors/api.error';
+import logger from '@config/logger';
+import env from '@config/env';
 import {
   validateMimeType,
   validateFileSize,
   getFileCategory,
   generateUniqueFilename,
-} from "../helpers/file-validation.helper";
-import { CLOUDINARY_FOLDERS } from "../resource.constants";
-import { Readable } from "stream";
+} from '../helpers/file-validation.helper';
+import { CLOUDINARY_FOLDERS } from '../resource.constants';
+import { Readable } from 'stream';
 
 type CloudinaryUploadResult = {
   url: string;
@@ -22,7 +22,7 @@ type CloudinaryUploadResult = {
   width?: number;
   height?: number;
   bytes: number;
-  resource_type: "image" | "video" | "raw";
+  resource_type: 'image' | 'video' | 'raw';
   folder: string;
 };
 
@@ -43,10 +43,21 @@ const fileFilter = (req: Request, file: Express.Multer.File, cb: FileFilterCallb
   }
 };
 
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    cb(null, 'uploads/');
+  },
+
+  filename: (_req, file, cb) => {
+    const unique = `${Date.now()}-${file.originalname}`;
+    cb(null, unique);
+  },
+});
+
 export const upload = multer({
-  storage: multer.memoryStorage(),
+  storage,
   limits: {
-    fileSize: 100 * 1024 * 1024,
+    fileSize: 7 * 1024 * 1024,
     fieldSize: 10 * 1024 * 1024,
     fields: 20,
   },
@@ -62,16 +73,12 @@ export interface UploadedFileRequest extends Request {
     width?: number;
     height?: number;
     bytes: number;
-    resourceType: "image" | "video" | "raw";
+    resourceType: 'image' | 'video' | 'raw';
     folder: string;
   };
 }
 
-export const uploadToCloudinary = async (
-  req: UploadedFileRequest,
-  res: Response,
-  next: NextFunction,
-) => {
+export const uploadToCloudinary = async (req: UploadedFileRequest, res: Response, next: NextFunction) => {
   try {
     if (!req.file) {
       return next();
@@ -90,18 +97,15 @@ export const uploadToCloudinary = async (
     }
 
     // Determine folder from request body or use default
-    const resourceType = req.body.type || "other";
-    const folder = CLOUDINARY_FOLDERS[resourceType as keyof typeof CLOUDINARY_FOLDERS] || "misc";
+    const resourceType = req.body.type || 'other';
+    const folder = CLOUDINARY_FOLDERS[resourceType as keyof typeof CLOUDINARY_FOLDERS] || 'misc';
 
     // Generate unique public_id
-    const publicId = generateUniqueFilename(
-      req.file.originalname,
-      req.body.title?.replace(/\s+/g, "_"),
-    );
+    const publicId = generateUniqueFilename(req.file.originalname, req.body.title?.replace(/\s+/g, '_'));
 
     // Determine Cloudinary resource type
-    const cloudinaryResourceType: "image" | "video" | "raw" =
-      category === "image" ? "image" : category === "video" ? "video" : "raw";
+    const cloudinaryResourceType: 'image' | 'video' | 'raw' =
+      category === 'image' ? 'image' : category === 'video' ? 'video' : 'raw';
 
     // Upload to Cloudinary
     const result = await new Promise<CloudinaryUploadResult>((resolve, reject) => {
@@ -114,30 +118,23 @@ export const uploadToCloudinary = async (
         },
         (error, result) => {
           if (error) {
-            logger.error("Cloudinary upload error:", error);
-            reject(
-              new ApiError(500, "Failed to upload file", "CLOUDINARY_UPLOAD_ERROR", error.message),
-            );
+            logger.error('Cloudinary upload error:', error);
+            reject(new ApiError(500, 'Failed to upload file', 'CLOUDINARY_UPLOAD_ERROR', error.message));
             return;
           }
           if (!result) {
             reject(
-              new ApiError(
-                500,
-                "Failed to upload file",
-                "CLOUDINARY_UPLOAD_ERROR",
-                "Cloudinary returned no result",
-              ),
+              new ApiError(500, 'Failed to upload file', 'CLOUDINARY_UPLOAD_ERROR', 'Cloudinary returned no result'),
             );
             return;
           }
           const uploadResult = result as UploadApiResponse;
           const safeResourceType =
-            uploadResult.resource_type === "image" ||
-            uploadResult.resource_type === "video" ||
-            uploadResult.resource_type === "raw"
+            uploadResult.resource_type === 'image' ||
+            uploadResult.resource_type === 'video' ||
+            uploadResult.resource_type === 'raw'
               ? uploadResult.resource_type
-              : "raw";
+              : 'raw';
           resolve({
             url: uploadResult.url,
             secure_url: uploadResult.secure_url,
@@ -178,7 +175,7 @@ export const uploadToCloudinary = async (
       return next(error);
     }
     // Log unexpected errors
-    logger.error("Unexpected error in uploadToCloudinary middleware:", error);
+    logger.error('Unexpected error in uploadToCloudinary middleware:', error);
     next(error);
   }
 };
@@ -188,7 +185,7 @@ export const uploadToCloudinary = async (
  */
 export async function deleteFromCloudinary(
   publicId: string,
-  resourceType: "image" | "video" | "raw" = "image",
+  resourceType: 'image' | 'video' | 'raw' = 'image',
 ): Promise<void> {
   try {
     await cloudinary.uploader.destroy(publicId, {
@@ -200,9 +197,9 @@ export async function deleteFromCloudinary(
     logger.error(`Error deleting file from Cloudinary: ${publicId}`, error);
     throw new ApiError(
       500,
-      "Failed to delete file from storage",
-      "CLOUDINARY_DELETE_ERROR",
-      error instanceof Error ? error.message : "Unknown error",
+      'Failed to delete file from storage',
+      'CLOUDINARY_DELETE_ERROR',
+      error instanceof Error ? error.message : 'Unknown error',
     );
   }
 }
@@ -210,15 +207,11 @@ export async function deleteFromCloudinary(
 /**
  * Generate thumbnail URL
  */
-export function getThumbnailUrl(
-  publicId: string,
-  width: number = 300,
-  height: number = 300,
-): string {
+export function getThumbnailUrl(publicId: string, width: number = 300, height: number = 300): string {
   return cloudinary.url(publicId, {
     transformation: [
-      { width, height, crop: "fill", gravity: "auto" },
-      { quality: "auto", fetch_format: "auto" },
+      { width, height, crop: 'fill', gravity: 'auto' },
+      { quality: 'auto', fetch_format: 'auto' },
     ],
   });
 }

@@ -6,3 +6,5 @@ docker-compose.yml
 prometheus.yml
 uploads
 test.ts
+coverage
+logs

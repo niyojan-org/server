@@ -202,7 +202,7 @@ pipeline {
                     sh '''
                         tar -czf dist-${BUILD_NUMBER}.tar.gz dist/
                     '''
-                    archiveArtifacts artifacts: 'dist-${BUILD_NUMBER}.tar.gz', 
+                    archiveArtifacts artifacts: 'dist-${BUILD_NUMBER}.tar.gz',
                                      allowEmptyArchive: true
                 }
             }
@@ -221,14 +221,14 @@ pipeline {
                 echo "✅ Build Successful!"
                 emailext(
                     to: '${DEFAULT_RECIPIENTS}',
-                    subject: "✅ CI/CD SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}",
+                    subject: "CI/CD SUCCESS: ${JOB_NAME} #${BUILD_NUMBER}",
                     body: """
                         Build Status: SUCCESS
                         Job: ${JOB_NAME}
                         Build Number: ${BUILD_NUMBER}
                         Build URL: ${BUILD_URL}
                         Branch: ${env.BRANCH_NAME}
-                        
+
                         Artifacts available at: ${BUILD_URL}artifact/
                     """
                 )
@@ -239,14 +239,14 @@ pipeline {
                 echo "❌ Build Failed!"
                 emailext(
                     to: '${DEFAULT_RECIPIENTS}',
-                    subject: "❌ CI/CD FAILURE: ${JOB_NAME} #${BUILD_NUMBER}",
+                    subject: "CI/CD FAILURE: ${JOB_NAME} #${BUILD_NUMBER}",
                     body: """
                         Build Status: FAILED
                         Job: ${JOB_NAME}
                         Build Number: ${BUILD_NUMBER}
                         Build URL: ${BUILD_URL}
                         Branch: ${env.BRANCH_NAME}
-                        
+
                         Please check the logs for details: ${BUILD_URL}console
                     """,
                     attachLog: true

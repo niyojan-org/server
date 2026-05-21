@@ -6,23 +6,22 @@ import { EventRepository } from '../persistence/event.repository';
  * @returns A URL-friendly slug
  */
 const slugify = (text: string): string => {
-  return (
-    text
-      .toString()
-      .toLowerCase()
-      .trim()
-      // Replace spaces with hyphens
-      .replace(/\s+/g, '-')
-      // Remove all non-word chars (except hyphens)
-      .replace(/[^\w-]+/g, '')
-      // Replace multiple hyphens with single hyphen
-      .replace(/--+/g, '-')
-      // Remove leading/trailing hyphens
-      .replace(/^-+/, '')
-      .replace(/-+$/, '')
-  );
+  let slug = text
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]/g, '')
+    .replace(/-+/g, '-');
+  // Remove leading hyphen
+  while (slug.startsWith('-')) {
+    slug = slug.slice(1);
+  }
+  // Remove trailing hyphen
+  while (slug.endsWith('-')) {
+    slug = slug.slice(0, -1);
+  }
+  return slug;
 };
-
 export const generateUniqueSlug = async (title: string): Promise<string> => {
   const baseSlug = slugify(title);
   let slug = baseSlug;

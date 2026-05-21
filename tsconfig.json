@@ -4,7 +4,7 @@
     "target": "ES2022",
     "lib": ["ES2022"],
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "node",
 
     /* Project Structure */
     "rootDir": "src",
@@ -20,7 +20,7 @@
       "@workers/*": ["./src/workers/*"],
       "@routes": ["./src/routes.ts"],
       "@app": ["./src/app.ts"],
-      "@helpers/*": ["./src/helpers/*"]
+      "@helpers/*": ["./src/helpers/*"],
     },
 
     /* Strictness */
@@ -41,9 +41,9 @@
 
     /* Output */
     "sourceMap": true,
-    "declaration": false
+    "declaration": false,
   },
 
   "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
 }

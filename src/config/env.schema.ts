@@ -68,6 +68,7 @@ export const envSchema = z.object({
   LOKI_HOST: z.url(),
   LOKI_USER: z.string(),
   LOKI_API_KEY: z.string(),
+  METRICS_ALLOWED_IP: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
