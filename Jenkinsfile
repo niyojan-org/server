@@ -15,7 +15,11 @@ pipeline {
         }
         stage('Install Dependencies') {
             steps {
-                sh 'pnpm install'
+                sh '''
+                    rm -rf node_modules
+                    rm -f package-lock.json
+                    pnpm install --no-frozen-lockfile
+                '''
             }
         }
         stage('Running Tests') {
