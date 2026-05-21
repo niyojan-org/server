@@ -9,15 +9,11 @@ pipeline {
 
     stages {
         stage('Checkout Code') {
-            steps {
-                checkout scm
-            }
+            steps { checkout scm }
         }
-
         stage('SonarQube Analysis') {
-        steps {
-            withSonarQubeEnv('SonarQube') {
-                sh 'sonar-scanner'
+            steps {
+                withSonarQubeEnv('SonarQube') {sh 'sonar-scanner'}
             }
         }
         stage('Build Docker Image') {
@@ -25,11 +21,10 @@ pipeline {
                 sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
-
         stage('Login to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: "$DOCKERHUB_CREDENTIALS",
+                    credentialsId: "${DOCKERHUB_CREDENTIALS}",
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
@@ -43,26 +38,27 @@ pipeline {
                 sh '''
                     docker tag $DOCKER_IMAGE $DOCKER_USER/$DOCKER_IMAGE:latest
                     docker tag $DOCKER_IMAGE $DOCKER_USER/$DOCKER_IMAGE:${BUILD_NUMBER}
+
                     docker push $DOCKER_USER/$DOCKER_IMAGE:latest
                     docker push $DOCKER_USER/$DOCKER_IMAGE:${BUILD_NUMBER}
                 '''
             }
         }
-
-
-        // Later do the ssh and do the things
     }
 
     post {
+
         success {
             echo 'Build & Deployment Successful!'
         }
+
         failure {
             echo 'Pipeline Failed!'
+
             emailext(
-            to: '$DEFAULT_RECIPIENTS',
-            subject: "CI/CD FAILURE: ${JOB_NAME} #${BUILD_NUMBER}",
-            body: "Build failed\n${BUILD_URL}"
+                to: '$DEFAULT_RECIPIENTS',
+                subject: "CI/CD FAILURE: ${JOB_NAME} #${BUILD_NUMBER}",
+                body: "Build failed\n${BUILD_URL}"
             )
         }
     }
