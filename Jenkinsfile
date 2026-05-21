@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-          nodejs 'node20'
+        nodejs 'node20'
     }
     environment {
         DOCKER_IMAGE = 'server'
@@ -12,6 +12,16 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps { checkout scm }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh 'pnpm install'
+            }
+        }
+        stage('Running Tests') {
+            steps {
+                sh 'pnpm test'
+            }
         }
         stage('SonarQube Analysis') {
             steps {
@@ -28,6 +38,7 @@ pipeline {
                 sh 'docker build -t $DOCKER_IMAGE .'
             }
         }
+
         stage('Login to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
@@ -49,6 +60,12 @@ pipeline {
                     docker push $DOCKER_USER/$DOCKER_IMAGE:latest
                     docker push $DOCKER_USER/$DOCKER_IMAGE:${BUILD_NUMBER}
                 '''
+            }
+        }
+
+        stage('Clean Up') {
+            steps {
+                sh 'docker image prune -af || true'
             }
         }
     }
