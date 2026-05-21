@@ -17,8 +17,9 @@ pipeline {
             steps {
                 sh '''
                     rm -rf node_modules
-                    rm -f package-lock.json
-                    pnpm install --no-frozen-lockfile
+                    pnpm store prune || true
+                    pnpm install --no-frozen-lockfile --shamefully-hoist
+                    pnpm rebuild rolldown
                 '''
             }
         }
