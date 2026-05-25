@@ -24,7 +24,7 @@ RUN addgroup -S nodejs && adduser -S nodeuser -G nodejs
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
-COPY --from=build /app/assets/fonts ./assets/fonts
+COPY --from=build /app/assets ./assets
 
 USER nodeuser
 EXPOSE 5050

@@ -1,12 +1,18 @@
-import { Types } from 'mongoose';
+import { Types, ClientSession } from 'mongoose';
 import { EventModel } from './event.model';
 import { EventStatus } from '../core/event.enums';
 import { Event, EventDocument } from '../core/event.types';
+import { EventTicket } from '../types';
 
 export class EventRepository {
   static async create(event: Event): Promise<EventDocument> {
     const doc = new EventModel(event);
     return doc.save();
+  }
+  static async getEventForOrganization(eventId: string, organizationId: Types.ObjectId): Promise<EventDocument | null> {
+    const orConditions: { slug?: string; _id?: Types.ObjectId }[] = [{ slug: eventId }];
+    if (Types.ObjectId.isValid(eventId)) orConditions.push({ _id: new Types.ObjectId(eventId) });
+    return EventModel.findOne({ organizationId, $or: orConditions }).lean();
   }
 
   static async find(input: string | Types.ObjectId): Promise<EventDocument | null> {
@@ -83,5 +89,65 @@ export class EventRepository {
 
   static async incrementView(slug: string) {
     return EventModel.updateOne({ slug }, { $inc: { 'metrics.view': 1 } });
+  }
+
+  /**
+   * OPTION 1: Atomically increment ticket sold count
+   * Prevents race conditions where multiple registrations could all pass capacity check
+   * @returns updated ticket or null if capacity exceeded
+   */
+  static async atomicIncrementTicketSold(
+    eventId: Types.ObjectId,
+    ticketId: Types.ObjectId,
+    quantity: number,
+    session?: ClientSession,
+  ): Promise<{ success: boolean; error?: string }> {
+    // Use MongoDB arrayFilters to update the specific ticket in the event's tickets array
+    const result = await EventModel.findOneAndUpdate(
+      { _id: eventId },
+      { $inc: { 'tickets.$[ticket].sold': quantity } },
+      { new: true, session, arrayFilters: [{ 'ticket._id': ticketId }] },
+    );
+    if (!result) {
+      return { success: false, error: 'Event or ticket not found' };
+    }
+    // Verify ticket doesn't exceed capacity
+    const ticket = result.tickets?.find((t) => t._id?.toString() === ticketId.toString());
+    if (ticket && ticket.sold > ticket.capacity) {
+      // Rollback the increment
+      await EventModel.findOneAndUpdate(
+        { _id: eventId },
+        { $inc: { 'tickets.$[ticket].sold': -quantity } },
+        { session, arrayFilters: [{ 'ticket._id': ticketId }] },
+      );
+      return { success: false, error: 'Ticket capacity exceeded' };
+    }
+    return { success: true };
+  }
+
+  /**
+   * Decrement ticket sold count (for cancellations/refunds)
+   */
+  static async decrementTicketSold(
+    eventId: Types.ObjectId,
+    ticketId: Types.ObjectId,
+    quantity: number,
+    session?: ClientSession,
+  ): Promise<boolean> {
+    const result = await EventModel.findOneAndUpdate(
+      { _id: eventId },
+      { $inc: { 'tickets.$[ticket].sold': -Math.abs(quantity) } },
+      { session, arrayFilters: [{ 'ticket._id': ticketId }] },
+    );
+    return !!result;
+  }
+
+  /**
+   * Get ticket from event
+   */
+  static async getTicketById(eventId: Types.ObjectId, ticketId: Types.ObjectId): Promise<EventTicket | null> {
+    const event = await EventModel.findOne({ _id: eventId, 'tickets._id': ticketId }, { 'tickets.$': 1 }).lean();
+    if (!event?.tickets?.[0]) return null;
+    return event.tickets[0];
   }
 }

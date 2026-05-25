@@ -38,6 +38,8 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 app.get('/metrics', async (req, res) => {
+  console.log('Received request for /metrics from IP:', req.ip);
+  console.log('Allowed IP for metrics:', env.METRICS_ALLOWED_IP);
   if (req.ip !== env.METRICS_ALLOWED_IP) {
     return res.status(403).json({ error: 'Forbidden' });
   }

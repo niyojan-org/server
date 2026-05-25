@@ -1,4 +1,5 @@
 import ApiError from '@core/errors/api.error';
+import cookiesHelper from '@modules/auth/helper/cookies.helper';
 import { validateSession, verifyAccessToken } from '@modules/auth/service';
 import UserModel from '@modules/user/user.model';
 import { UserDocument } from '@modules/user/user.types';
@@ -12,10 +13,13 @@ export const authenticate: RequestHandler = async (req, _res, next) => {
   const authReq = req as AuthenticatedRequest;
   try {
     const authHeader = authReq.headers.authorization;
-    const token = authHeader?.startsWith('Bearer ')
-      ? authHeader.slice(7)
-      : null;
+    const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
     if (!token) {
+      const cookieToken = cookiesHelper.getAccessToken(req);
+      if (cookieToken) {
+        authReq.headers.authorization = `Bearer ${cookieToken}`;
+        return authenticate(authReq, _res, next);
+      }
       throw new ApiError(
         401,
         'Authentication token missing',

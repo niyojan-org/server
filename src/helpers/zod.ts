@@ -16,8 +16,7 @@ export const objectIdSchema = preprocess(
 
 export const uuidSchema = uuid({ message: 'Invalid UUID format' });
 
-export const toObjectId = (value?: ObjectId | string) =>
-  value ? objectIdSchema.parse(value) : undefined;
+export const toObjectId = (value?: ObjectId | string) => (value ? objectIdSchema.parse(value) : undefined);
 
 export type ObjectId = z.infer<typeof objectIdSchema>;
 

@@ -16,27 +16,15 @@ export enum RegistrationType {
 
 export const RegistrationTypeHelpers = {
   isIndividual(type: RegistrationType): boolean {
-    return (
-      type === RegistrationType.INDIVIDUAL_FREE ||
-      type === RegistrationType.INDIVIDUAL_PAID
-    );
+    return type === RegistrationType.INDIVIDUAL_FREE || type === RegistrationType.INDIVIDUAL_PAID;
   },
   isGroup(type: RegistrationType): boolean {
-    return (
-      type === RegistrationType.GROUP_FREE ||
-      type === RegistrationType.GROUP_PAID
-    );
+    return type === RegistrationType.GROUP_FREE || type === RegistrationType.GROUP_PAID;
   },
   isFree(type: RegistrationType): boolean {
-    return (
-      type === RegistrationType.INDIVIDUAL_FREE ||
-      type === RegistrationType.GROUP_FREE
-    );
+    return type === RegistrationType.INDIVIDUAL_FREE || type === RegistrationType.GROUP_FREE;
   },
   isPaid(type: RegistrationType): boolean {
-    return (
-      type === RegistrationType.INDIVIDUAL_PAID ||
-      type === RegistrationType.GROUP_PAID
-    );
+    return type === RegistrationType.INDIVIDUAL_PAID || type === RegistrationType.GROUP_PAID;
   },
 };

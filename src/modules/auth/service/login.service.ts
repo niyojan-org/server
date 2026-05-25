@@ -11,9 +11,7 @@ import { UserDocument } from '@modules/user/user.types';
 import { checkMfa } from '../mfa/mfa.service';
 
 export const login = async (input: LoginInput, req: Request) => {
-  const user = await UserModel.findOne({ email: input.email }).select(
-    '+password',
-  );
+  const user = await UserModel.findOne({ email: input.email }).select('+password');
   if (!user) {
     throw new ApiError(
       401,

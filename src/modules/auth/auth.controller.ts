@@ -1,6 +1,6 @@
 import { asyncHandler } from '@core/utils/asyncHandler';
 import * as authService from './service';
-import { getRefreshToken } from './helper/cookies.helper';
+import CookkiesHelper, { getRefreshToken } from './helper/cookies.helper';
 import { AuthenticatedRequest } from '@core/middlewares/auth.middleware';
 import type { Request } from 'express';
 import { extractIntent, resolveRedirect } from './utils/redirect';
@@ -35,10 +35,7 @@ export const register = asyncHandler(async (req, res) => {
 });
 
 export const verifyEmail = asyncHandler(async (req, res) => {
-  await authService.verifyEmail(
-    req.body.email as string,
-    req.body.token as string,
-  );
+  await authService.verifyEmail(req.body.email as string, req.body.token as string);
   res.status(200).json({
     success: true,
     message: 'Email verified successfully',
@@ -48,6 +45,7 @@ export const verifyEmail = asyncHandler(async (req, res) => {
 export const refreshAccessToken = asyncHandler(async (req, res) => {
   const refreshToken = getRefreshToken(req);
   const token = await authService.refreshAccessToken(refreshToken!);
+  CookkiesHelper.setAcessToken(res, token);
   res.status(200).json({
     success: true,
     message: 'Access token refreshed successfully',
@@ -79,38 +77,26 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 });
 
 export const resetPassword = asyncHandler(async (req: Request, res) => {
-  await authService.resetPasswordWithToken(
-    req.body.email,
-    req.body.newPassword,
-    req.body.token,
-    req,
-  );
+  await authService.resetPasswordWithToken(req.body.email, req.body.newPassword, req.body.token, req);
   res.status(200).json({
     success: true,
     message: 'Password reset successful',
   });
 });
 
-export const changePassword = asyncHandler(
-  async (req: AuthenticatedRequest, res) => {
-    const userId = req.user?._id?.toString();
+export const changePassword = asyncHandler(async (req: AuthenticatedRequest, res) => {
+  const userId = req.user?._id?.toString();
 
-    if (!userId) {
-      throw new Error('Unauthorized');
-    }
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
 
-    await authService.changePassword(
-      userId,
-      req.body.oldPassword,
-      req.body.newPassword,
-      req,
-    );
-    res.status(200).json({
-      success: true,
-      message: 'Password changed successfully',
-    });
-  },
-);
+  await authService.changePassword(userId, req.body.oldPassword, req.body.newPassword, req);
+  res.status(200).json({
+    success: true,
+    message: 'Password changed successfully',
+  });
+});
 
 export const googleRedirect = asyncHandler(async (req: Request, res) => {
   const redirectUrl = authService.redirectToGoogleOAuth(req);

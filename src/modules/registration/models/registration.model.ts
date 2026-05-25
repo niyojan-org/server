@@ -1,5 +1,5 @@
-import mongoose, { Schema } from 'mongoose';
-
+import mongoose, { PaginateModel, Schema } from 'mongoose';
+import mongoosePaginate from 'mongoose-paginate-v2';
 import { RegistrationStatus, RegistrationType } from '../constants/registration.constants';
 
 const registrationPricingSchema = new Schema(
@@ -76,7 +76,9 @@ const registrationSchema = new Schema(
     },
     registrationType: { type: String, enum: Object.values(RegistrationType), index: true },
     pricing: {
-      type: registrationPricingSchema,required: true},
+      type: registrationPricingSchema,
+      required: true,
+    },
     coupon: {
       type: registrationCouponSchema,
     },
@@ -102,8 +104,16 @@ registrationSchema.index({
   ticketId: 1,
 });
 
+//plugins
+registrationSchema.plugin(mongoosePaginate);
+
 export type RegistrationDocument = mongoose.HydratedDocument<RegistrationSchema>;
 
 export type RegistrationSchema = mongoose.InferSchemaType<typeof registrationSchema>;
 
-export const RegistrationModel = mongoose.model('Registration', registrationSchema);
+export type RegistrationModel = PaginateModel<RegistrationDocument>;
+
+export const RegistrationModel = mongoose.model<RegistrationDocument, RegistrationModel>(
+  'Registration',
+  registrationSchema,
+);

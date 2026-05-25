@@ -14,6 +14,7 @@ import settlementRoutes from '@modules/settlements/routes/settlement.routes';
 import payoutRoutes from '@modules/payouts/routes/payout.routes';
 import registrationRoutes from '@modules/registration/routes/registration.routes';
 import designTemplateRoutes from '@modules/design-template/routes/design-template.routes';
+// import managementRoutes from '@modules/registration/routes/registration-management.routes';
 
 const mainRoutes = Router();
 
@@ -34,5 +35,6 @@ mainRoutes.use('/settlements', settlementRoutes);
 mainRoutes.use('/payouts', payoutRoutes);
 mainRoutes.use('/registrations', registrationRoutes);
 mainRoutes.use('/design-templates', designTemplateRoutes);
+// mainRoutes.use('/management', managementRoutes);
 
 export default mainRoutes;

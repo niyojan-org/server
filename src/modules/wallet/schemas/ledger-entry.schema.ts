@@ -1,10 +1,5 @@
 import { HydratedDocument, model, Schema, PaginateModel } from 'mongoose';
-import {
-  LedgerBalanceType,
-  LedgerCategory,
-  LedgerEntryType,
-  LedgerReferenceType,
-} from '../types/ledger.enums';
+import { LedgerBalanceType, LedgerCategory, LedgerEntryType, LedgerReferenceType } from '../types/ledger.enums';
 import { ObjectId } from '@helpers/zod';
 import mongoosePaginate from 'mongoose-paginate-v2';
 
@@ -136,7 +131,4 @@ LedgerEntrySchema.plugin(mongoosePaginate);
 
 export type LedgerEntryModel = PaginateModel<ILedgerEntry>;
 
-export const LedgerEntryModel = model<ILedgerEntry, LedgerEntryModel>(
-  'ledger_entries',
-  LedgerEntrySchema,
-);
+export const LedgerEntryModel = model<ILedgerEntry, LedgerEntryModel>('ledger_entries', LedgerEntrySchema);

@@ -1,32 +1,20 @@
 import { ClientSession } from 'mongoose';
 
-import {
-  ILedgerEntry,
-  LedgerEntryDocument,
-  LedgerEntryModel,
-} from '../schemas/ledger-entry.schema';
+import { ILedgerEntry, LedgerEntryDocument, LedgerEntryModel } from '../schemas/ledger-entry.schema';
 
 import { ObjectId } from '@helpers/zod';
 import { LedgerPaginationQuery } from '../types/ledger-pagination.types';
 import { buildPaginationQuery } from '../helper/ledger-pagination.helper';
 
 class LedgerRepository {
-  static async createEntry(
-    data: Partial<ILedgerEntry>,
-    session?: ClientSession,
-  ): Promise<LedgerEntryDocument> {
+  static async createEntry(data: Partial<ILedgerEntry>, session?: ClientSession): Promise<LedgerEntryDocument> {
     const entry = new LedgerEntryModel(data);
     return await entry.save({ session });
   }
-  static async createEntries(
-    data: Partial<ILedgerEntry>[],
-    session?: ClientSession,
-  ): Promise<LedgerEntryDocument[]> {
+  static async createEntries(data: Partial<ILedgerEntry>[], session?: ClientSession): Promise<LedgerEntryDocument[]> {
     return LedgerEntryModel.insertMany(data, { session });
   }
-  static async findById(
-    id: ObjectId | string,
-  ): Promise<LedgerEntryDocument | null> {
+  static async findById(id: ObjectId | string): Promise<LedgerEntryDocument | null> {
     return await LedgerEntryModel.findById(id);
   }
   static async findByReference(
@@ -41,9 +29,7 @@ class LedgerRepository {
     });
   }
 
-  static async findLatestWalletEntry(
-    walletId: ObjectId | string,
-  ): Promise<LedgerEntryDocument | null> {
+  static async findLatestWalletEntry(walletId: ObjectId | string): Promise<LedgerEntryDocument | null> {
     return await LedgerEntryModel.findOne({
       walletId,
     }).sort({

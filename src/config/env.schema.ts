@@ -21,7 +21,7 @@ export const envSchema = z.object({
   JWT_ACCESS_TOKEN_EXPIRY: z.string(),
   JWT_REFRESH_TOKEN_EXPIRY: z.string(),
   AUTH_URL: z.string(),
-  COOKIE_DOMAIN: z.string().optional(),
+  COOKIE_DOMAIN: z.string(),
 
   //REDIS
   REDIS_HOST: z.string(),
