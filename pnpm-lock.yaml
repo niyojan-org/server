@@ -4,10 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  nodemailer@<8.0.4: '>=8.0.4'
-  nodemailer@<=8.0.4: '>=8.0.5'
-
 importers:
 
   .:
@@ -70,8 +66,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       nodemailer:
-        specifier: '>=8.0.5'
-        version: 8.0.7
+        specifier: ^7.0.13
+        version: 7.0.13
       pg:
         specifier: ^8.20.0
         version: 8.21.0
@@ -842,6 +838,7 @@ packages:
     engines: {node: ^20.19.0 || >=22.12.0}
     cpu: [x64]
     os: [linux]
+    libc: [glibc]
 
   '@rolldown/binding-linux-x64-musl@1.0.1':
     resolution: {integrity: sha512-bV4fzswuzVcKD90o/VM6QqKxnxlDq0g2BISDLNVmxrnhpv1DDbyPhCIjYfvzYLV+MvkKKnQt2Q6AO86SEBULUQ==}
@@ -2074,8 +2071,8 @@ packages:
     resolution: {integrity: sha512-s+w+rBWnpTMwSFbaE0UXsRlg7hU4FjekKU4eyAih5T8nJuNZT1nNsskXpxmeqSK9UzkBl6UgRlnKc8hz8IEqOw==}
     hasBin: true
 
-  nodemailer@8.0.7:
-    resolution: {integrity: sha512-pkjE4mkBzQjdJT4/UmlKl3pX0rC9fZmjh7c6C9o7lv66Ac6w9WCnzPzhbPNxwZAzlF4mdq4CSWB5+FbK6FWCow==}
+  nodemailer@7.0.13:
+    resolution: {integrity: sha512-PNDFSJdP+KFgdsG3ZzMXCgquO7I6McjY2vlqILjtJd0hy8wEvtugS9xKRF2NWlPNGxvLCXlTNIae4serI7dinw==}
     engines: {node: '>=6.0.0'}
 
   normalize-path@3.0.0:
@@ -4557,7 +4554,7 @@ snapshots:
       detect-libc: 2.1.2
     optional: true
 
-  nodemailer@8.0.7: {}
+  nodemailer@7.0.13: {}
 
   normalize-path@3.0.0: {}
 

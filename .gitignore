@@ -10,3 +10,4 @@ test.ts
 coverage
 logs
 .scannerwork
+pnpm-workspace.yaml
