@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 describe('Payments Module - Payment Service', () => {
   describe('Payment Order Creation', () => {
@@ -11,7 +11,7 @@ describe('Payments Module - Payment Service', () => {
         status: 'pending',
         createdAt: new Date(),
       };
-      
+
       expect(order.amount).toBe(500);
       expect(order.status).toBe('pending');
     });
@@ -19,7 +19,7 @@ describe('Payments Module - Payment Service', () => {
     it('should calculate order total with tax', () => {
       const subtotal = 400;
       const taxRate = 0.1;
-      
+
       const total = subtotal * (1 + taxRate);
       expect(total).toBeCloseTo(440, 2);
     });
@@ -27,8 +27,8 @@ describe('Payments Module - Payment Service', () => {
     it('should apply discount to order amount', () => {
       let orderAmount = 500;
       const discountPercent = 0.2; // 20%
-      
-      orderAmount *= (1 - discountPercent);
+
+      orderAmount *= 1 - discountPercent;
       expect(orderAmount).toBeCloseTo(400, 2);
     });
 
@@ -38,7 +38,7 @@ describe('Payments Module - Payment Service', () => {
         paymentMethod: 'credit_card',
         amount: 500,
       };
-      
+
       expect(order.paymentMethod).toBeTruthy();
     });
   });
@@ -52,7 +52,7 @@ describe('Payments Module - Payment Service', () => {
         status: 'completed',
         transactionId: 'txn_789',
       };
-      
+
       expect(payment.status).toBe('completed');
       expect(payment.transactionId).toBeTruthy();
     });
@@ -63,7 +63,7 @@ describe('Payments Module - Payment Service', () => {
         status: 'failed',
         errorCode: 'insufficient_funds',
       };
-      
+
       expect(payment.status).toBe('failed');
       expect(payment.errorCode).toBeTruthy();
     });
@@ -74,7 +74,7 @@ describe('Payments Module - Payment Service', () => {
         status: 'pending',
         expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
       };
-      
+
       expect(payment.status).toBe('pending');
     });
 
@@ -88,7 +88,7 @@ describe('Payments Module - Payment Service', () => {
     it('should validate credit card format', () => {
       const cardNumber = '4111111111111111';
       const isValid = cardNumber.length === 16 && /^\d+$/.test(cardNumber);
-      
+
       expect(isValid).toBe(true);
     });
 
@@ -96,17 +96,17 @@ describe('Payments Module - Payment Service', () => {
       const expiryMonth = 12;
       const expiryYear = 2026;
       const now = new Date();
-      
-      const isValid = expiryYear > now.getFullYear() || 
-                     (expiryYear === now.getFullYear() && expiryMonth > now.getMonth() + 1);
-      
+
+      const isValid =
+        expiryYear > now.getFullYear() || (expiryYear === now.getFullYear() && expiryMonth > now.getMonth() + 1);
+
       expect(isValid).toBe(true);
     });
 
     it('should validate credit card CVV', () => {
       const cvv = '123';
       const isValid = /^\d{3,4}$/.test(cvv);
-      
+
       expect(isValid).toBe(true);
     });
 
@@ -116,7 +116,7 @@ describe('Payments Module - Payment Service', () => {
         bankName: 'Bank ABC',
         accountNumber: '1234567890',
       };
-      
+
       expect(method.type).toBe('bank_transfer');
     });
 
@@ -125,7 +125,7 @@ describe('Payments Module - Payment Service', () => {
         type: 'digital_wallet',
         provider: 'apple_pay',
       };
-      
+
       expect(method.provider).toBeTruthy();
     });
   });
@@ -139,7 +139,7 @@ describe('Payments Module - Payment Service', () => {
         reason: 'cancellation',
         status: 'pending',
       };
-      
+
       expect(refund.paymentId).toBe('payment_456');
       expect(refund.reason).toBeTruthy();
     });
@@ -147,21 +147,21 @@ describe('Payments Module - Payment Service', () => {
     it('should process full refund', () => {
       const originalAmount = 500;
       const refundAmount = 500;
-      
+
       expect(refundAmount).toBe(originalAmount);
     });
 
     it('should process partial refund', () => {
       const originalAmount = 500;
       const refundAmount = 250;
-      
+
       expect(refundAmount).toBeLessThan(originalAmount);
     });
 
     it('should prevent refund exceeding original amount', () => {
       const originalAmount = 500;
       const refundAmount = 600;
-      
+
       const isValid = refundAmount <= originalAmount;
       expect(isValid).toBe(false);
     });
@@ -176,7 +176,7 @@ describe('Payments Module - Payment Service', () => {
     it('should match payment with order', () => {
       const order = { id: 'order_123', amount: 500 };
       const payment = { orderId: 'order_123', amount: 500, status: 'completed' };
-      
+
       const isMatched = order.id === payment.orderId && order.amount === payment.amount;
       expect(isMatched).toBe(true);
     });
@@ -184,7 +184,7 @@ describe('Payments Module - Payment Service', () => {
     it('should detect overpayment', () => {
       const orderAmount = 500;
       const paymentAmount = 550;
-      
+
       const isOverpaid = paymentAmount > orderAmount;
       expect(isOverpaid).toBe(true);
     });
@@ -192,7 +192,7 @@ describe('Payments Module - Payment Service', () => {
     it('should detect underpayment', () => {
       const orderAmount = 500;
       const paymentAmount = 450;
-      
+
       const isUnderpaid = paymentAmount < orderAmount;
       expect(isUnderpaid).toBe(true);
     });
@@ -203,23 +203,23 @@ describe('Payments Module - Payment Service', () => {
       const amount = 1000;
       const feePercent = 0.029; // 2.9%
       const fee = amount * feePercent;
-      
+
       expect(fee).toBeCloseTo(29, 0);
     });
 
     it('should include fixed fee in total', () => {
       const amount = 1000;
       const percentFee = amount * 0.029;
-      const fixedFee = 0.30;
-      
+      const fixedFee = 0.3;
+
       const totalFee = percentFee + fixedFee;
-      expect(totalFee).toBeCloseTo(29.30, 2);
+      expect(totalFee).toBeCloseTo(29.3, 2);
     });
 
     it('should deduct fee from organization wallet', () => {
       let walletBalance = 1000;
       const paymentFee = 29;
-      
+
       walletBalance -= paymentFee;
       expect(walletBalance).toBe(971);
     });

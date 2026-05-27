@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 describe('Event Module - Event Service', () => {
   describe('Event Creation', () => {
@@ -11,7 +11,7 @@ describe('Event Module - Event Service', () => {
         location: 'Convention Center',
         createdAt: new Date(),
       };
-      
+
       expect(event.name).toBe('Annual Conference 2024');
       expect(event.date).toBeInstanceOf(Date);
     });
@@ -19,7 +19,7 @@ describe('Event Module - Event Service', () => {
     it('should validate event date is in future', () => {
       const eventDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
       const now = new Date();
-      
+
       const isValid = eventDate > now;
       expect(isValid).toBe(true);
     });
@@ -27,7 +27,7 @@ describe('Event Module - Event Service', () => {
     it('should reject event date in past', () => {
       const eventDate = new Date('2020-06-15');
       const now = new Date();
-      
+
       const isValid = eventDate > now;
       expect(isValid).toBe(false);
     });
@@ -40,9 +40,9 @@ describe('Event Module - Event Service', () => {
 
   describe('Event Publishing', () => {
     it('should publish event', () => {
-      let event = { status: 'draft' };
+      const event = { status: 'draft' };
       event.status = 'published';
-      
+
       expect(event.status).toBe('published');
     });
 
@@ -51,21 +51,21 @@ describe('Event Module - Event Service', () => {
         status: 'published',
         publishedAt: new Date(),
       };
-      
+
       expect(event.publishedAt).toBeInstanceOf(Date);
     });
 
     it('should support archived status', () => {
-      let event = { status: 'published' };
+      const event = { status: 'published' };
       event.status = 'archived';
-      
+
       expect(event.status).toBe('archived');
     });
 
     it('should support cancelled status', () => {
-      let event = { status: 'published' };
+      const event = { status: 'published' };
       event.status = 'cancelled';
-      
+
       expect(event.status).toBe('cancelled');
     });
   });
@@ -76,7 +76,7 @@ describe('Event Module - Event Service', () => {
         id: 'event_123',
         category: 'technology',
       };
-      
+
       expect(event.category).toBe('technology');
     });
 
@@ -86,7 +86,7 @@ describe('Event Module - Event Service', () => {
         category: 'technology',
         subcategories: ['AI', 'Web Development', 'Cloud Computing'],
       };
-      
+
       expect(event.subcategories).toHaveLength(3);
     });
 
@@ -95,7 +95,7 @@ describe('Event Module - Event Service', () => {
         id: 'event_123',
         tags: ['free', 'online', 'beginner-friendly'],
       };
-      
+
       expect(event.tags).toContain('free');
     });
   });
@@ -106,7 +106,7 @@ describe('Event Module - Event Service', () => {
         id: 'event_123',
         description: '<h1>Welcome</h1><p>Join our event...</p>',
       };
-      
+
       expect(event.description).toContain('<h1>');
     });
 
@@ -119,7 +119,7 @@ describe('Event Module - Event Service', () => {
           { time: '12:00', title: 'Lunch' },
         ],
       };
-      
+
       expect(event.agenda).toHaveLength(3);
     });
 
@@ -131,7 +131,7 @@ describe('Event Module - Event Service', () => {
           { name: 'Jane Smith', bio: 'Industry leader' },
         ],
       };
-      
+
       expect(event.speakers).toHaveLength(2);
     });
   });
@@ -143,7 +143,7 @@ describe('Event Module - Event Service', () => {
         capacity: 500,
         registered: 0,
       };
-      
+
       expect(event.capacity).toBe(500);
     });
 
@@ -152,7 +152,7 @@ describe('Event Module - Event Service', () => {
         capacity: 100,
         registered: 75,
       };
-      
+
       const isFull = event.registered >= event.capacity;
       expect(isFull).toBe(false);
     });
@@ -162,7 +162,7 @@ describe('Event Module - Event Service', () => {
         capacity: 100,
         registered: 100,
       };
-      
+
       const isFull = event.registered >= event.capacity;
       expect(isFull).toBe(true);
     });
@@ -172,7 +172,7 @@ describe('Event Module - Event Service', () => {
         capacity: 100,
         registered: 75,
       };
-      
+
       const available = event.capacity - event.registered;
       expect(available).toBe(25);
     });
@@ -188,7 +188,7 @@ describe('Event Module - Event Service', () => {
           { id: 'ticket_3', name: 'VIP', price: 150 },
         ],
       };
-      
+
       expect(event.tickets).toHaveLength(3);
     });
 
@@ -197,8 +197,8 @@ describe('Event Module - Event Service', () => {
         { id: 'ticket_1', sold: 100, price: 50 },
         { id: 'ticket_2', sold: 50, price: 75 },
       ];
-      
-      const totalRevenue = tickets.reduce((sum, t) => sum + (t.sold * t.price), 0);
+
+      const totalRevenue = tickets.reduce((sum, t) => sum + t.sold * t.price, 0);
       expect(totalRevenue).toBe(8750);
     });
   });
@@ -209,7 +209,7 @@ describe('Event Module - Event Service', () => {
         id: 'event_123',
         views: 1250,
       };
-      
+
       expect(event.views).toBe(1250);
     });
 
@@ -218,14 +218,14 @@ describe('Event Module - Event Service', () => {
         id: 'event_123',
         registered: 200,
       };
-      
+
       expect(event.registered).toBe(200);
     });
 
     it('should calculate conversion rate', () => {
       const views = 1000;
       const registrations = 150;
-      
+
       const conversionRate = (registrations / views) * 100;
       expect(conversionRate).toBe(15);
     });
@@ -233,7 +233,7 @@ describe('Event Module - Event Service', () => {
     it('should track attendance rate', () => {
       const registrations = 200;
       const attendance = 180;
-      
+
       const attendanceRate = (attendance / registrations) * 100;
       expect(attendanceRate).toBeCloseTo(90, 0);
     });
@@ -241,15 +241,15 @@ describe('Event Module - Event Service', () => {
 
   describe('Event Update', () => {
     it('should update event details', () => {
-      let event = {
+      const event = {
         id: 'event_123',
         name: 'Original Name',
         location: 'Original Location',
       };
-      
+
       event.name = 'Updated Name';
       event.location = 'Updated Location';
-      
+
       expect(event.name).toBe('Updated Name');
     });
 
@@ -258,7 +258,7 @@ describe('Event Module - Event Service', () => {
         id: 'event_123',
         updatedAt: new Date(),
       };
-      
+
       expect(event.updatedAt).toBeInstanceOf(Date);
     });
 
@@ -267,10 +267,10 @@ describe('Event Module - Event Service', () => {
         id: 'event_123',
         date: new Date(Date.now() - 60 * 60 * 1000), // 1 hour ago
       };
-      
+
       const hasStarted = event.date < new Date();
       const canUpdate = !hasStarted;
-      
+
       expect(canUpdate).toBe(false);
     });
   });
@@ -282,8 +282,8 @@ describe('Event Module - Event Service', () => {
         { id: 'e2', name: 'Business Meetup' },
         { id: 'e3', name: 'Tech Webinar' },
       ];
-      
-      const results = events.filter(e => e.name.toLowerCase().includes('tech'));
+
+      const results = events.filter((e) => e.name.toLowerCase().includes('tech'));
       expect(results).toHaveLength(2);
     });
 
@@ -293,11 +293,11 @@ describe('Event Module - Event Service', () => {
         { id: 'e2', date: new Date('2024-07-01') },
         { id: 'e3', date: new Date('2024-08-01') },
       ];
-      
+
       const start = new Date('2024-06-15');
       const end = new Date('2024-07-15');
-      
-      const results = events.filter(e => e.date >= start && e.date <= end);
+
+      const results = events.filter((e) => e.date >= start && e.date <= end);
       expect(results).toHaveLength(1);
     });
 
@@ -307,8 +307,8 @@ describe('Event Module - Event Service', () => {
         { id: 'e2', category: 'business' },
         { id: 'e3', category: 'technology' },
       ];
-      
-      const results = events.filter(e => e.category === 'technology');
+
+      const results = events.filter((e) => e.category === 'technology');
       expect(results).toHaveLength(2);
     });
   });

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 describe('Registration Module - Registration Service', () => {
   describe('Registration Creation', () => {
@@ -10,7 +10,7 @@ describe('Registration Module - Registration Service', () => {
         status: 'confirmed',
         createdAt: new Date(),
       };
-      
+
       expect(registration.eventId).toBe('event_456');
       expect(registration.status).toBe('confirmed');
     });
@@ -30,14 +30,14 @@ describe('Registration Module - Registration Service', () => {
     it('should validate participant email', () => {
       const email = 'participant@example.com';
       const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      
+
       expect(isValid).toBe(true);
     });
 
     it('should reject invalid email', () => {
       const email = 'invalid-email';
       const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      
+
       expect(isValid).toBe(false);
     });
 
@@ -47,7 +47,7 @@ describe('Registration Module - Registration Service', () => {
         email: 'john@example.com',
         phone: '+1234567890',
       };
-      
+
       expect(registration.name).toBeTruthy();
       expect(registration.email).toBeTruthy();
       expect(registration.phone).toBeTruthy();
@@ -58,24 +58,24 @@ describe('Registration Module - Registration Service', () => {
         eventId: 'event_123',
         participantEmail: 'john@example.com',
       };
-      
+
       const newReg = {
         eventId: 'event_123',
         participantEmail: 'john@example.com',
       };
-      
-      const isDuplicate = existingReg.eventId === newReg.eventId && 
-                         existingReg.participantEmail === newReg.participantEmail;
-      
+
+      const isDuplicate =
+        existingReg.eventId === newReg.eventId && existingReg.participantEmail === newReg.participantEmail;
+
       expect(isDuplicate).toBe(true);
     });
   });
 
   describe('Registration Status Workflow', () => {
     it('should progress from pending to confirmed', () => {
-      let registration = { status: 'pending' };
+      const registration = { status: 'pending' };
       registration.status = 'confirmed';
-      
+
       expect(registration.status).toBe('confirmed');
     });
 
@@ -85,9 +85,9 @@ describe('Registration Module - Registration Service', () => {
     });
 
     it('should support cancellation status', () => {
-      let registration = { status: 'confirmed' };
+      const registration = { status: 'confirmed' };
       registration.status = 'cancelled';
-      
+
       expect(registration.status).toBe('cancelled');
     });
 
@@ -97,7 +97,7 @@ describe('Registration Module - Registration Service', () => {
         newStatus: 'confirmed',
         changedAt: new Date(),
       };
-      
+
       expect(statusChange.changedAt).toBeInstanceOf(Date);
     });
   });
@@ -108,7 +108,7 @@ describe('Registration Module - Registration Service', () => {
         type: 'free',
         ticketPrice: 0,
       };
-      
+
       expect(registration.type).toBe('free');
       expect(registration.ticketPrice).toBe(0);
     });
@@ -119,7 +119,7 @@ describe('Registration Module - Registration Service', () => {
         ticketPrice: 100,
         paymentStatus: 'completed',
       };
-      
+
       expect(registration.type).toBe('paid');
       expect(registration.ticketPrice).toBe(100);
     });
@@ -129,7 +129,7 @@ describe('Registration Module - Registration Service', () => {
         type: 'approval_required',
         status: 'pending_approval',
       };
-      
+
       expect(registration.type).toBe('approval_required');
     });
 
@@ -138,7 +138,7 @@ describe('Registration Module - Registration Service', () => {
         type: 'waitlist',
         position: 5,
       };
-      
+
       expect(registration.type).toBe('waitlist');
       expect(registration.position).toBe(5);
     });
@@ -148,7 +148,7 @@ describe('Registration Module - Registration Service', () => {
     it('should calculate registration cost with tax', () => {
       const basePrice = 100;
       const taxRate = 0.1;
-      
+
       const totalCost = basePrice * (1 + taxRate);
       expect(totalCost).toBeCloseTo(110, 2);
     });
@@ -157,15 +157,15 @@ describe('Registration Module - Registration Service', () => {
       const basePrice = 100;
       const quantity = 10;
       const discountPercent = 0.1; // 10% for 10+ people
-      
-      const totalCost = (basePrice * quantity) * (1 - discountPercent);
+
+      const totalCost = basePrice * quantity * (1 - discountPercent);
       expect(totalCost).toBeCloseTo(900, 2);
     });
 
     it('should apply early bird discount', () => {
       const basePrice = 100;
       const earlyBirdDiscount = 0.2; // 20%
-      
+
       const discountedPrice = basePrice * (1 - earlyBirdDiscount);
       expect(discountedPrice).toBeCloseTo(80, 2);
     });
@@ -173,17 +173,13 @@ describe('Registration Module - Registration Service', () => {
 
   describe('Registration Fields', () => {
     it('should validate required fields', () => {
-      const requiredFields = ['name', 'email', 'phone'];
+      const requiredFields: Array<keyof typeof registration> = ['name', 'email', 'phone'];
       const registration = {
         name: 'John Doe',
         email: 'john@example.com',
         phone: '+1234567890',
       };
-      
-      const allFieldsPresent = requiredFields.every(field => 
-        field in registration && registration[field]
-      );
-      
+      const allFieldsPresent = requiredFields.every((field) => registration[field]);
       expect(allFieldsPresent).toBe(true);
     });
 
@@ -193,7 +189,7 @@ describe('Registration Module - Registration Service', () => {
         type: 'text',
         required: true,
       };
-      
+
       expect(customField.name).toBe('organization');
       expect(customField.required).toBe(true);
     });
@@ -205,10 +201,10 @@ describe('Registration Module - Registration Service', () => {
         min: 18,
         max: 100,
       };
-      
+
       const value = 25;
       const isValid = value >= field.min && value <= field.max;
-      
+
       expect(isValid).toBe(true);
     });
   });
@@ -220,14 +216,14 @@ describe('Registration Module - Registration Service', () => {
         subject: 'Registration Confirmed',
         type: 'registration_confirmation',
       };
-      
+
       expect(email.to).toBeTruthy();
       expect(email.type).toBe('registration_confirmation');
     });
 
     it('should generate confirmation number', () => {
       const confirmationNumber = 'REG-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-      
+
       expect(confirmationNumber).toMatch(/^REG-/);
       expect(confirmationNumber.length).toBeGreaterThan(10);
     });

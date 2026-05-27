@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 describe('Auth Module - MFA Service', () => {
   describe('TOTP Setup', () => {
@@ -13,7 +13,7 @@ describe('Auth Module - MFA Service', () => {
       const secret = 'JBSWY3DPEBLW64TMMQ======';
       const email = 'user@example.com';
       const appName = 'Orgatick';
-      
+
       const qrUrl = `otpauth://totp/${appName}:${email}?secret=${secret}`;
       expect(qrUrl).toContain('otpauth://totp/');
       expect(qrUrl).toContain(email);
@@ -26,7 +26,7 @@ describe('Auth Module - MFA Service', () => {
         totpVerified: false,
         secret: 'JBSWY3DPEBLW64TMMQ======',
       };
-      
+
       expect(mfa.totpEnabled).toBe(false);
       expect(mfa.totpVerified).toBe(false);
     });
@@ -53,23 +53,21 @@ describe('Auth Module - MFA Service', () => {
 
     it('should enable TOTP after successful verification', () => {
       const mfa = { totpVerified: false, totpEnabled: false };
-      
+
       // Simulate verification
       mfa.totpVerified = true;
       mfa.totpEnabled = true;
-      
+
       expect(mfa.totpEnabled).toBe(true);
     });
   });
 
   describe('Backup Codes', () => {
     it('should generate backup codes during TOTP setup', () => {
-      const backupCodes = Array.from({ length: 10 }, () => 
-        Math.random().toString(36).substr(2, 8)
-      );
-      
+      const backupCodes = Array.from({ length: 10 }, () => Math.random().toString(36).substr(2, 8));
+
       expect(backupCodes).toHaveLength(10);
-      backupCodes.forEach(code => {
+      backupCodes.forEach((code) => {
         expect(code).toBeTruthy();
       });
     });
@@ -79,27 +77,29 @@ describe('Auth Module - MFA Service', () => {
         { code: 'BACKUP01', used: false },
         { code: 'BACKUP02', used: false },
       ];
-      
+
       backupCodes[0].used = true;
-      
-      const unusedCodes = backupCodes.filter(c => !c.used);
+
+      const unusedCodes = backupCodes.filter((c) => !c.used);
       expect(unusedCodes).toHaveLength(1);
     });
 
     it('should prevent reuse of backup codes', () => {
       const code = { value: 'BACKUP01', used: true };
       const canUse = !code.used;
-      
+
       expect(canUse).toBe(false);
     });
 
     it('should ensure at least one backup code remains unused', () => {
-      const backupCodes = Array(10).fill(null).map((_, i) => ({
-        code: `BACKUP${String(i).padStart(2, '0')}`,
-        used: i < 9 // 9 codes used
-      }));
-      
-      const unusedCodes = backupCodes.filter(c => !c.used);
+      const backupCodes = Array(10)
+        .fill(null)
+        .map((_, i) => ({
+          code: `BACKUP${String(i).padStart(2, '0')}`,
+          used: i < 9, // 9 codes used
+        }));
+
+      const unusedCodes = backupCodes.filter((c) => !c.used);
       expect(unusedCodes.length).toBeGreaterThan(0);
     });
   });
@@ -108,7 +108,7 @@ describe('Auth Module - MFA Service', () => {
     it('should accept valid TOTP during login', () => {
       const mfaEnabled = true;
       const totpCode = '123456';
-      
+
       const canAuthenticate = mfaEnabled && totpCode.length === 6;
       expect(canAuthenticate).toBe(true);
     });
@@ -116,7 +116,7 @@ describe('Auth Module - MFA Service', () => {
     it('should accept valid backup code during login', () => {
       const mfaEnabled = true;
       const backupCode = 'BACKUP01';
-      
+
       const canAuthenticate = mfaEnabled && backupCode.length > 0;
       expect(canAuthenticate).toBe(true);
     });
@@ -124,11 +124,11 @@ describe('Auth Module - MFA Service', () => {
     it('should lock account after multiple failed MFA attempts', () => {
       let failedAttempts = 0;
       const maxAttempts = 5;
-      
+
       for (let i = 0; i < 5; i++) {
         failedAttempts++;
       }
-      
+
       const isLocked = failedAttempts >= maxAttempts;
       expect(isLocked).toBe(true);
     });
@@ -138,14 +138,13 @@ describe('Auth Module - MFA Service', () => {
     it('should disable TOTP', () => {
       const mfa = { totpEnabled: true };
       mfa.totpEnabled = false;
-      
+
       expect(mfa.totpEnabled).toBe(false);
     });
 
     it('should clear TOTP secret on disable', () => {
-      const mfa = { secret: 'JBSWY3DPEBLW64TMMQ======' };
+      const mfa: { secret: string | null } = { secret: 'JBSWY3DPEBLW64TMMQ======' };
       mfa.secret = null;
-      
       expect(mfa.secret).toBeNull();
     });
 

@@ -15,6 +15,8 @@ import { upload, uploadToCloudinary } from "./middleware/upload.middleware";
 import { isTaskMaster } from "@core/middlewares/taskmaster.middleware";
 import { Request, Response, NextFunction } from "express";
 import ApiError from "@core/errors/api.error";
+import { PublicApiRateLimit } from "@core/rate_limit/public-api-rate-limit";
+import { UploadRateLimit } from "@core/rate_limit/upload-rate-limit";
 
 const router = Router();
 
@@ -52,9 +54,10 @@ const handleMulterError = (
 
 // Public routes (no authentication required for listing public resources)
 // SECURITY: These routes STRICTLY enforce isPublic: true to prevent unauthorized access
-router.get("/public", validate({ query: resourceQuerySchema }), resourceController.listPublicResources);
+router.get("/public", PublicApiRateLimit.listPublicResources(), validate({ query: resourceQuerySchema }), resourceController.listPublicResources);
 router.get(
   "/public/:id",
+  PublicApiRateLimit.getPublicResource(),
   validate({ params: resourceIdParamSchema }),
   resourceController.getPublicResource,
 );
@@ -65,6 +68,7 @@ router.use(authenticate);
 // Create resource (requires file upload)
 router.post(
   "/",
+  UploadRateLimit.limiter(),
   (req, res, next) =>
     upload.single("file")(req, res, (err) => handleMulterError(err, req, res, next)),
   uploadToCloudinary,
@@ -121,6 +125,7 @@ router.patch(
 router.put(
   "/:id/file",
   organizationRole("owner", "admin", "manager"),
+  UploadRateLimit.limiter(),
   (req, res, next) =>
     upload.single("file")(req, res, (err) => handleMulterError(err, req, res, next)),
   uploadToCloudinary,

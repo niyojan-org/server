@@ -6,7 +6,7 @@ import {
   RegistrationListQueryDto,
 } from '@modules/registration/dto/registration-management.dto';
 import ApiError from '@core/errors/api.error';
-import ParticipantRepository from '@modules/participant/repository/participant.repository';
+// import ParticipantRepository from '@modules/participant/repository/participant.repository';
 import RegistrationRepository from '@modules/registration/repository/registration.repository';
 
 export class RegistrationManagementService {
@@ -51,7 +51,7 @@ export class RegistrationManagementService {
     eventId: mongoose.Types.ObjectId,
     updateData: UpdateRegistrationDto,
   ): Promise<RegistrationDocument> {
-    const registration = await this.getRegistrationById(registrationId, eventId);
+    // const registration = await this.getRegistrationById(registrationId, eventId);
 
     const updated = await RegistrationModel.findByIdAndUpdate(registrationId, { $set: updateData }, { new: true })
       .populate('participantIds')
@@ -78,7 +78,7 @@ export class RegistrationManagementService {
     eventId: mongoose.Types.ObjectId,
     statusData: UpdateRegistrationStatusDto,
   ): Promise<RegistrationDocument> {
-    const registration = await this.getRegistrationById(registrationId, eventId);
+    // const registration = await this.getRegistrationById(registrationId, eventId);
 
     const updated = await RegistrationModel.findByIdAndUpdate(
       registrationId,
@@ -104,64 +104,64 @@ export class RegistrationManagementService {
   /**
    * Delete registration
    */
-  static async deleteRegistration(
-    registrationId: mongoose.Types.ObjectId,
-    eventId: mongoose.Types.ObjectId,
-  ): Promise<void> {
-    const registration = await this.getRegistrationById(registrationId, eventId);
+  // static async deleteRegistration(
+  //   registrationId: mongoose.Types.ObjectId,
+  //   eventId: mongoose.Types.ObjectId,
+  // ): Promise<void> {
+  //   // const registration = await this.getRegistrationById(registrationId, eventId);
 
-    // Delete all associated participants
-    if (registration.participantIds && registration.participantIds.length > 0) {
-      await Promise.all(
-        (registration.participantIds as any[]).map((participantId) =>
-          ParticipantRepository.updateParticipant(participantId._id, { status: 'CANCELLED' as any }),
-        ),
-      );
-    }
+  //   // // Delete all associated participants
+  //   // if (registration.participantIds && registration.participantIds.length > 0) {
+  //   //   await Promise.all(
+  //   //     (registration.participantIds as any[]).map((participantId) =>
+  //   //       ParticipantRepository.updateParticipant(participantId._id, { status: 'CANCELLED' as any }),
+  //   //     ),
+  //   //   );
+  //   // }
 
-    await RegistrationModel.findByIdAndDelete(registrationId).exec();
-  }
+  //   await RegistrationModel.findByIdAndDelete(registrationId).exec();
+  // }
 
   /**
    * Resend registration details to participants
    */
-  static async resendRegistrationDetails(
-    registrationId: mongoose.Types.ObjectId,
-    eventId: mongoose.Types.ObjectId,
-    channels: string[],
-  ): Promise<{ succeeded: number; failed: number }> {
-    const registration = await this.getRegistrationById(registrationId, eventId);
+  // static async resendRegistrationDetails(
+  //   registrationId: mongoose.Types.ObjectId,
+  //   eventId: mongoose.Types.ObjectId,
+  //   channels: string[],
+  // ): Promise<{ succeeded: number; failed: number }> {
+  //   const registration = await this.getRegistrationById(registrationId, eventId);
 
-    if (!registration.participantIds || registration.participantIds.length === 0) {
-      throw new ApiError(
-        400,
-        'No participants in this registration',
-        'NO_PARTICIPANTS',
-        'Cannot resend details when there are no participants',
-      );
-    }
+  //   if (!registration.participantIds || registration.participantIds.length === 0) {
+  //     throw new ApiError(
+  //       400,
+  //       'No participants in this registration',
+  //       'NO_PARTICIPANTS',
+  //       'Cannot resend details when there are no participants',
+  //     );
+  //   }
 
-    // In a real implementation, you would queue email/SMS/WhatsApp jobs
-    // For now, we'll just update the notification flags
-    let succeeded = 0;
-    let failed = 0;
+  //   // In a real implementation, you would queue email/SMS/WhatsApp jobs
+  //   // For now, we'll just update the notification flags
+  //   let succeeded = 0;
+  //   let failed = 0;
 
-    for (const participantId of registration.participantIds as any[]) {
-      try {
-        await ParticipantRepository.updateParticipant(participantId._id, {
-          notifications: {
-            emailSent: channels.includes('email'),
-            whatsAppSent: channels.includes('whatsapp'),
-          },
-        } as any);
-        succeeded++;
-      } catch {
-        failed++;
-      }
-    }
+  //   for (const participantId of registration.participantIds as any[]) {
+  //     try {
+  //       await ParticipantRepository.updateParticipant(participantId._id, {
+  //         notifications: {
+  //           emailSent: channels.includes('email'),
+  //           whatsAppSent: channels.includes('whatsapp'),
+  //         },
+  //       } as any);
+  //       succeeded++;
+  //     } catch {
+  //       failed++;
+  //     }
+  //   }
 
-    return { succeeded, failed };
-  }
+  //   return { succeeded, failed };
+  // }
 
   /**
    * Get registration statistics

@@ -8,6 +8,7 @@ import {
   passkeyAuthenticationSchema,
   passkeyIdParamSchema,
 } from './passkey.schema';
+import { AuthRateLimit } from '@core/rate_limit/auth-rate-limit';
 
 const passkeyRoutes = Router();
 
@@ -24,11 +25,13 @@ passkeyRoutes.post(
 );
 passkeyRoutes.post(
   '/authenticate/options',
+  AuthRateLimit.login(),
   validate({ body: passkeyAuthenticationSchema }),
   passkeyController.startPasskeyAuthenticationOption,
 );
 passkeyRoutes.post(
   '/authenticate/verify',
+  AuthRateLimit.login(),
   validate({ body: finishPasskeyAuthenticationSchema }),
   passkeyController.finishPasskeyAuthentication,
 );

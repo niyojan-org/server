@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 describe('Auth Module - Password Service', () => {
   describe('Password validation', () => {
@@ -74,7 +74,7 @@ describe('Auth Module - Password Service', () => {
     });
 
     it('should reject incorrect password against hash', () => {
-      const password = 'TestPassword123';
+      const password: string = 'TestPassword123';
       const isValid = password === 'WrongPassword123';
       expect(isValid).toBe(false);
     });

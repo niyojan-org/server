@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 describe('Wallet Module - Ledger Service', () => {
   describe('Ledger Entry Creation', () => {
@@ -11,7 +11,7 @@ describe('Wallet Module - Ledger Service', () => {
         description: 'Event registration payment',
         createdAt: new Date(),
       };
-      
+
       expect(entry.type).toBe('credit');
       expect(entry.amount).toBe(100);
     });
@@ -25,7 +25,7 @@ describe('Wallet Module - Ledger Service', () => {
         description: 'Payout settlement',
         createdAt: new Date(),
       };
-      
+
       expect(entry.type).toBe('debit');
       expect(entry.amount).toBe(50);
     });
@@ -36,7 +36,7 @@ describe('Wallet Module - Ledger Service', () => {
         reference: 'settlement_123',
         referenceType: 'settlement',
       };
-      
+
       expect(entry.reference).toBeTruthy();
       expect(entry.referenceType).toBeTruthy();
     });
@@ -45,7 +45,7 @@ describe('Wallet Module - Ledger Service', () => {
       const before = new Date();
       const entry = { createdAt: new Date() };
       const after = new Date();
-      
+
       expect(entry.createdAt.getTime()).toBeGreaterThanOrEqual(before.getTime());
       expect(entry.createdAt.getTime()).toBeLessThanOrEqual(after.getTime());
     });
@@ -59,25 +59,23 @@ describe('Wallet Module - Ledger Service', () => {
         { id: 'e2', walletId, type: 'debit', amount: 50 },
         { id: 'e3', walletId, type: 'credit', amount: 75 },
       ];
-      
-      const walletEntries = entries.filter(e => e.walletId === walletId);
+
+      const walletEntries = entries.filter((e) => e.walletId === walletId);
       expect(walletEntries).toHaveLength(3);
     });
 
     it('should retrieve entries within date range', () => {
       const start = new Date('2024-01-01');
       const end = new Date('2024-01-31');
-      
+
       const entries = [
         { createdAt: new Date('2024-01-15'), amount: 100 },
         { createdAt: new Date('2024-01-20'), amount: 50 },
         { createdAt: new Date('2024-02-15'), amount: 75 }, // Outside range
       ];
-      
-      const filtered = entries.filter(e => 
-        e.createdAt >= start && e.createdAt <= end
-      );
-      
+
+      const filtered = entries.filter((e) => e.createdAt >= start && e.createdAt <= end);
+
       expect(filtered).toHaveLength(2);
     });
 
@@ -87,8 +85,8 @@ describe('Wallet Module - Ledger Service', () => {
         { type: 'debit', amount: 50 },
         { type: 'credit', amount: 75 },
       ];
-      
-      const creditEntries = entries.filter(e => e.type === 'credit');
+
+      const creditEntries = entries.filter((e) => e.type === 'credit');
       expect(creditEntries).toHaveLength(2);
     });
 
@@ -99,8 +97,8 @@ describe('Wallet Module - Ledger Service', () => {
         { id: 'e2', reference: 'settlement_124', amount: 50 },
         { id: 'e3', reference: 'settlement_123', amount: 75 },
       ];
-      
-      const filtered = entries.filter(e => e.reference === reference);
+
+      const filtered = entries.filter((e) => e.reference === reference);
       expect(filtered).toHaveLength(2);
     });
   });
@@ -112,11 +110,9 @@ describe('Wallet Module - Ledger Service', () => {
         { type: 'credit', amount: 50 },
         { type: 'debit', amount: 25 },
       ];
-      
-      const totalCredits = entries
-        .filter(e => e.type === 'credit')
-        .reduce((sum, e) => sum + e.amount, 0);
-      
+
+      const totalCredits = entries.filter((e) => e.type === 'credit').reduce((sum, e) => sum + e.amount, 0);
+
       expect(totalCredits).toBe(150);
     });
 
@@ -126,11 +122,9 @@ describe('Wallet Module - Ledger Service', () => {
         { type: 'debit', amount: 25 },
         { type: 'debit', amount: 15 },
       ];
-      
-      const totalDebits = entries
-        .filter(e => e.type === 'debit')
-        .reduce((sum, e) => sum + e.amount, 0);
-      
+
+      const totalDebits = entries.filter((e) => e.type === 'debit').reduce((sum, e) => sum + e.amount, 0);
+
       expect(totalDebits).toBe(40);
     });
 
@@ -140,11 +134,11 @@ describe('Wallet Module - Ledger Service', () => {
         { type: 'debit', amount: 30 },
         { type: 'credit', amount: 50 },
       ];
-      
+
       const net = entries.reduce((sum, e) => {
         return e.type === 'credit' ? sum + e.amount : sum - e.amount;
       }, 0);
-      
+
       expect(net).toBe(120);
     });
   });
@@ -156,7 +150,7 @@ describe('Wallet Module - Ledger Service', () => {
         amount: 100,
         frozen: true,
       };
-      
+
       const canModify = !entry.frozen;
       expect(canModify).toBe(false);
     });
@@ -166,7 +160,7 @@ describe('Wallet Module - Ledger Service', () => {
         { id: 'e1', amount: 100 },
         { id: 'e2', amount: 50 },
       ];
-      
+
       // Cannot delete, immutable
       const deletedCount = 0;
       expect(entries).toHaveLength(2);
@@ -177,11 +171,9 @@ describe('Wallet Module - Ledger Service', () => {
       const entry = {
         id: 'ledger_123',
         originalAmount: 100,
-        auditLog: [
-          { action: 'created', timestamp: new Date() },
-        ],
+        auditLog: [{ action: 'created', timestamp: new Date() }],
       };
-      
+
       expect(entry.auditLog).toHaveLength(1);
     });
   });
@@ -190,14 +182,14 @@ describe('Wallet Module - Ledger Service', () => {
     it('should reconcile ledger with wallet balance', () => {
       const walletBalance = 200;
       const ledgerSum = 100 - 30 + 50 + 80; // Net 200
-      
+
       expect(walletBalance).toBe(ledgerSum);
     });
 
     it('should detect reconciliation discrepancies', () => {
-      const walletBalance = 200;
-      const ledgerSum = 150;
-      
+      const walletBalance: number = 200;
+      const ledgerSum: number = 150;
+
       const isReconciled = walletBalance === ledgerSum;
       expect(isReconciled).toBe(false);
     });
@@ -210,7 +202,7 @@ describe('Wallet Module - Ledger Service', () => {
         reconciled: true,
         timestamp: new Date(),
       };
-      
+
       expect(report.reconciled).toBe(true);
       expect(report.discrepancy).toBe(0);
     });

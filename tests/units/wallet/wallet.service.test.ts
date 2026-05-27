@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect} from 'vitest';
 
 describe('Wallet Module - Wallet Service', () => {
   describe('Wallet Creation', () => {
@@ -48,7 +48,7 @@ describe('Wallet Module - Wallet Service', () => {
     });
 
     it('should prevent debit exceeding balance', () => {
-      let balance = 50;
+      const balance = 50;
       const amount = 100;
       
       const canDebit = balance >= amount;

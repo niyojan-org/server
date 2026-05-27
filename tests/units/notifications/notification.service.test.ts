@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 
 describe('Notifications Module - Notification Service', () => {
   describe('Notification Creation', () => {
@@ -11,7 +11,7 @@ describe('Notifications Module - Notification Service', () => {
         body: 'Your registration has been confirmed',
         createdAt: new Date(),
       };
-      
+
       expect(notification.type).toBe('email');
       expect(notification.subject).toBeTruthy();
     });
@@ -24,7 +24,7 @@ describe('Notifications Module - Notification Service', () => {
         title: 'Event Reminder',
         message: 'Your event starts in 1 hour',
       };
-      
+
       expect(notification.type).toBe('push');
     });
 
@@ -35,7 +35,7 @@ describe('Notifications Module - Notification Service', () => {
         type: 'sms',
         message: 'Your verification code is 123456',
       };
-      
+
       expect(notification.type).toBe('sms');
     });
 
@@ -52,9 +52,9 @@ describe('Notifications Module - Notification Service', () => {
     });
 
     it('should track notification as sent', () => {
-      let notification = { status: 'pending' };
+      const notification = { status: 'pending' };
       notification.status = 'sent';
-      
+
       expect(notification.status).toBe('sent');
     });
 
@@ -63,21 +63,21 @@ describe('Notifications Module - Notification Service', () => {
         status: 'failed',
         error: 'Invalid email address',
       };
-      
+
       expect(notification.status).toBe('failed');
     });
 
     it('should track notification as delivered', () => {
-      let notification = { status: 'sent' };
+      const notification = { status: 'sent' };
       notification.status = 'delivered';
-      
+
       expect(notification.status).toBe('delivered');
     });
 
     it('should track notification read status', () => {
-      let notification = { read: false };
+      const notification = { read: false };
       notification.read = true;
-      
+
       expect(notification.read).toBe(true);
     });
   });
@@ -117,7 +117,7 @@ describe('Notifications Module - Notification Service', () => {
         subject: 'Registration Confirmation',
         body: 'Dear {name}, your registration for {event} is confirmed.',
       };
-      
+
       expect(template.type).toBe('email');
       expect(template.body).toContain('{name}');
     });
@@ -126,7 +126,7 @@ describe('Notifications Module - Notification Service', () => {
       let body = 'Dear {name}, your registration for {event} is confirmed.';
       body = body.replace('{name}', 'John');
       body = body.replace('{event}', 'Tech Conference');
-      
+
       expect(body).toContain('John');
       expect(body).toContain('Tech Conference');
     });
@@ -137,7 +137,7 @@ describe('Notifications Module - Notification Service', () => {
         { id: 'template_2', name: 'Event Reminder' },
         { id: 'template_3', name: 'Payment Received' },
       ];
-      
+
       expect(templates).toHaveLength(3);
     });
   });
@@ -150,7 +150,7 @@ describe('Notifications Module - Notification Service', () => {
         pushNotifications: false,
         smsNotifications: true,
       };
-      
+
       expect(preferences.emailNotifications).toBe(true);
       expect(preferences.pushNotifications).toBe(false);
     });
@@ -161,7 +161,7 @@ describe('Notifications Module - Notification Service', () => {
         doNotDisturb: true,
         quietHours: { start: '22:00', end: '08:00' },
       };
-      
+
       expect(preferences.doNotDisturb).toBe(true);
     });
 
@@ -170,7 +170,7 @@ describe('Notifications Module - Notification Service', () => {
         userId: 'user_123',
         unsubscribedTypes: ['marketing', 'newsletter'],
       };
-      
+
       expect(preferences.unsubscribedTypes).toContain('marketing');
     });
 
@@ -179,7 +179,7 @@ describe('Notifications Module - Notification Service', () => {
         userId: 'user_123',
         frequency: 'daily', // daily, weekly, real-time
       };
-      
+
       expect(preferences.frequency).toBe('daily');
     });
   });
@@ -191,7 +191,7 @@ describe('Notifications Module - Notification Service', () => {
         status: 'queued',
         queuedAt: new Date(),
       };
-      
+
       expect(notification.status).toBe('queued');
     });
 
@@ -202,7 +202,7 @@ describe('Notifications Module - Notification Service', () => {
         retryCount: 0,
         maxRetries: 3,
       };
-      
+
       notification.retryCount += 1;
       expect(notification.retryCount).toBe(1);
       expect(notification.retryCount).toBeLessThan(notification.maxRetries);
@@ -215,7 +215,7 @@ describe('Notifications Module - Notification Service', () => {
         expiresAfterDays: 7,
         isExpired: true,
       };
-      
+
       expect(notification.isExpired).toBe(true);
     });
   });
@@ -228,7 +228,7 @@ describe('Notifications Module - Notification Service', () => {
         failed: 5,
         deliveryRate: 0.95,
       };
-      
+
       expect(stats.deliveryRate).toBe(0.95);
     });
 
@@ -238,7 +238,7 @@ describe('Notifications Module - Notification Service', () => {
         opened: 45,
         openRate: 0.45,
       };
-      
+
       expect(stats.openRate).toBe(0.45);
     });
 
@@ -246,10 +246,10 @@ describe('Notifications Module - Notification Service', () => {
       const stats = {
         sent: 100,
         clicked: 20,
-        clickRate: 0.20,
+        clickRate: 0.2,
       };
-      
-      expect(stats.clickRate).toBe(0.20);
+
+      expect(stats.clickRate).toBe(0.2);
     });
   });
 
@@ -264,7 +264,7 @@ describe('Notifications Module - Notification Service', () => {
         ],
         status: 'pending',
       };
-      
+
       expect(batch.notifications).toHaveLength(3);
     });
 
@@ -275,7 +275,7 @@ describe('Notifications Module - Notification Service', () => {
         processedNotifications: 750,
         progress: 0.75,
       };
-      
+
       expect(batch.progress).toBe(0.75);
     });
   });

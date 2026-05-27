@@ -9,6 +9,7 @@ import express, { Request, Response } from 'express';
 import { register } from './metrics';
 import { metricsMiddleware } from '@core/middlewares/metrics.middleware';
 import env from '@config/env';
+import globalRateLimit from '@core/rate_limit/global-rate-limit';
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(
 app.use(jsonValidation);
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
+app.use(globalRateLimit);
 app.use(metricsMiddleware);
 
 //BOOTSTRAP
