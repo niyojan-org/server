@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import { describe, it, expect } from 'vitest';
 
 describe('Auth Module - MFA Service', () => {
@@ -64,7 +65,7 @@ describe('Auth Module - MFA Service', () => {
 
   describe('Backup Codes', () => {
     it('should generate backup codes during TOTP setup', () => {
-      const backupCodes = Array.from({ length: 10 }, () => Math.random().toString(36).substr(2, 8));
+      const backupCodes = Array.from({ length: 10 }, () => randomBytes(4).toString('hex'));
 
       expect(backupCodes).toHaveLength(10);
       backupCodes.forEach((code) => {

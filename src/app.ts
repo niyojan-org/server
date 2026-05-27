@@ -41,7 +41,9 @@ app.get('/', (_req: Request, res: Response) => {
 
 app.get('/metrics', async (req, res) => {
   if (req.ip !== env.METRICS_ALLOWED_IP) {
-    return res.status(403).json({ error: 'Forbidden' });
+    return res
+      .status(403)
+      .json({ error: 'Forbidden', message: `You are not allowed to access metrics from this IP address. ${req.ip}` });
   }
   res.set('Content-Type', register.contentType);
   res.end(await register.metrics());
