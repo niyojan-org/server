@@ -13,16 +13,7 @@ import { organizationRole } from '@core/middlewares/organization.middleware';
 //   exportParticipants,
 //   getParticipantStats,
 // } from '../controllers/participant-management.controller';
-import {
-  getRegistrations,
-  getRegistration,
-  updateRegistration,
-  updateRegistrationStatus,
-  deleteRegistration,
-  resendRegistrationDetails,
-  getRegistrationStats,
-  exportRegistrations,
-} from '../controllers/registration-manage.controller';
+import { getRegistrations } from '../controllers/registration-manage.controller';
 
 const RegistrationManagementRoutes = Router();
 
@@ -45,15 +36,15 @@ RegistrationManagementRoutes.use(organizationRole('owner', 'admin'));
 
 // Registration routes
 RegistrationManagementRoutes.get('/:eventId', getRegistrations);
-RegistrationManagementRoutes.get('/events/:eventId/registrations/stats', getRegistrationStats);
-RegistrationManagementRoutes.get('/events/:eventId/registrations/export', exportRegistrations);
-RegistrationManagementRoutes.get('/events/:eventId/registrations/:registrationId', getRegistration);
-RegistrationManagementRoutes.put('/events/:eventId/registrations/:registrationId', updateRegistration);
-RegistrationManagementRoutes.patch('/events/:eventId/registrations/:registrationId/status', updateRegistrationStatus);
-RegistrationManagementRoutes.post(
-  '/events/:eventId/registrations/:registrationId/resend-details',
-  resendRegistrationDetails,
-);
-RegistrationManagementRoutes.delete('/events/:eventId/registrations/:registrationId', deleteRegistration);
+// RegistrationManagementRoutes.get('/events/:eventId/registrations/stats', getRegistrationStats);
+// RegistrationManagementRoutes.get('/events/:eventId/registrations/export', exportRegistrations);
+// RegistrationManagementRoutes.get('/events/:eventId/registrations/:registrationId', getRegistration);
+// RegistrationManagementRoutes.put('/events/:eventId/registrations/:registrationId', updateRegistration);
+// RegistrationManagementRoutes.patch('/events/:eventId/registrations/:registrationId/status', updateRegistrationStatus);
+// RegistrationManagementRoutes.post(
+//   '/events/:eventId/registrations/:registrationId/resend-details',
+//   resendRegistrationDetails,
+// );
+// RegistrationManagementRoutes.delete('/events/:eventId/registrations/:registrationId', deleteRegistration);
 
 export default RegistrationManagementRoutes;

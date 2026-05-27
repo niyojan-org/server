@@ -1,12 +1,6 @@
 import { asyncHandler } from '@core/utils/asyncHandler';
 import { OrganizationRequest } from '@core/middlewares/organization.middleware';
-import mongoose from 'mongoose';
-import {
-  updateRegistrationSchema,
-  updateRegistrationStatusSchema,
-  registrationListQuerySchema,
-  resendDetailsSchema,
-} from '../dto/registration-management.dto';
+import { registrationListQuerySchema } from '../dto/registration-management.dto';
 import { RegistrationManagementService } from '../services/management/registration-management.service';
 import { EventRepository } from '@modules/events/persistence/event.repository';
 import { string } from 'zod';
@@ -25,132 +19,132 @@ export const getRegistrations = asyncHandler(async (req: OrganizationRequest, re
 /**
  * Get single registration details
  */
-export const getRegistration = asyncHandler(async (req: OrganizationRequest, res) => {
-  const { eventId, registrationId } = req.params as { eventId: string; registrationId: string };
+// export const getRegistration = asyncHandler(async (req: OrganizationRequest, res) => {
+//   const { eventId, registrationId } = req.params as { eventId: string; registrationId: string };
 
-  const registration = await RegistrationManagementService.getRegistrationById(
-    new mongoose.Types.ObjectId(registrationId),
-    new mongoose.Types.ObjectId(eventId),
-  );
+//   const registration = await RegistrationManagementService.getRegistrationById(
+//     new mongoose.Types.ObjectId(registrationId),
+//     new mongoose.Types.ObjectId(eventId),
+//   );
 
-  res.status(200).json({
-    success: true,
-    message: 'Registration retrieved successfully',
-    data: registration,
-  });
-});
+//   res.status(200).json({
+//     success: true,
+//     message: 'Registration retrieved successfully',
+//     data: registration,
+//   });
+// });
 
-/**
- * Update registration information
- */
-export const updateRegistration = asyncHandler(async (req: OrganizationRequest, res) => {
-  const { eventId, registrationId } = req.params as { eventId: string; registrationId: string };
-  const updateData = updateRegistrationSchema.parse(req.body);
+// /**
+//  * Update registration information
+//  */
+// export const updateRegistration = asyncHandler(async (req: OrganizationRequest, res) => {
+//   const { eventId, registrationId } = req.params as { eventId: string; registrationId: string };
+//   const updateData = updateRegistrationSchema.parse(req.body);
 
-  const updated = await RegistrationManagementService.updateRegistration(
-    new mongoose.Types.ObjectId(registrationId),
-    new mongoose.Types.ObjectId(eventId),
-    updateData,
-  );
+//   const updated = await RegistrationManagementService.updateRegistration(
+//     new mongoose.Types.ObjectId(registrationId),
+//     new mongoose.Types.ObjectId(eventId),
+//     updateData,
+//   );
 
-  res.status(200).json({
-    success: true,
-    message: 'Registration updated successfully',
-    data: updated,
-  });
-});
+//   res.status(200).json({
+//     success: true,
+//     message: 'Registration updated successfully',
+//     data: updated,
+//   });
+// });
 
-/**
- * Update registration status
- */
-export const updateRegistrationStatus = asyncHandler(async (req: OrganizationRequest, res) => {
-  const { eventId, registrationId } = req.params as { eventId: string; registrationId: string };
-  const statusData = updateRegistrationStatusSchema.parse(req.body);
+// /**
+//  * Update registration status
+//  */
+// export const updateRegistrationStatus = asyncHandler(async (req: OrganizationRequest, res) => {
+//   const { eventId, registrationId } = req.params as { eventId: string; registrationId: string };
+//   const statusData = updateRegistrationStatusSchema.parse(req.body);
 
-  const updated = await RegistrationManagementService.updateRegistrationStatus(
-    new mongoose.Types.ObjectId(registrationId),
-    new mongoose.Types.ObjectId(eventId),
-    statusData,
-  );
+//   const updated = await RegistrationManagementService.updateRegistrationStatus(
+//     new mongoose.Types.ObjectId(registrationId),
+//     new mongoose.Types.ObjectId(eventId),
+//     statusData,
+//   );
 
-  res.status(200).json({
-    success: true,
-    message: 'Registration status updated successfully',
-    data: updated,
-  });
-});
+//   res.status(200).json({
+//     success: true,
+//     message: 'Registration status updated successfully',
+//     data: updated,
+//   });
+// });
 
-/**
- * Delete registration
- */
-export const deleteRegistration = asyncHandler(async (req: OrganizationRequest, res) => {
-  const { eventId, registrationId } = req.params as { eventId: string; registrationId: string };
+// /**
+//  * Delete registration
+//  */
+// export const deleteRegistration = asyncHandler(async (req: OrganizationRequest, res) => {
+//   const { eventId, registrationId } = req.params as { eventId: string; registrationId: string };
 
-  await RegistrationManagementService.deleteRegistration(
-    new mongoose.Types.ObjectId(registrationId),
-    new mongoose.Types.ObjectId(eventId),
-  );
+//   await RegistrationManagementService.deleteRegistration(
+//     new mongoose.Types.ObjectId(registrationId),
+//     new mongoose.Types.ObjectId(eventId),
+//   );
 
-  res.status(200).json({
-    success: true,
-    message: 'Registration deleted successfully',
-  });
-});
+//   res.status(200).json({
+//     success: true,
+//     message: 'Registration deleted successfully',
+//   });
+// });
 
-/**
- * Resend registration details to participants
- */
-export const resendRegistrationDetails = asyncHandler(async (req: OrganizationRequest, res) => {
-  const { eventId, registrationId } = req.params as { eventId: string; registrationId: string };
-  const { channels } = resendDetailsSchema.parse(req.body);
+// /**
+//  * Resend registration details to participants
+//  */
+// export const resendRegistrationDetails = asyncHandler(async (req: OrganizationRequest, res) => {
+//   const { eventId, registrationId } = req.params as { eventId: string; registrationId: string };
+//   const { channels } = resendDetailsSchema.parse(req.body);
 
-  const result = await RegistrationManagementService.resendRegistrationDetails(
-    new mongoose.Types.ObjectId(registrationId),
-    new mongoose.Types.ObjectId(eventId),
-    channels,
-  );
+//   const result = await RegistrationManagementService.resendRegistrationDetails(
+//     new mongoose.Types.ObjectId(registrationId),
+//     new mongoose.Types.ObjectId(eventId),
+//     channels,
+//   );
 
-  res.status(200).json({
-    success: true,
-    message: 'Registration details resent successfully',
-    data: result,
-  });
-});
+//   res.status(200).json({
+//     success: true,
+//     message: 'Registration details resent successfully',
+//     data: result,
+//   });
+// });
 
-/**
- * Get registration statistics
- */
-export const getRegistrationStats = asyncHandler(async (req: OrganizationRequest, res) => {
-  const { eventId } = req.params as { eventId: string };
+// /**
+//  * Get registration statistics
+//  */
+// export const getRegistrationStats = asyncHandler(async (req: OrganizationRequest, res) => {
+//   const { eventId } = req.params as { eventId: string };
 
-  const stats = await RegistrationManagementService.getRegistrationStats(new mongoose.Types.ObjectId(eventId));
+//   const stats = await RegistrationManagementService.getRegistrationStats(new mongoose.Types.ObjectId(eventId));
 
-  res.status(200).json({
-    success: true,
-    message: 'Registration statistics retrieved successfully',
-    data: stats,
-  });
-});
+//   res.status(200).json({
+//     success: true,
+//     message: 'Registration statistics retrieved successfully',
+//     data: stats,
+//   });
+// });
 
-/**
- * Export registrations list
- */
-export const exportRegistrations = asyncHandler(async (req: OrganizationRequest, res) => {
-  const { eventId } = req.params as { eventId: string };
-  const { format = 'csv' } = req.query;
+// /**
+//  * Export registrations list
+//  */
+// export const exportRegistrations = asyncHandler(async (req: OrganizationRequest, res) => {
+//   const { eventId } = req.params as { eventId: string };
+//   const { format = 'csv' } = req.query;
 
-  const exported = await RegistrationManagementService.exportRegistrations(
-    new mongoose.Types.ObjectId(eventId),
-    (format as 'csv' | 'json') || 'csv',
-  );
+//   const exported = await RegistrationManagementService.exportRegistrations(
+//     new mongoose.Types.ObjectId(eventId),
+//     (format as 'csv' | 'json') || 'csv',
+//   );
 
-  if (format === 'csv') {
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', `attachment; filename="registrations-${Date.now()}.csv"`);
-  } else {
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Content-Disposition', `attachment; filename="registrations-${Date.now()}.json"`);
-  }
+//   if (format === 'csv') {
+//     res.setHeader('Content-Type', 'text/csv');
+//     res.setHeader('Content-Disposition', `attachment; filename="registrations-${Date.now()}.csv"`);
+//   } else {
+//     res.setHeader('Content-Type', 'application/json');
+//     res.setHeader('Content-Disposition', `attachment; filename="registrations-${Date.now()}.json"`);
+//   }
 
-  res.send(exported);
-});
+//   res.send(exported);
+// });
