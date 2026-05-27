@@ -50,7 +50,7 @@ app.get('/metrics', async (req, res) => {
 app.use('/', mainRoutes);
 
 app.get('/health', (_req: Request, res: Response) => {
-  res.status(200).json({ status: 'OK', message: 'Server is healthy' });
+  res.status(200).json({ status: 'OK', message: 'Server is healthy', timestamp: new Date().toISOString() });
 });
 
 app.use(() => {
