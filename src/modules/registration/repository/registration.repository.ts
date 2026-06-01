@@ -7,6 +7,8 @@ import { ObjectId } from '@helpers/zod';
 import { RegistrationListQueryDto } from '../dto/registration-management.dto';
 import { buildRegistrationPaginationQuery } from '../helpers/registration-pagination.helper';
 import { PaginationResponse } from '@helpers/pagination.helper';
+import { IdGeneratorHelper } from '../helpers/id-generator.helper';
+import { EventModel } from '@modules/events/persistence/event.model';
 
 class RegistrationRepository {
   static async createRegistration(
@@ -14,9 +16,15 @@ class RegistrationRepository {
     pricing: RegistrationPricing,
     session?: mongoose.ClientSession,
   ): Promise<RegistrationDocument> {
+    // Get event to extract code/name for registration ID
+    const event = await EventModel.findById(payload.eventId).select('title slug').exec();
+    const eventCode = event?.slug || event?.title || 'EVENT';
+    const registrationIdBase = IdGeneratorHelper.generateRegistrationIdBase(eventCode);
+
     const data = new RegistrationModel({
       eventId: payload.eventId,
       ticketId: payload.ticketId,
+      registrationId: registrationIdBase,
       participantsCount: payload.participants.length,
       status: RegistrationStatus.DRAFT,
       pricing,
@@ -31,8 +39,8 @@ class RegistrationRepository {
     return registration;
   }
 
-  static async findById(id: ObjectId): Promise<RegistrationDocument | null> {
-    return RegistrationModel.findById(id).exec();
+  static async findById(id: ObjectId, eventId: ObjectId): Promise<RegistrationDocument | null> {
+    return RegistrationModel.findOne({ _id: id, eventId }).populate('participantIds').exec();
   }
 
   /**

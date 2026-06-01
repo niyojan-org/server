@@ -8,6 +8,7 @@ import {
 import ApiError from '@core/errors/api.error';
 // import ParticipantRepository from '@modules/participant/repository/participant.repository';
 import RegistrationRepository from '@modules/registration/repository/registration.repository';
+import { ObjectId } from '@helpers/zod';
 
 export class RegistrationManagementService {
   // Get all registrations for an event with filtering and pagination
@@ -19,27 +20,15 @@ export class RegistrationManagementService {
   /**
    * Get single registration details
    */
-  static async getRegistrationById(
-    registrationId: mongoose.Types.ObjectId,
-    eventId: mongoose.Types.ObjectId,
-  ): Promise<RegistrationDocument> {
-    const registration = await RegistrationModel.findOne({
-      _id: registrationId,
-      eventId,
-    })
-      .populate('participantIds')
-      .populate('ticketId')
-      .exec();
-
-    if (!registration) {
+  static async getRegistrationById(registrationId: ObjectId, eventId: ObjectId): Promise<RegistrationDocument> {
+    const registration = await RegistrationRepository.findById(registrationId, eventId);
+    if (!registration)
       throw new ApiError(
         404,
         'Registration not found',
         'REGISTRATION_NOT_FOUND',
-        'The requested registration does not exist',
+        'The requested registration was not found',
       );
-    }
-
     return registration;
   }
 

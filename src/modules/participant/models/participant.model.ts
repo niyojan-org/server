@@ -13,6 +13,14 @@ const participantSessionCheckInSchema = new Schema(
 
 const participantSchema = new Schema(
   {
+    participantId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      index: true,
+      trim: true,
+      uppercase: true,
+    },
     registrationId: {
       type: Schema.Types.ObjectId,
       ref: 'Registration',
@@ -56,6 +64,8 @@ const participantSchema = new Schema(
 );
 
 participantSchema.index({ eventId: 1, email: 1 }, { unique: true });
+participantSchema.index({ registrationId: 1, participantId: 1 });
+participantSchema.index({ eventId: 1, participantId: 1 });
 
 export type ParticipantDocument = mongoose.HydratedDocument<ParticipantSchema>;
 export type ParticipantSchema = mongoose.InferSchemaType<typeof participantSchema>;

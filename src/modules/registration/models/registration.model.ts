@@ -63,6 +63,14 @@ const registrationGroupInfoSchema = new Schema(
 
 const registrationSchema = new Schema(
   {
+    registrationId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      index: true,
+      trim: true,
+      uppercase: true,
+    },
     eventId: { type: Schema.Types.ObjectId, ref: 'Event', required: true, index: true },
     ticketId: { type: Schema.Types.ObjectId, ref: 'EventTicket', required: true },
     participantIds: [{ type: Schema.Types.ObjectId, ref: 'Participant' }],
@@ -100,8 +108,11 @@ registrationSchema.index({
   status: 1,
 });
 
+registrationSchema.index({ ticketId: 1 });
+
 registrationSchema.index({
-  ticketId: 1,
+  eventId: 1,
+  registrationId: 1,
 });
 
 //plugins

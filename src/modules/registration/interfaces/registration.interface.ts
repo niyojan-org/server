@@ -21,6 +21,7 @@ export interface RegistrationCoupon {
 export interface RegistrationBase {
   eventId: string;
   ticketId: string;
+  registrationId?: string;
   participantsCount: number;
   status: RegistrationStatus;
   pricing: RegistrationPricing;

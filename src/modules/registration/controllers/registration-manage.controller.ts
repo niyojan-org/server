@@ -3,18 +3,34 @@ import { OrganizationRequest } from '@core/middlewares/organization.middleware';
 import { registrationListQuerySchema } from '../dto/registration-management.dto';
 import { RegistrationManagementService } from '../services/management/registration-management.service';
 import { EventRepository } from '@modules/events/persistence/event.repository';
-import { string } from 'zod';
 import ApiError from '@core/errors/api.error';
+import { objectIdSchema } from '@helpers/zod';
+import { string, object } from 'zod';
 
-export const getRegistrations = asyncHandler(async (req: OrganizationRequest, res) => {
-  const eventId = string({ message: 'Need a valid EventId' }).parse(req.params.eventId);
-  const organizationId = req.organization._id;
-  const event = await EventRepository.getEventForOrganization(eventId, organizationId);
-  if (!event) throw new ApiError(404, 'Event not found', 'EVENT_NOT_FOUND', 'The requested event was not found');
-  const options = registrationListQuerySchema.parse(req.query);
-  const stats = await RegistrationManagementService.getRegistrationsByEvent(event._id, options);
-  res.status(200).json({ success: true, message: 'Registrations retrieved successfully', ...stats });
-});
+class RegistrationManagementController {
+  getRegistrations = asyncHandler(async (req: OrganizationRequest, res) => {
+    const eventId = string({ message: 'Need a valid EventId' }).parse(req.params.eventId);
+    const event = await EventRepository.getEventForOrganization(eventId, req.organization._id);
+    if (!event) throw new ApiError(404, 'Event not found', 'EVENT_NOT_FOUND', 'The requested event was not found');
+    const options = registrationListQuerySchema.parse(req.query);
+    const stats = await RegistrationManagementService.getRegistrationsByEvent(event._id, options);
+    res.status(200).json({ success: true, message: 'Registrations retrieved successfully', ...stats });
+  });
+  getRegistration = asyncHandler(async (req: OrganizationRequest, res) => {
+    const { eventId, registrationId } = object({ eventId: string(), registrationId: objectIdSchema }).parse(req.params);
+    const organizationId = req.organization._id;
+    const event = await EventRepository.getEventForOrganization(eventId, organizationId);
+    if (!event) throw new ApiError(404, 'Event not found', 'EVENT_NOT_FOUND', 'The requested event was not found');
+    const registration = await RegistrationManagementService.getRegistrationById(registrationId, event._id);
+    res.status(200).json({
+      success: true,
+      message: 'Registration retrieved successfully',
+      data: registration,
+    });
+  });
+}
+
+export default new RegistrationManagementController();
 
 /**
  * Get single registration details

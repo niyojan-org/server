@@ -20,6 +20,6 @@ export const toObjectId = (value?: ObjectId | string) => (value ? objectIdSchema
 
 export type ObjectId = z.infer<typeof objectIdSchema>;
 
-export const isObjectId = (value: string): boolean => {
+export const isObjectId = (value: string | ObjectId): boolean => {
   return Types.ObjectId.isValid(value);
 };

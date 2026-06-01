@@ -12,7 +12,8 @@ import {
   generateUniqueFilename,
 } from '../helpers/file-validation.helper';
 import { CLOUDINARY_FOLDERS } from '../resource.constants';
-import { Readable } from 'stream';
+import { createReadStream } from 'fs';
+import { unlink } from 'fs/promises';
 
 type CloudinaryUploadResult = {
   url: string;
@@ -149,9 +150,13 @@ export const uploadToCloudinary = async (req: UploadedFileRequest, res: Response
         },
       );
 
-      // Convert buffer to stream and pipe to Cloudinary
-      const bufferStream = Readable.from(req.file!.buffer);
-      bufferStream.pipe(uploadStream);
+     // Read file from disk (multer diskStorage saves to disk, not buffer) and pipe to Cloudinary
+     const fileStream = createReadStream(req.file!.path);
+     fileStream.pipe(uploadStream);
+
+     fileStream.on('error', (error) => {
+       reject(new ApiError(500, 'Failed to read file', 'FILE_READ_ERROR', error.message));
+     });
     });
 
     // Attach upload result to request
@@ -167,8 +172,24 @@ export const uploadToCloudinary = async (req: UploadedFileRequest, res: Response
       folder: result.folder,
     };
 
+    // Clean up temporary file from disk
+    try {
+      await unlink(req.file!.path);
+    } catch (cleanupError) {
+      logger.warn(`Failed to clean up temporary file: ${req.file!.path}`, cleanupError);
+    }
+
     next();
   } catch (error) {
+    // Clean up temporary file on error
+    if (req.file?.path) {
+      try {
+        await unlink(req.file.path);
+      } catch (cleanupError) {
+        logger.warn(`Failed to clean up temporary file on error: ${req.file.path}`, cleanupError);
+      }
+    }
+
     // Only log as error if it's not an ApiError (which indicates expected validation failure)
     if (error instanceof ApiError) {
       // ApiErrors are expected validation/business logic errors, just pass them through

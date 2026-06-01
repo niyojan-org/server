@@ -4,6 +4,7 @@ import { ParticipantStatus } from '../constants/participant.constants';
 import mongoose from 'mongoose';
 
 export const participantSchema = object({
+  participantId: string().optional(),
   registrationId: objectIdSchema,
   eventId: objectIdSchema,
   ticketId: objectIdSchema,
@@ -28,6 +29,7 @@ export const participantSchema = object({
 });
 
 export type CreateParticipantDto = {
+  participantId?: string;
   registrationId: mongoose.Types.ObjectId;
   eventId: mongoose.Types.ObjectId;  
   ticketId: mongoose.Types.ObjectId;

@@ -3,16 +3,22 @@ import { EventModel } from './event.model';
 import { EventStatus } from '../core/event.enums';
 import { Event, EventDocument } from '../core/event.types';
 import { EventTicket } from '../types';
+import { isObjectId, ObjectId } from '@helpers/zod';
 
 export class EventRepository {
   static async create(event: Event): Promise<EventDocument> {
     const doc = new EventModel(event);
     return doc.save();
   }
-  static async getEventForOrganization(eventId: string, organizationId: Types.ObjectId): Promise<EventDocument | null> {
-    const orConditions: { slug?: string; _id?: Types.ObjectId }[] = [{ slug: eventId }];
-    if (Types.ObjectId.isValid(eventId)) orConditions.push({ _id: new Types.ObjectId(eventId) });
-    return EventModel.findOne({ organizationId, $or: orConditions }).lean();
+  static async getEventForOrganization(
+    eventId: string | ObjectId,
+    organizationId: Types.ObjectId,
+  ): Promise<EventDocument | null> {
+    if (isObjectId(eventId)) {
+      return EventModel.findOne({ _id: eventId, organizationId }).lean();
+    } else {
+      return EventModel.findOne({ organizationId, slug: eventId.toString() }).lean();
+    }
   }
 
   static async find(input: string | Types.ObjectId): Promise<EventDocument | null> {
